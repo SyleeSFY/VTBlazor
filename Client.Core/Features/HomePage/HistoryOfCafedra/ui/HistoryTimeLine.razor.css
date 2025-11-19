@@ -1,0 +1,23 @@
+.dot__history {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 50px;
+    background-color: white;
+    /*margin-right: 6.25vw;*/
+}
+
+.dot__history__p {
+    margin-right: 10px;
+    font-family: Roboto;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+    width: 100%;
+    max-width: 700px;
+}
+
+.dot__history__li {
+    list-style-type: none;
+    display: flex;
+    margin-bottom: 10px;
+}

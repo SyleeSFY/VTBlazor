@@ -1,0 +1,16 @@
+.our_graduates_info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 30px;
+    padding: 0 40px 30px 40px;
+}
+
+.our_graduates_info_IMG {
+    width: 100%;
+    max-width: 530px;
+    height: auto;
+    object-fit: contain;
+    margin-right: 50px;
+    margin-left: 50px;
+}

@@ -1,0 +1,315 @@
+.container {
+    background-color: rgba(255, 255, 255);
+    border-style: none solid none solid;
+    border-color: #2e7d32;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    line-height: normal;
+}
+
+.containerBg {
+
+    width: 100%;
+    min-height: 100%;
+    border-width: 3px;
+    box-sizing: border-box;
+}
+
+.dot {
+    border: 2px solid #009639;
+    background-color: transparent;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-right: 10px;
+    flex-shrink: 0
+}
+
+.dot_small {
+    width: 5px;
+    height: 5px;
+    margin-right: 10px;
+    margin-top: 6px;
+    margin-bottom: auto;
+    flex-shrink: 0
+}
+/*.Tochka {*/
+/*    border: 1px solid #009639;*/
+/*    margin-top: auto;*/
+/*    margin-bottom: auto;*/
+/*    width: 1.9vw;*/
+/*    height: 1.9vw;*/
+/*    margin-right: 1.25vw;*/
+/*}*/
+/*----------*/
+nav, div, p, ul, h1, h2, h3 {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Предотвращает горизонтальный скролл */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    /*background: url(../components/Icons/фон12.png) repeat center center;*/
+    background-size: cover;
+    min-height: 100vh;
+    width: 100%;
+}
+
+#root {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.home {
+    padding-top: 80px;
+}
+
+.VT {
+    font-family: Rubik;
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 100%;
+    letter-spacing: 0;
+    background-color: #006928d8;
+    color: white;
+    padding: 5px 5px;
+    display: inline-block;
+}
+
+.InfoCafedra {
+    padding-left: 40px;
+    margin-top: 20px;
+    margin-bottom: auto;
+}
+
+.CafedraCard {
+    display: flex;
+    margin-bottom: 40px;
+    align-items: center;
+}
+
+.CafedraCard>p {
+
+    margin-left: 20px;
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+}
+
+.CafedraCard:last-child {
+    margin-bottom: 0px;
+}
+
+
+
+
+
+/* OurGraduates */
+
+
+.FlexCenter {
+    display: flex;
+    justify-content: center;
+}
+
+
+
+
+
+
+
+.HistoryOfCafedra .OurGraduatesInfo .OurGraduatesInfoText li {
+    margin-bottom: 40px;
+}
+
+.HistoryOfCafedra .OurGraduatesInfo .OurGraduatesInfoText li:last-child {
+    margin-bottom: 0px;
+}
+
+.OurGraduatesInfoText p {
+    width: 700px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* HistoryOfCafedra */
+.HistoryOfCafedra {
+    margin-top: 20px;
+
+}
+
+.FlexStart {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.HistoryOfCafedra .OurGraduatesInfo .OurGraduatesInfoText li {
+    margin-bottom: 40px;
+}
+
+.HistoryOfCafedra .OurGraduatesInfo .OurGraduatesInfoText li:last-child {
+    margin-bottom: 0px;
+}
+
+.OurGraduatesInfoText p {
+    width: 700px;
+}
+
+
+
+@media (max-width: 950px) {
+    .CafedraCards {
+        margin-bottom: 10px;
+    }
+
+
+    .VT {
+        font-size: 4vw;
+
+        padding: 0.6vw 1vw;
+    }
+
+    .InfoCafedra {
+        padding-left: 5vw;
+        margin-top: 2.5vw;
+    }
+
+    .CafedraCard {
+        margin-bottom: 5vw;
+    }
+
+    .CafedraCard>p {
+        margin-left: 2.5vw;
+        font-size: 2.5vw;
+    }
+
+    .Stick {
+        width: 0.4vw;
+        height: 7vw;
+    }
+
+
+    /* OurGraduates */
+
+
+
+    .OurGraduatesInfo {
+        padding: 0 5vw 4vw 5vw;
+        margin-top: 4vw;
+    }
+
+    .OurGraduatesInfoIMG {
+        max-width: 50vw;
+        margin-right: 6vw;
+        margin-left: 6vw;
+    }
+
+    .OurGraduatesInfoText {
+        min-width: 37.5vw;
+
+    }
+
+    .OurGraduatesInfoText p {
+        font-size: 2.25vw;
+
+        line-height: 2.5vw;
+        max-width: 87.5vw;
+
+    }
+
+
+
+    .SmallTochka {
+        width: 0.6vw;
+        height: 0.6vw;
+        margin-right: 1.25vw;
+    }
+
+    /* HistoryOfCafedra */
+    .HistoryOfCafedra {
+        margin-top: 2.5vw;
+    }
+
+    .HistoryOfCafedra .OurGraduatesInfo .OurGraduatesInfoText li {
+        margin-bottom: 5vw;
+    }
+
+
+
+    .StickInHistory {
+        margin-left: 4px;
+        height: 32.75vw;
+        margin-top: -33.6vw;
+    }
+
+
+    body {
+        overflow-x: hidden;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    html,
+    body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+@media (max-width: 450px) {
+    .VT {
+        font-size: 21px;
+    }
+
+    .CafedraCard>p {
+        margin-left: 2.5vw;
+        font-size: 12px;
+    }
+
+    .OurGraduatesInfoText p {
+        font-size: 12px;
+        line-height: 14px;
+    }
+
+    .SmallTochka {
+        width: 3px;
+        height: 3px;
+        margin-right: 10px
+    }
+
+    .StickInHistory {
+        display: none;
+    }
+}

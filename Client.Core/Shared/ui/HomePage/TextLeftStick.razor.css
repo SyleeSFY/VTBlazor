@@ -1,0 +1,23 @@
+.stick__left {
+    width: 3px;
+    height: 55px;
+    background-color: #009639;
+    flex-shrink: 0;
+}
+
+.caferda__card {
+    display: flex;
+    margin-bottom: 40px;
+    align-items: center;
+}
+
+.caferda__card>p {
+
+    margin-left: 20px;
+    font-family: "Roboto", sans-serif;
+    font-size: 20px;
+}
+
+.caferda__card:last-child {
+    margin-bottom: 0px;
+}
