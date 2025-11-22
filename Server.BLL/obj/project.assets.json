@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/artemryklin/RiderProjects/VTmei/Server.BLL/Server.BLL.csproj",
+      "projectUniqueName": "/Users/artemryklin/Projects/VTmei/Server.BLL/Server.BLL.csproj",
       "projectName": "Server.BLL",
-      "projectPath": "/Users/artemryklin/RiderProjects/VTmei/Server.BLL/Server.BLL.csproj",
+      "projectPath": "/Users/artemryklin/Projects/VTmei/Server.BLL/Server.BLL.csproj",
       "packagesPath": "/Users/artemryklin/.nuget/packages/",
-      "outputPath": "/Users/artemryklin/RiderProjects/VTmei/Server.BLL/obj/",
+      "outputPath": "/Users/artemryklin/Projects/VTmei/Server.BLL/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/artemryklin/.nuget/NuGet/NuGet.Config"

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "yUPjNuZrpSU=",
+  "dgSpecHash": "93UGVc49v5s=",
   "success": true,
-  "projectFilePath": "/Users/artemryklin/RiderProjects/VTmei/Client.Core/Client.Core.csproj",
+  "projectFilePath": "/Users/artemryklin/Projects/VTmei/Client.Core/Client.Core.csproj",
   "expectedPackageFiles": [
     "/Users/artemryklin/.nuget/packages/microsoft.aspnetcore.authorization/9.0.6/microsoft.aspnetcore.authorization.9.0.6.nupkg.sha512",
     "/Users/artemryklin/.nuget/packages/microsoft.aspnetcore.components/9.0.6/microsoft.aspnetcore.components.9.0.6.nupkg.sha512",

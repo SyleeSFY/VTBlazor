@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/artemryklin/RiderProjects/VTmei/Server.DAL/Server.DAL.csproj",
+      "projectUniqueName": "/Users/artemryklin/Projects/VTmei/Server.DAL/Server.DAL.csproj",
       "projectName": "Server.DAL",
-      "projectPath": "/Users/artemryklin/RiderProjects/VTmei/Server.DAL/Server.DAL.csproj",
+      "projectPath": "/Users/artemryklin/Projects/VTmei/Server.DAL/Server.DAL.csproj",
       "packagesPath": "/Users/artemryklin/.nuget/packages/",
-      "outputPath": "/Users/artemryklin/RiderProjects/VTmei/Server.DAL/obj/",
+      "outputPath": "/Users/artemryklin/Projects/VTmei/Server.DAL/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/artemryklin/.nuget/NuGet/NuGet.Config"

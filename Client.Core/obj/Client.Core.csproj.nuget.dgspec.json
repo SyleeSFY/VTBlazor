@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/artemryklin/RiderProjects/VTmei/Client.Core/Client.Core.csproj": {}
+    "/Users/artemryklin/Projects/VTmei/Client.Core/Client.Core.csproj": {}
   },
   "projects": {
-    "/Users/artemryklin/RiderProjects/VTmei/Client.Core/Client.Core.csproj": {
+    "/Users/artemryklin/Projects/VTmei/Client.Core/Client.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/artemryklin/RiderProjects/VTmei/Client.Core/Client.Core.csproj",
+        "projectUniqueName": "/Users/artemryklin/Projects/VTmei/Client.Core/Client.Core.csproj",
         "projectName": "Client.Core",
-        "projectPath": "/Users/artemryklin/RiderProjects/VTmei/Client.Core/Client.Core.csproj",
+        "projectPath": "/Users/artemryklin/Projects/VTmei/Client.Core/Client.Core.csproj",
         "packagesPath": "/Users/artemryklin/.nuget/packages/",
-        "outputPath": "/Users/artemryklin/RiderProjects/VTmei/Client.Core/obj/",
+        "outputPath": "/Users/artemryklin/Projects/VTmei/Client.Core/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/artemryklin/.nuget/NuGet/NuGet.Config"
