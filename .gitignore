@@ -11,3 +11,28 @@ obj/
 *.suo
 *.vscode/
 .vs/
+.DS_Store
+*.DS_Store
+**/.DS_Store
+[Dd]ebug/
+
+# Blazor WebAssembly webcil files
+**/obj/**/webcil/
+**/bin/**/webcil/
+
+
+# ALL build directories - most important!
+obj/
+bin/
+[Dd]ebug/
+[Rr]elease/
+[Bb]uild/
+[Oo]ut/
+[Pp]ublish/
+
+# Blazor specific
+**/wwwroot/_framework/
+**/webcil/
+**/scopedcss/
+**/Razor/
+
