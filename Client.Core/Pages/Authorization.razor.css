@@ -1,0 +1,309 @@
+/* ----------------------------------------------------------------------------------------------------- */
+/* Тело. Фон */
+.authorization-page {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('/image/AuthorizationPage/BgLeft.png'), url('/image/AuthorizationPage/BgRight.png');
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-position: left -1px bottom 0px, right top;
+    font-family: "Roboto Flex", sans-serif;
+}
+
+
+/* ----------------------------------------------------------------------------------------------------- */
+/* Меню */
+.Menu {
+    width: 1024px;
+    height: 459px;
+    filter: drop-shadow(0 0 14.75px #5E5E5E);
+    display: flex;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 100vh;
+    align-items: center;
+}
+
+.Menu-Left {
+    display: flex;
+    position: relative;
+    background-image: url(../image/bg-menu.png);
+    background-size: cover;
+    width: 554px;
+    left: 0;
+    transition: transform 1s ease;
+    overflow: hidden;
+    z-index: 1;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.Menu-Left::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.95);
+    opacity: 0.8;
+    z-index: -1;
+
+
+}
+
+.Menu-Left-Authorization{
+    margin: auto;
+    width: 270px;
+    text-align: center;
+    display: grid;
+    justify-content: center;
+}
+
+/* ----------------------------------------------------------------------------------------------------- */
+/* Форма и внутренности */
+form {
+    display: grid;
+    margin-top: -20px;
+    padding-top: 20px;
+}
+
+button {
+    border-radius: 40px;
+    box-shadow: 0px 4px 4px 0px #00000040;
+    border: 0px solid #00000080;
+    width: 286px;
+    height: 61px;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: bold;
+    font-size: 24px;
+    cursor: pointer;
+    font-family: "Roboto Flex", sans-serif;
+    background-color: white;
+}
+
+.button-black {
+    opacity: 1;
+    color: white;
+    background-color: black;
+    width: 397px;
+    height: 61px;
+    border-radius: 45px;
+    margin-top: 35px;
+}
+
+.button-black span {
+    opacity: 1;
+}
+
+input {
+    margin: 10px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border: none;
+    border-radius: 40px;
+    width: 397px;
+    height: 61px;
+    padding-left: 27px;
+    text-align: left;
+    font-size: 30px;
+    line-height: 61px;
+    font-family: "Rubik", sans-serif;
+    font-weight: bold;
+
+    outline: none;
+}
+
+.input::placeholder {
+    opacity: 15%;
+}
+
+.forgot-password {
+    color: black;
+    font-weight: bold;
+
+    font-size: 18px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    vertical-align: middle;
+    margin-bottom: 38px;
+    margin-top: 18px;
+    text-decoration: none;
+    opacity: 15%;
+    font-size: 18px;
+    font-family: "Rubik", sans-serif;
+}
+
+/* ----------------------------------------------------------------------------------------------------- */
+/* Анимации */
+.Menu.swapped .Menu-Left {
+    transform: translateX(470px);
+}
+
+.Menu.swapped{
+    transform: translateX(-554px);
+}
+
+.Menu.swapped2 .Menu-Left {
+    transform: translateX(-470px);
+}
+
+.Menu.swapped2{
+
+    transform: translateX(554px);
+}
+
+/* мягкое исчезновение */
+.Menu-Left>div,
+.Menu-Right>div {
+    transition: opacity 0.5s ease;
+}
+
+/* ----------------------------------------------------------------------------------------------------- */
+/* Шрифты для заголовков */
+
+button span {
+    opacity: 0.8
+}
+
+.Tittle {
+    margin-top: 0px;
+    font-family: "Roboto Flex", sans-serif;
+    font-weight: 900;
+    font-size: 72px;
+    opacity: 0.8;
+}
+
+.Menu-Left-Authorization-Tittle-Lower {
+    font-size: 36px;
+    margin-top: -30px;
+    margin-bottom: 3px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* адаптация */
+@media(max-width:1060px) {
+    .Menu {
+
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+}
+
+@media(max-width:830px) {
+    .Menu {
+
+        margin: 10px;
+        display: grid;
+        justify-content: center;
+        width: 600px;
+        height: 700px;
+    }
+
+    .Menu-Left {
+        scale: 90%;
+        margin-top: -25px;
+    }
+}
+
+@media(max-width:550px) {
+    .Menu {
+        margin: 30px;
+        display: grid;
+        width: 550px;
+        height: 600px;
+
+    }
+
+    button {
+        width: 250px;
+        height: 60px;
+        border-radius: 45px;
+
+    }
+
+    .button-black {
+        width: 300px;
+    }
+
+    input {
+        /* margin-top: 20px; */
+        margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+
+        width: 325px;
+    }
+
+
+
+    .Menu-Left-Authorization {
+        margin-top: 40px;
+    }
+
+    .Menu-Left {
+
+
+        height: 545px;
+        margin-top: -30px;
+    }
+}
+
+@media(max-width:450px) {
+
+    span {
+        font-size: 16px;
+    }
+
+    button {
+        width: 250px;
+        height: 60px;
+        border-radius: 45px;
+
+    }
+
+
+
+
+    .button-black {
+        width: 200px;
+    }
+
+    input {
+        /* margin-top: 20px; */
+        margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+
+        width: 300px;
+    }
+
+    .Menu {
+        margin: 30px;
+        display: grid;
+        width: 500px;
+        height: 600px;
+
+    }
+
+    .Menu-Left-Authorization {
+        margin-top: 40px;
+    }
+
+    .Menu-Left {
+
+
+        height: 545px;
+        margin-top: -30px;
+    }
+}
