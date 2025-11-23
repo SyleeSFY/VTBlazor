@@ -43,3 +43,5 @@ bin/
 rider.project.restore.info
 .idea/
 
+*.nuget.info
+**/obj/
