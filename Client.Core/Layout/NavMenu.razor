@@ -1,10 +1,9 @@
-﻿<nav class='nav_bar'>
+﻿<nav class="nav_bar">
     <img src="/image/Shared/nav_bar.png" alt="Логотип кафедры" class='nav_bar_IMG' />
     <button class="mobile-menu-button">
     </button>
-    @* class={`nav_menu ${isMenuOpen ? 'mobile-open' : ''}`} *@
     <nav> 
-        <ul class='nav_li'>
+        <ul class="nav_li">
             <NavLink href="/" class="nav_link"> 
                 <li class='nav_item Cursor'>О КАФЕДРЕ</li>
             </NavLink>
@@ -14,9 +13,9 @@
             <NavLink href="contacts" class="nav_link"> 
                 <li class='nav_item Cursor'>КОНТАКТЫ</li>
             </NavLink>
-            <NavLink href="authorization" class="nav_link" style="text-align: right"> 
-                <p class='nav_item Cursor'>Авторизация</p>
-            </NavLink>
         </ul>
     </nav>
+    <NavLink href="authorization" class="nav_link" style="margin-left: auto"> 
+        <p class='nav_item Cursor'>Авторизация</p>
+    </NavLink>
 </nav>

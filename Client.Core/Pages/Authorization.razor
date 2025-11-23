@@ -1,7 +1,8 @@
 @page "/Authorization"
+@layout LayoutWithoutBackground
+
 <div class="authorization-page">
     <div class="Menu" id="menu">
-        <!-- Левая часть меню -->
         <div class="Menu-Left">
             <div class="Menu-Left-Authorization">
                 <p class="Tittle">ВХОД</p>
@@ -16,27 +17,3 @@
         </div>
     </div>
 </div>
-
-    @* <script> *@
-    @*     function toggleMenu() { *@
-    @*         const menu = document.getElementById('menu'); *@
-    @*         const leftContent = menu.querySelector('.Menu-Left > div'); *@
-    @*         const rightContent = menu.querySelector('.Menu-Right > div'); *@
-    @*         void menu.offsetWidth;  *@
-    @*         leftContent.style.opacity = '0'; *@
-    @*         rightContent.style.opacity = '0'; *@
-    @*         setTimeout(() => { *@
-    @*             menu.classList.add('swapped');              *@
-    @*             const backupTimeout = setTimeout(() => { *@
-    @*                 window.location.href = "../Registation/index2.html"; *@
-    @*             }, 1500);  *@
-    @*             menu.addEventListener('transitionend', function handler(e) { *@
-    @*                 if (e.propertyName.includes('transform')) { *@
-    @*                     clearTimeout(backupTimeout); *@
-    @*                     menu.removeEventListener('transitionend', handler); *@
-    @*                     window.location.href = "../Registation/index2.html"; *@
-    @*                 } *@
-    @*             }, { once: true }); *@
-    @*         }, 500); *@
-    @*     } *@
-    @* </script> *@
