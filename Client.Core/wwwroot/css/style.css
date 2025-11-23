@@ -13,7 +13,6 @@
 }
 
 .containerBg {
-
     width: 100%;
     min-height: 100%;
     border-width: 3px;
@@ -38,15 +37,7 @@
     margin-bottom: auto;
     flex-shrink: 0
 }
-/*.Tochka {*/
-/*    border: 1px solid #009639;*/
-/*    margin-top: auto;*/
-/*    margin-bottom: auto;*/
-/*    width: 1.9vw;*/
-/*    height: 1.9vw;*/
-/*    margin-right: 1.25vw;*/
-/*}*/
-/*----------*/
+
 nav, div, p, ul, h1, h2, h3 {
     margin: 0;
     padding: 0;
@@ -63,10 +54,14 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
-    /*background: url(../components/Icons/фон12.png) repeat center center;*/
+    background: url('/image/Shared/BackgroundMainPage.png') repeat center center !important;
     background-size: cover;
     min-height: 100vh;
     width: 100%;
+}
+
+body.authorization-page {
+    background: none;
 }
 
 #root {
