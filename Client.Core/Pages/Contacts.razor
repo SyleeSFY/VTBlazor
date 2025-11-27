@@ -15,12 +15,7 @@ else if (educator != null)
         <p>ID: @educator.Id</p>
         <p>ФИО: @educator.FullName</p>
         <p>Степень: @educator.AcademicDegree</p>
-        @if (educator.Image != null && educator.Image.Length > 0)
-        {
-            <img src="data:image/jpeg;base64,@Convert.ToBase64String(educator.Image)" 
-                 alt="@educator.FullName" 
-                 style="max-width: 200px; max-height: 200px;" />
-        }
+        <p>дисциплины: @string.Join(" , ", educator.EducatorAdditionalInfo.EducatorDisciplines.Select(x => x.Discipline.NameDiscipline))</p>
     </div>
 }
 else if (errorMessage != null)
