@@ -1,9 +1,10 @@
 using System.Net.Http.Json;
 using Client.Core.Shared.Models;
+using Microsoft.AspNetCore.Components;
 
 namespace Client.Core.Pages;
 
-public partial class Educators
+public partial class Educators : ComponentBase
 {
     private List<Educator> _educators = new List<Educator>();
     

@@ -1,5 +1,8 @@
+using System.Text.Json;
 using Client.Core.Shared.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.JSInterop;
 
 namespace Client.Core.Features.EducatorInfo;
 
@@ -14,7 +17,11 @@ public partial class EducatorCard : ComponentBase
             return $"data:image/jpeg;base64,{imageData}";
         return String.Empty;
     }
-    
-    private void GoToEducatorCard()
-        => Navigation.NavigateTo($"/EducatorCard/{EducatorEntitie.Id}");
+
+    private async Task GoToEducatorCard()
+    {
+        await JSRuntime.InvokeVoidAsync("sessionStorage.setItem", $"educator_{EducatorEntitie.Id}", JsonSerializer.Serialize(EducatorEntitie));
+        
+        Navigation.NavigateTo($"/educatorcard/{EducatorEntitie.Id}");
+    }
 }
