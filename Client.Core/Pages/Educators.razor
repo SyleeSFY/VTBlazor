@@ -1,8 +1,24 @@
-@page "/Educator"
+@page "/Educators"
 @layout MainLayout
+@inject HttpClient Http
 
-<h3>Educator</h3>
-
-@code {
-    
-}
+<div class="container">
+    @if (_educators == null)
+    {
+        <p>Loading...</p>
+    }
+    else if (!_educators.Any())
+    {
+        <p>No educators available</p>
+    }
+    else
+    {
+        <div class="EducatorsCards">
+            @foreach (var educator in _educators)
+            {
+                <EducatorCard EducatorEntitie="@educator"/>
+                
+            }
+        </div>
+    }
+</div>

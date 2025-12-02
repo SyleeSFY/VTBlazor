@@ -10,29 +10,37 @@ namespace Server.DAL.Repositories;
 public class EducatorRepository : IEducatorRepository
 {
     private readonly EducatorDbContext _context;
-
-    public EducatorRepository(EducatorDbContext context)
-    {
-        _context = context;
-    }
-
-    public async Task<Educator> GetByIdAsync(int id)
-    {
-        return await _context.Educators.FindAsync(id);
-    }
     
-    public async Task<Educator> GetByIdAddInfoAsync(int id)
-    {
-        return await _context.Educators
+    public EducatorRepository(EducatorDbContext context)
+        => _context = context;
+    
+    /// <summary>
+    /// Получение всего списка user's
+    /// </summary>
+    /// <returns></returns>
+    public async Task<List<Educator>> GetEducatorsSimpleAsync()
+        => await _context.Educators.ToListAsync();
+    
+    public async Task<List<Educator>> GetEducatorsAsync()
+        => await _context.Educators
+            .Include(x => x.EducatorAdditionalInfo)
+                .ThenInclude(ai => ai.EducatorDisciplines)
+                    .ThenInclude(ed => ed.Discipline)
+            .ToListAsync();
+
+    public async Task<Educator> GetByIdSimpleAsync(int id)
+        => await _context.Educators.FindAsync(id);
+    
+    public async Task<Educator> GetByIdAsync(int id)
+        => await _context.Educators
             .Include(x => x.EducatorAdditionalInfo)
                 .ThenInclude(ai => ai.EducatorDisciplines)
                     .ThenInclude(ed => ed.Discipline)
             .FirstOrDefaultAsync(x => x.Id == id);
-    }
 
-    public async Task AddEducator(Educator educator)
+    public async Task AddEducator(Educator edc)
     {
-        await _context.Educators.AddAsync(educator);
-        await _context.SaveChangesAsync();
+        await _context.Educators.AddAsync(edc);
+        await _context.SaveChangesAsync();   
     }
 }

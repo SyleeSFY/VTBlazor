@@ -1,5 +1,9 @@
-<h3>EducatorCard</h3>
+@inject NavigationManager Navigation
 
-@code {
-    
-}
+<div class="Card Cursor" style="transition-delay: 0.08s" @onclick="@GoToEducatorCard">
+    <img src="@GetIMG()" alt="Фото Преподавателя" class="EducatorPhoto"/>
+    <div class="EducatorOverlay">
+        <p class="fio">@EducatorEntitie?.FullName</p>
+        <p class="academic-title">@EducatorEntitie?.AcademicDegree</p>
+    </div>
+</div>
