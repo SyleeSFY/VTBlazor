@@ -13,13 +13,18 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="App\" />
       <Folder Include="Entities\" />
       <Folder Include="Widgets\" />
     </ItemGroup>
 
     <ItemGroup>
       <Content Include="wwwroot\image\.DS_Store" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="App\Layout\LayoutWithoutBackground.razor" />
+      <AdditionalFiles Include="App\Layout\MainLayout.razor" />
+      <AdditionalFiles Include="App\Layout\NavMenu.razor" />
     </ItemGroup>
 
 </Project>

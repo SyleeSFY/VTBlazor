@@ -1,7 +1,7 @@
 using Client.Core.Shared.Models;
 using Microsoft.AspNetCore.Components;
 
-namespace Client.Core.Features.EducatorsPage;
+namespace Client.Core.Features.EducatorInfo;
 
 public partial class EducatorCard : ComponentBase
 {

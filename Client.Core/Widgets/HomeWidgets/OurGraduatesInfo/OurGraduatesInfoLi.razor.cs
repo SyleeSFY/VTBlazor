@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 
-namespace Client.Core.Features.HomePage.OurGraduatesInfo.ui;
+namespace Client.Core.Widgets.HomeWidgets.OurGraduatesInfo;
 
 public partial class OurGraduatesInfoLi : ComponentBase
 {

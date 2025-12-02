@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 
-namespace Client.Core.Features.HomePage.HistoryOfCafedra.ui
+namespace Client.Core.Widgets.HomeWidgets.HistoryOfCafedra
 {
     public partial class HistoryTimeLine : ComponentBase
     {
