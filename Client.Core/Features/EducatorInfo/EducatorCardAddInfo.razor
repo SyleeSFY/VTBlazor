@@ -1,0 +1,58 @@
+@page "/EducatorCardAddInfo"
+
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
+@inject HttpClient Http
+
+<div style="display: flex">
+    <div style="width: 30%">
+        <img src="@GetIMG()" alt="Фото Преподавателя" class="EducatorCardIMG"/>
+    </div>
+    <div style="width: 70%">
+        <TittleUnderStick 
+            Tittle="@educator?.FullName" 
+            JustifyContent="JustifyContentEnum.FlexStart" 
+            FontSize="32"/>
+        <p>Должность на кафедре: @educator?.Profession</p>
+        <p>Ученая степень: @educator?.AcademicDegree</p>
+        <p>Уровень образования: @educator?.EducatorAdditionalInfo.EducationLevel</p>
+        <p>Ученое звание @educator?.EducatorAdditionalInfo.AcademicTitle</p>
+        <p>Специальность или направление подготовки: @educator?.EducatorAdditionalInfo.SpecialtyOrFieldOfStudy </p>
+        <p>Квалификация: @educator?.EducatorAdditionalInfo.Qualification</p>
+        <p>
+            Дисциплины:
+            @if (educator?.EducatorAdditionalInfo?.EducatorDisciplines != null)
+            {
+                @foreach (var dicipline in educator.EducatorAdditionalInfo.EducatorDisciplines)
+                {
+                    @if (dicipline?.Discipline?.NameDiscipline != null)
+                    {
+                        <p>@dicipline.Discipline.NameDiscipline</p>
+                    }
+                }
+            }
+            else
+            {
+                <p>Дисциплины не указаны</p>
+            }
+        </p>
+        <p>Дополнительная информация: @educator?.EducatorAdditionalInfo.AdditionalInfo </p>
+        
+    </div>
+</div>
+
+@if (isLoading)
+{
+    <p>Загрузка...</p>
+}
+else if (educator != null)
+{
+    <div style="margin-top: 20px">
+        <a href="/educators" class="btn btn-secondary">Назад к контактам</a>
+    </div>
+}
+else if (errorMessage != null)
+{
+    <p style="color: red;">Ошибка: @errorMessage</p>
+    <a href="/educators" class="btn btn-secondary">Назад</a>
+}

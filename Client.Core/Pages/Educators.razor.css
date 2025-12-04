@@ -1,5 +1,5 @@
 .EducatorsCards {
-    padding: 20px 60px;
+    padding: 0 60px 20px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     justify-items: center;
