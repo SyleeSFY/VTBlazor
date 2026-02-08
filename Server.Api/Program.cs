@@ -23,13 +23,16 @@ public class Program
             options.AddPolicy("AllowBlazorWasm", policy =>
             {
                 policy.WithOrigins(
-                        "https://localhost:5001", 
+                        "https://localhost:5001",
                         "http://localhost:5000",
-                        "https://localhost:7001", 
+                        "https://localhost:7001",
                         "http://localhost:3000",
-                        "http://localhost:5125") // Blazor Client
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
+                        "http://localhost:5125",
+                        "http://localhost:5129",
+                        "https://localhost:7063",
+                        "http://localhost:7063")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
             });
         });
         

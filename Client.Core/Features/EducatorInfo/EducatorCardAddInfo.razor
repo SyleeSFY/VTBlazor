@@ -3,41 +3,45 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager Navigation
 @inject HttpClient Http
-
-<div style="display: flex">
+<TittleUnderStick Tittle="@educator?.FullName"
+                  JustifyContent="JustifyContentEnum.FlexStart"
+                  FontSize="38"
+                  PaddinLeft="2"/>
+<div style="display: flex; margin-top:50px">
     <div style="width: 30%">
         <img src="@GetIMG()" alt="Фото Преподавателя" class="EducatorCardIMG"/>
     </div>
-    <div style="width: 70%">
-        <TittleUnderStick 
-            Tittle="@educator?.FullName" 
-            JustifyContent="JustifyContentEnum.FlexStart" 
-            FontSize="32"/>
-        <p>Должность на кафедре: @educator?.Profession</p>
-        <p>Ученая степень: @educator?.AcademicDegree</p>
-        <p>Уровень образования: @educator?.EducatorAdditionalInfo.EducationLevel</p>
-        <p>Ученое звание @educator?.EducatorAdditionalInfo.AcademicTitle</p>
-        <p>Специальность или направление подготовки: @educator?.EducatorAdditionalInfo.SpecialtyOrFieldOfStudy </p>
-        <p>Квалификация: @educator?.EducatorAdditionalInfo.Qualification</p>
-        <p>
-            Дисциплины:
-            @if (educator?.EducatorAdditionalInfo?.EducatorDisciplines != null)
+    <div style="width: 70%;">
+
+
+        <div class="EducatorCardInfo">
+            <p><span style="font-weight: 500;">Должность на кафедре:</span> @educator?.Profession</p>
+            <p><span style="font-weight: 500;">Ученая степень:</span> @educator?.AcademicDegree</p>
+            <p><span style="font-weight: 500;">Уровень образования:</span> @educator?.EducatorAdditionalInfo.EducationLevel</p>
+            <p><span style="font-weight: 500;">Ученое звание:</span> @educator?.EducatorAdditionalInfo.AcademicTitle</p>
+            <p><span style="font-weight: 500;">Специальность или направление подготовки:</span> @educator?.EducatorAdditionalInfo.SpecialtyOrFieldOfStudy </p>
+            <p><span style="font-weight: 500;">Квалификация:</span> @educator?.EducatorAdditionalInfo.Qualification</p>
+            <p>
+            <span style="font-weight: 500;">Преподаваемые дисциплины:</span>
+
+            @if (educator?.EducatorAdditionalInfo?.EducatorDisciplines != null && educator.EducatorAdditionalInfo.EducatorDisciplines.Any())
             {
-                @foreach (var dicipline in educator.EducatorAdditionalInfo.EducatorDisciplines)
-                {
-                    @if (dicipline?.Discipline?.NameDiscipline != null)
+                <ul class="disciplines_list">
+                    @foreach (var discipline in educator.EducatorAdditionalInfo.EducatorDisciplines)
                     {
-                        <p>@dicipline.Discipline.NameDiscipline</p>
+                        <li>@discipline.Discipline.NameDiscipline</li>
                     }
-                }
+                </ul>
             }
             else
             {
-                <p>Дисциплины не указаны</p>
+                <span>Дисциплины не указаны</span>
             }
-        </p>
-        <p>Дополнительная информация: @educator?.EducatorAdditionalInfo.AdditionalInfo </p>
-        
+
+            </p>
+            <p>@((MarkupString)@GetIndentedText(educator?.EducatorAdditionalInfo.AdditionalInfo))</p>
+
+       </div>
     </div>
 </div>
 
@@ -47,8 +51,8 @@
 }
 else if (educator != null)
 {
-    <div style="margin-top: 20px">
-        <a href="/educators" class="btn btn-secondary">Назад к контактам</a>
+    <div style="margin-top: 20px; padding-left: 2vw;">
+        <a href="/educators" class="btn btn-secondary" style="background-color: #2e7d32">Назад</a>
     </div>
 }
 else if (errorMessage != null)
