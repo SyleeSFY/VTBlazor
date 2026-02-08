@@ -1,21 +1,36 @@
 ﻿<nav class="nav_bar">
     <img src="/image/Shared/nav_bar.png" alt="Логотип кафедры" class='nav_bar_IMG' />
-    <button class="mobile-menu-button">
+    
+    <button class="mobile-menu-button" @onclick="ToggleMenu">
+        @if (isMenuOpen)
+        {
+            <span>✕</span>
+        }
+        else
+        {
+            <span>☰</span>
+        }
     </button>
-    <nav> 
+
+    <nav class="@($"nav_menu {(isMenuOpen ? "mobile-open" : "")}")"> 
         <ul class="nav_li">
-            <NavLink href="/" class="nav_link"> 
-                <li class="nav_item Cursor">О КАФЕДРЕ</li>
+            <NavLink href="/" class="nav_link" style="text-decoration: none" @onclick="CloseMenu">
+                <li class="nav_item">КАФЕДРА</li>
             </NavLink>
-            <NavLink href="educators" class="nav_link"> 
-                <li class="nav_item Cursor">ПРЕПОДАВАТЕЛИ И СОТРУДНИКИ</li>
+            <NavLink href="discipline" style="text-decoration: none" class="nav_link Cursor" @onclick="CloseMenu">
+                <li class="nav_item">ДИСЦИПЛИНЫ</li>
             </NavLink>
-            <NavLink href="contacts" class="nav_link"> 
-                <li class="nav_item Cursor">КОНТАКТЫ</li>
+            <NavLink href="educators" style="text-decoration: none" class="nav_link Cursor" @onclick="CloseMenu">
+                <li class="nav_item">ПРЕПОДАВАТЕЛИ И СОТРУДНИКИ</li>
+            </NavLink>
+            <NavLink href="contacts" style="text-decoration: none" class="nav_link Cursor" @onclick="CloseMenu">
+                <li class="nav_item">КОНТАКТЫ</li>
             </NavLink>
         </ul>
+        
+        <NavLink href="authorization" class="nav_link auth-link Cursor" style="margin-left: auto; text-decoration: none">
+            <p class="nav_item Cursor">Авторизация</p>
+        </NavLink>
     </nav>
-    <NavLink href="authorization" class="nav_link" style="margin-left: auto"> 
-        <p class="nav_item Cursor">Авторизация</p>
-    </NavLink>
+
 </nav>
