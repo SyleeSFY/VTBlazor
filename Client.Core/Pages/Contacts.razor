@@ -2,61 +2,58 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 
-<div class="home">
-  <div class="Block">
-    <div class="FlexCenter">
-      <div className="BlockTittleHome">
+<div class="container">
+    <div class="home">
+      <div class="Block">
+
         <TittleUnderStick Tittle="Контакты для связи!"
-                          JustifyContent="JustifyContentEnum.FlexStart"
-                          FontSize="38"
-                          PaddinLeft="2"/>
-        @* <span class="TittleHome">Контакты для связи!</span> *@
-        @* <div class="Stip"></div> *@
-      </div>
-    </div>
-    <div class="BlockContacts">
-      <div class="LeftBlockContacts">
-        <div class="Left">
-          <div class="FirstBlock">
-            <div class="ContactsInfo">
-              <img src={Geo} alt="" class="ContactsIMG" />
-              <p class="ContactsContentTittle">Адрес:</p>
-              <p class="ContactsContent">214013, г. Смоленск, Энергетический проезд, д. 1</p>
+                            JustifyContent="JustifyContentEnum.Center"
+                            FontSize="48"/>
+
+        <div class="BlockContacts">
+          <div class="LeftBlockContacts">
+            <div class="Left">
+              <div class="FirstBlock">
+                <div class="ContactsInfo">
+                  <img src="/image/ContactsPage/Geo.png" alt="" class="ContactsIMG" />
+                  <p class="ContactsContentTittle">Адрес:</p>
+                  <p class="ContactsContent">214013, г. Смоленск, Энергетический проезд, д. 1</p>
+                </div>
+              </div>
+              <div class="SecondBlock">
+                <div class="ContactsInfo">
+                  <img src="/image/ContactsPage/Mail.png" alt="" class="ContactsIMG" />
+                  <p class="ContactsContentTittle">Почта:</p>
+                  <p class="ContactsContent">VT@sbmpei.ru</p>
+                </div>
+              </div>
+            </div>
+            <div class="Right">
+              <div class="FirstBlock">
+                <div class="ContactsInfo">
+                  <img src="/image/ContactsPage/Phone.png" alt="" class="ContactsIMG" />
+                  <p class="ContactsContentTittle">Телефон:</p>
+                  <p class="ContactsContent">+7(4812) 39-11-60<br />
+                    +7(4812) 39-11-68</p>
+                </div>
+              </div>
+              <div class="SecondBlock">
+                <div class="ContactsInfo contact-person">
+                  <p class="contact-person-title"><strong>Контактное лицо</strong></p>
+                  <p class="ContactsContent contact-person-name">Ольшевская<br />
+                    Ирина Николаевна</p>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="SecondBlock">
-            <div class="ContactsInfo">
-              <img src={Mail} alt="" class="ContactsIMG" />
-              <p class="ContactsContentTittle">Почта:</p>
-              <p class="ContactsContent">VT@sbmpei.ru</p>
-            </div>
+          <div class="RightBlockContacts">
+            <iframe 
+              src="https://yandex.ru/map-widget/v1/?um=constructor%3A248f63b372de498e9051cbf8be2b3ed6f0e20425851ee1dd481c97e2becd51c9&amp;source=constructor" 
+              title="Карта расположения"
+              class="map-iframe" 
+            ></iframe>
           </div>
         </div>
-        <div class="Right">
-          <div class="FirstBlock">
-            <div class="ContactsInfo">
-              <img src={Mobile} alt="" class="ContactsIMG" />
-              <p class="ContactsContentTittle">Телефон:</p>
-              <p class="ContactsContent">+7(4812) 39-11-60<br />
-                +7(4812) 39-11-68</p>
-            </div>
-          </div>
-          <div class="SecondBlock">
-            <div class="ContactsInfo contact-person">
-              <p class="contact-person-title"><strong>Контактное лицо</strong></p>
-              <p class="ContactsContent contact-person-name">Ольшевская<br />
-                Ирина Николаевна</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="RightBlockContacts">
-        <iframe 
-          src="https://yandex.ru/map-widget/v1/?um=constructor%3A248f63b372de498e9051cbf8be2b3ed6f0e20425851ee1dd481c97e2becd51c9&amp;source=constructor" 
-          title="Карта расположения"
-          class="map-iframe" 
-        ></iframe>
       </div>
     </div>
-  </div>
 </div>
