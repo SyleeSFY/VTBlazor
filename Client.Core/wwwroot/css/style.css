@@ -5,7 +5,7 @@
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 15px;
+    padding: 50px 15px;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -68,11 +68,6 @@ body.authorization-page {
     flex: 1;
     display: flex;
     flex-direction: column;
-}
-
-
-.home {
-    padding-top: 50px;
 }
 
 .VT {

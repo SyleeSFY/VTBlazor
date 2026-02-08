@@ -1,0 +1,45 @@
+.EducatorCardIMG {
+    margin: auto;
+/*    margin-top: 90px;*/
+    height: 400px;
+    width: 275px;
+    border-radius: 8px;
+    border: 2px solid #2e7d32;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.EducatorCardInfo {
+    font-family: "Roboto", sans-serif;
+    /*    margin-top: 50px;*/
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.EducatorCardInfo p{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    white-space: pre-line;
+}
+.EducatorCardInfo br {
+    display: block;
+    margin-bottom: 1em;
+    content: "";
+}
+
+.EducatorCardInfo p:first-child{
+    margin-top: -8px;
+}
+
+.disciplines_list {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+    list-style-type: disc;
+}
+
+.disciplines_list li {
+    margin-left: 50px;
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
+}
