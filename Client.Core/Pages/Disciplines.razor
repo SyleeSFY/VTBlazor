@@ -1,0 +1,12 @@
+﻿@page "/discipline"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+@foreach(var qwe in _educators)
+{
+    <h3>@qwe.NameDiscipline @qwe.Course as: @qwe.Group.isAS по: @qwe.Group.isPO ВМ: @qwe.Group.isVM</h3>
+}
+
+@code{
+
+}

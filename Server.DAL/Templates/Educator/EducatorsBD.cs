@@ -6,9 +6,9 @@ namespace Server.DAL.Templates;
 
 public class EducatorsBD
 {
-    private readonly EducatorDbContext _context;
+    private readonly UniversityDbContext _context;
 
-    public EducatorsBD(EducatorDbContext context)
+    public EducatorsBD(UniversityDbContext context)
         => _context = context;
     
   private List<Educator> _listEducators = new List<Educator>()

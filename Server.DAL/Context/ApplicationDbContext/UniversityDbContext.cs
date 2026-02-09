@@ -5,16 +5,17 @@ using Server.DAL.Models.Entities.Educators;
 namespace Server.DAL.Context.ApplicationDbContext;
 
 
-public class EducatorDbContext : DbContext
+public class UniversityDbContext : DbContext
 {
-    public EducatorDbContext(DbContextOptions<EducatorDbContext> options) : base(options)
+    public UniversityDbContext(DbContextOptions<UniversityDbContext> options) : base(options)
     { }
     
     public DbSet<Educator> Educators { get; set; }
     public DbSet<EducatorAdditionalInfo> EducatorAdditionalInfos { get; set; }
     public DbSet<EducatorDiscipline> EducatorDisciplines { get; set; }
     public DbSet<Discipline> Disciplines { get; set; }
-    
+    public DbSet<TrainedGroup> TrainedGroups { get; set; }
+
     /// <summary>
     /// Связи БД через EF
     /// </summary>
@@ -42,6 +43,26 @@ public class EducatorDbContext : DbContext
                 .WithMany()
                 .HasForeignKey(ed => ed.DisciplineId);
         });
-    }
-        
+
+        // Discipline - TrainedGroup
+
+        modelBuilder.Entity<Discipline>(entity =>
+        {
+            modelBuilder.Entity<Discipline>()
+                .HasOne(d => d.Group)
+                .WithOne(g => g.Discipline)
+                .HasForeignKey<TrainedGroup>(g => g.DisciplineId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasIndex(d => d.Course);
+
+        });
+
+        // TrainedGroup
+        modelBuilder.Entity<TrainedGroup>(entity =>
+        {
+            entity.HasKey(tg => tg.Id);
+        });
+    }    
 }

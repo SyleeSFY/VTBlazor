@@ -39,7 +39,6 @@ public class EducatorService : IEducatorService
         return new List<Educator>();
     }
 
-    
     /// <summary>
     /// Упрощенный список educators
     /// </summary>
