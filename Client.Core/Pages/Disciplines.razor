@@ -31,8 +31,6 @@
             {
                 case EducationLevelEnum.Bachelor:
                     @* Таблица для бакалавриата *@
-                // class={ getRowClassName(discipline, index, bachelorDisciplines)}
-
                     <div class="table-container">
                         <table class="disciplines-table">
                             <thead>
@@ -52,7 +50,7 @@
                                 @foreach(var item in _diciplinesBachelor)
                                 {
                                     <tr @key="item.Index"
-                                        style="background: @(item.Discipline.Course == 1 || item.Discipline.Course == 3 ? "none" : "none")">
+                                        style="background: @(item.Discipline.Course == 1 || item.Discipline.Course == 3 ? "none" : "#cfcdcd5e")">
                                         <td>@item.Index</td>
                                         <td style="text-align: left">@item.Discipline.NameDiscipline</td>
                                         <td>@item.Discipline.Course</td>
