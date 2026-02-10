@@ -31,9 +31,9 @@
     background: none;
 }
 
-    .button_with_under_stick.active {
-        border-bottom: 2px solid #009639;
-    }
+.button_with_under_stick.active {
+    border-bottom: 2px solid #009639;
+}
 
 .table-container {
     display: flex;

@@ -4,24 +4,26 @@
 
 <div class="container">
     <div class="home">
-@*         <div className="FlexEnd" style={{ paddingRight: 60 }}>
-            <div className="BlockTittleHome">
-                <span className='VT'>Преподаваемые дисциплины</span>
-            </div>
-        </div> *@
-        @* ${activeTable= = ='bachelor' ? 'active' : '' } *@
-        @* ${activeTable= = ='magistracy' ? 'active' : '' }`} *@
+        <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Преподаваемые дисциплины" />
         <div class="block gap">
             <div class="center">
                 <button style= "margin-right:40px"
                         class="button_with_under_stick" 
                         @onclick="(() => SetActiveTable(EducationLevelEnum.Bachelor))">
-                    Бакалавриат
+
+                    <TittleUnderStick Tittle="Бакалавриат"
+                                      JustifyContent="JustifyContentEnum.Center"
+                                      FontSize="36"
+                                      State="@(statusTable == EducationLevelEnum.Bachelor ? true : false)" />
                 </button>
                 <button style="margin-right:40px"
                         class="button_with_under_stick" 
                         @onclick="(() => SetActiveTable(EducationLevelEnum.Magistracy))">
-                    Магистратура
+
+                    <TittleUnderStick Tittle="Магистратура"
+                                      JustifyContent="JustifyContentEnum.Center"
+                                      FontSize="36"
+                                      State="@(statusTable == EducationLevelEnum.Magistracy ? true : false)" />
                 </button>
             </div>
         </div>
@@ -30,7 +32,6 @@
             switch (statusTable)
             {
                 case EducationLevelEnum.Bachelor:
-                    @* Таблица для бакалавриата *@
                     <div class="table-container">
                         <table class="disciplines-table">
                             <thead>
@@ -63,7 +64,6 @@
                             </tbody>
                         </table>
                     </div>
-                    @*         )} *@
                     break;
                            case EducationLevelEnum.Magistracy:
                 <div class="table-container">
@@ -91,5 +91,6 @@
         
             }
         }
+
     </div> 
 </div>
