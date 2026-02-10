@@ -2,11 +2,96 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 
-@foreach(var qwe in _educators)
-{
-    <h3>@qwe.NameDiscipline @qwe.Course as: @qwe.Group.isAS по: @qwe.Group.isPO ВМ: @qwe.Group.isVM</h3>
-}
+<div class="container">
+    <div class="home">
+@*         <div className="FlexEnd" style={{ paddingRight: 60 }}>
+            <div className="BlockTittleHome">
+                <span className='VT'>Преподаваемые дисциплины</span>
+            </div>
+        </div> *@
+        @* ${activeTable= = ='bachelor' ? 'active' : '' } *@
+        @* ${activeTable= = ='magistracy' ? 'active' : '' }`} *@
+        <div class="block gap">
+            <div class="center">
+                <button style= "margin-right:40px"
+                        class="button_with_under_stick" 
+                        @onclick="(() => SetActiveTable(EducationLevelEnum.Bachelor))">
+                    Бакалавриат
+                </button>
+                <button style="margin-right:40px"
+                        class="button_with_under_stick" 
+                        @onclick="(() => SetActiveTable(EducationLevelEnum.Magistracy))">
+                    Магистратура
+                </button>
+            </div>
+        </div>
 
-@code{
+        @{
+            switch (statusTable)
+            {
+                case EducationLevelEnum.Bachelor:
+                    @* Таблица для бакалавриата *@
+                // class={ getRowClassName(discipline, index, bachelorDisciplines)}
 
-}
+                    <div class="table-container">
+                        <table class="disciplines-table">
+                            <thead>
+                                <tr class='table_tr'>
+                                    <th rowSpan="2">№<br />п/п</th>
+                                    <th rowSpan="2">Наименование дисциплины</th>
+                                    <th rowSpan="2">Курс</th>
+                                    <th colSpan="3" class="profile-header">Профиль подготовки</th>
+                                </tr>
+                                <tr class='table_tr'>
+                                    <th>АС</th>
+                                    <th>ВМ</th>
+                                    <th>ПО</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var item in _diciplinesBachelor)
+                                {
+                                    <tr @key="item.Index"
+                                        style="background: @(item.Discipline.Course == 1 || item.Discipline.Course == 3 ? "none" : "none")">
+                                        <td>@item.Index</td>
+                                        <td style="text-align: left">@item.Discipline.NameDiscipline</td>
+                                        <td>@item.Discipline.Course</td>
+                                        <td>@PlusOrMinus(item.Discipline.Group.isAS)</td>
+                                        <td>@PlusOrMinus(item.Discipline.Group.isVM)</td>
+                                        <td>@PlusOrMinus(item.Discipline.Group.isPO)</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                    @*         )} *@
+                    break;
+                           case EducationLevelEnum.Magistracy:
+                <div class="table-container">
+                    <table class="disciplines-table">
+                        <thead>
+                            <tr class='table_tr'>
+                                <th>№ <br />п/п</th>
+                                <th>Наименование дисциплины</th>
+                                <th>Курс</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var item in _diciplinesMagistracy)
+                            {
+                                <tr @key="item.Index">
+                                    <td>@item.Index</td>
+                                    <td style="text-align: left">@item.Discipline.NameDiscipline</td>
+                                    <td>@item.Discipline.Course</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                break;
+        
+            }
+        }
+    </div> 
+</div>

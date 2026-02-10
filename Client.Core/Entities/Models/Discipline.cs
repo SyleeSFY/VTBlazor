@@ -11,3 +11,9 @@ public class Discipline
     public bool isMagistracy { get; set; } = false;
     public TrainedGroup? Group { get; set; }
 }
+
+public class DisciplineIndex
+{
+    public int Index { get; set; }
+    public Discipline Discipline { get; set; }
+}
