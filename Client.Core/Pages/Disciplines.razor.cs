@@ -24,9 +24,9 @@ namespace Client.Core.Pages
 
         private void SetActiveTable(EducationLevelEnum level)
             =>statusTable = (level == EducationLevelEnum.Bachelor) ? EducationLevelEnum.Bachelor : EducationLevelEnum.Magistracy;
-        
 
-        public async Task<List<Discipline>> GetEducators()
+
+        private async Task<List<Discipline>> GetEducators()
         {
             _diciplines = await Http.GetFromJsonAsync<List<Discipline>>("api/Diciplines/GetDicipline");
             return _diciplines;
@@ -34,5 +34,9 @@ namespace Client.Core.Pages
 
         private string PlusOrMinus(bool state)
             => state ? "+" : "-";
+
+        private bool isLastTr(int index,int course, List<DisciplineIndex> _diciplines)
+            => _diciplines.Where(x => x.Discipline.Course == course).Max(x => x.Index) == index;
+
     }
 }

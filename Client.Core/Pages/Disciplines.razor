@@ -51,7 +51,7 @@
                                 @foreach(var item in _diciplinesBachelor)
                                 {
                                     <tr @key="item.Index"
-                                        style="background: @(item.Discipline.Course == 1 || item.Discipline.Course == 3 ? "none" : "#cfcdcd5e")">
+                                        style="border-bottom: @((item.Discipline.Course == 1 || item.Discipline.Course == 2 || item.Discipline.Course == 3) & (isLastTr(item.Index, item.Discipline.Course, _diciplinesBachelor)) ? "2px solid black" : "none")">
                                         <td>@item.Index</td>
                                         <td style="text-align: left">@item.Discipline.NameDiscipline</td>
                                         <td>@item.Discipline.Course</td>
@@ -78,7 +78,9 @@
                         <tbody>
                             @foreach(var item in _diciplinesMagistracy)
                             {
-                                <tr @key="item.Index">
+                                <tr @key="item.Index"
+                                        style="border-bottom: @((item.Discipline.Course == 1) & (isLastTr(item.Index, item.Discipline.Course, _diciplinesMagistracy)) ? "2px solid black" : "none")">
+                                        
                                     <td>@item.Index</td>
                                     <td style="text-align: left">@item.Discipline.NameDiscipline</td>
                                     <td>@item.Discipline.Course</td>
