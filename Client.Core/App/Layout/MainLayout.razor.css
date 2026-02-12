@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    width: 100%;
 }
 
 .page {
@@ -11,15 +12,17 @@
 }
 
 main {
-    flex: 1;
-}
-
-main {
     flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .content {
-    padding-top: 30px;
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .sidebar {
@@ -35,26 +38,26 @@ main {
     align-items: center;
 }
 
-    .top-row ::deep a,
-    .top-row ::deep .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
+.top-row ::deep a,
+.top-row ::deep .btn-link {
+    white-space: nowrap;
+    margin-left: 1.5rem;
+    text-decoration: none;
+}
 
-        .top-row ::deep a:hover,
-        .top-row ::deep .btn-link:hover {
-            text-decoration: underline;
-        }
+.top-row ::deep a:hover,
+.top-row ::deep .btn-link:hover {
+    text-decoration: underline;
+}
 
-        .top-row ::deep a:first-child {
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+.top-row ::deep a:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-footer,
 FooterMenu {
     flex-shrink: 0;
+    width: 100%;
 }
 
 @media (max-width: 640.98px) {
@@ -88,9 +91,9 @@ FooterMenu {
         padding-right: 1.5rem !important;
     }
 
-        .top-row.auth ::deep a:first-child {
-            flex: 1;
-            text-align: right;
-            width: 0;
-        }
+    .top-row.auth ::deep a:first-child {
+        flex: 1;
+        text-align: right;
+        width: 0;
+    }
 }
