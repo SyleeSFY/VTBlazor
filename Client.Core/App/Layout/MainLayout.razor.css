@@ -1,3 +1,17 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Вся высота окна */
+}
+
+main {
+    flex: 1 0 auto; /* Растягивается на всё свободное место */
+}
+
+footer, FooterMenu {
+    flex-shrink: 0; /* Не сжимается */
+}
+
 .page {
     position: relative;
     display: flex;
