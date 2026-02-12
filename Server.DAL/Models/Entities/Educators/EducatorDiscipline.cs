@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Server.DAL.Models.Entities.Educators;
 
 public class EducatorDiscipline

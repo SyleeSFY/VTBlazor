@@ -9,9 +9,9 @@ namespace Server.DAL.Repositories;
 
 public class EducatorRepository : IEducatorRepository
 {
-    private readonly EducatorDbContext _context;
+    private readonly UniversityDbContext _context;
     
-    public EducatorRepository(EducatorDbContext context)
+    public EducatorRepository(UniversityDbContext context)
         => _context = context;
     
     /// <summary>
@@ -37,6 +37,11 @@ public class EducatorRepository : IEducatorRepository
                 .ThenInclude(ai => ai.EducatorDisciplines)
                     .ThenInclude(ed => ed.Discipline)
             .FirstOrDefaultAsync(x => x.Id == id);
+
+    public async Task<List<Discipline>> GetDiciplinesAsync()
+    => await _context.Disciplines
+            .Include(x => x.Group)
+            .ToListAsync();
 
     public async Task AddEducator(Educator edc)
     {

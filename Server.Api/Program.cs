@@ -36,11 +36,13 @@ public class Program
             });
         });
         
-        builder.Services.AddDbContext<EducatorDbContext>(options =>
+        builder.Services.AddDbContext<UniversityDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
         
         builder.Services.AddScoped<IEducatorRepository, EducatorRepository>();
+        builder.Services.AddScoped<IDiciplineRepository, DiciplineRepository>();
         builder.Services.AddScoped<IEducatorService, EducatorService>();
+        builder.Services.AddScoped<IDiciplineService, DiciplineService>();
 
         var app = builder.Build();
         

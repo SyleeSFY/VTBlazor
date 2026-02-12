@@ -10,7 +10,7 @@ using Server.DAL.Context.ApplicationDbContext;
 
 namespace Server.DLL.Migrations
 {
-    [DbContext(typeof(EducatorDbContext))]
+    [DbContext(typeof(UniversityDbContext))]
     [Migration("20251201120533_Initial")]
     partial class Initial
     {

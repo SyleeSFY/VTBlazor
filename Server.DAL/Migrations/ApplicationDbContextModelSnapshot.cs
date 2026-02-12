@@ -9,7 +9,7 @@ using Server.DAL.Context.ApplicationDbContext;
 
 namespace Server.DLL.Migrations
 {
-    [DbContext(typeof(EducatorDbContext))]
+    [DbContext(typeof(UniversityDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -29,11 +29,19 @@ namespace Server.DLL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Course")
+                        .HasColumnType("integer");
+
                     b.Property<string>("NameDiscipline")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("isMagistracy")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Course");
 
                     b.ToTable("Disciplines");
                 });
@@ -129,6 +137,34 @@ namespace Server.DLL.Migrations
                     b.ToTable("EducatorDisciplines");
                 });
 
+            modelBuilder.Entity("Server.DAL.Models.Entities.Educators.TrainedGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DisciplineId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("isAS")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("isPO")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("isVM")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DisciplineId")
+                        .IsUnique();
+
+                    b.ToTable("TrainedGroups");
+                });
+
             modelBuilder.Entity("Server.DAL.Models.Entities.Educators.EducatorAdditionalInfo", b =>
                 {
                     b.HasOne("Server.DAL.Models.Entities.Educators.Educator", null)
@@ -153,6 +189,21 @@ namespace Server.DLL.Migrations
                         .IsRequired();
 
                     b.Navigation("Discipline");
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Educators.TrainedGroup", b =>
+                {
+                    b.HasOne("Server.DAL.Models.Entities.Educators.Discipline", "Discipline")
+                        .WithOne("Group")
+                        .HasForeignKey("Server.DAL.Models.Entities.Educators.TrainedGroup", "DisciplineId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Discipline");
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Educators.Discipline", b =>
+                {
+                    b.Navigation("Group");
                 });
 
             modelBuilder.Entity("Server.DAL.Models.Entities.Educators.Educator", b =>

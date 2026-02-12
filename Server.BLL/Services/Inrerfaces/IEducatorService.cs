@@ -9,7 +9,5 @@ public interface IEducatorService
     Task<Educator> GetByIdSimpleAsync(int id);
     Task<List<Educator>> GetEducatorsSimpleAsync();
     Task<List<Educator>> GetEducatorsAsync();
-
     Task AddEducator(Educator educator);
-
 }
