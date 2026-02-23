@@ -1,0 +1,14 @@
+@page "/test"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found>
+            Я гей
+        </Found>
+        <NotFound>
+            Я не гей
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
