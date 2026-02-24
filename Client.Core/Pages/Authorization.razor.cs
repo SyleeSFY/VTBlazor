@@ -1,5 +1,6 @@
 ﻿using Client.Core.App.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using System.ComponentModel.DataAnnotations;
 
 namespace Client.Core.Pages

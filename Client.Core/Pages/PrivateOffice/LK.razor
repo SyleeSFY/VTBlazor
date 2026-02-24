@@ -1,14 +1,15 @@
 @page "/test"
-@inject HttpClient Http
-@inject NavigationManager Navigation
+<h3>Тест авторизации</h3>
 
-<CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Program).Assembly">
-        <Found>
-            Я гей
-        </Found>
-        <NotFound>
-            Я не гей
-        </NotFound>
-    </Router>
-</CascadingAuthenticationState>
+<AuthorizeView>
+    <Authorized>
+        <h4>Вы авторизованы!</h4>
+        @foreach (var claim in context.User.Claims)
+        {
+            <p><strong>@claim.Type:</strong> @claim.Value</p>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <p>Вы не авторизованы</p>
+    </NotAuthorized>
+</AuthorizeView>
