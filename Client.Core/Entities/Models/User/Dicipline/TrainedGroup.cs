@@ -1,7 +1,6 @@
-﻿using Client.Core.Shared.Models;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace Client.Core.Entities.Models
+namespace Client.Core.Entities.Models.User.Dicipline
 {
     public class TrainedGroup
     {

@@ -1,8 +1,8 @@
 using System.Net.Http.Json;
-using Client.Core.Shared.Models;
+using Client.Core.Entities.Models.User.Educator;
 using Microsoft.AspNetCore.Components;
 
-namespace Client.Core.Pages;
+namespace Client.Core.Pages.Public;
 
 public partial class Educators : ComponentBase
 {

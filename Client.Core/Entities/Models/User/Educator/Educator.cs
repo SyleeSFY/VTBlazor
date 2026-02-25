@@ -1,4 +1,4 @@
-namespace Client.Core.Shared.Models;
+namespace Client.Core.Entities.Models.User.Educator;
 
 public class Educator
 {

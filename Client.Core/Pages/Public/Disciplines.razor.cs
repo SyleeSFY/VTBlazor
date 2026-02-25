@@ -1,9 +1,9 @@
-﻿using Client.Core.Shared.Enums.HomePage;
-using Client.Core.Shared.Models;
+﻿using Client.Core.Entities.Models.User.Dicipline;
+using Client.Core.Shared.Enums.HomePage;
 using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
 
-namespace Client.Core.Pages
+namespace Client.Core.Pages.Public
 {
     public partial class Disciplines : ComponentBase
     {

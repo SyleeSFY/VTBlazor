@@ -1,18 +1,18 @@
 ﻿using Client.Core.App.Services;
+using Client.Core.Entities.Models.Authentication;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using System.ComponentModel.DataAnnotations;
 
-namespace Client.Core.Pages
+namespace Client.Core.Pages.Public
 {
     public partial class Authorization : ComponentBase
     {
         [Inject]
         public ILocalStorageService LocalStorageService { get; set; }
-        private AuthorizationModel _authorization;
+
+        private AuthorizationData _authorization;
         
         public Authorization() {
-            _authorization = new AuthorizationModel();
+            _authorization = new AuthorizationData();
         }
 
         protected async Task LoginAsync()
@@ -25,21 +25,5 @@ namespace Client.Core.Pages
             };
             await LocalStorageService.SetAsync(nameof(SecurityToken), token);
         }
-    }
-
-    public class AuthorizationModel
-    {
-        [Required]
-        [StringLength(50, ErrorMessage = "Long")]
-        public string Email { get; set; }
-        [Required]
-        public string Password { get; set; }
-    }
-
-    public class SecurityToken
-    {
-        public string Email { get; set; }
-        public string AccessToken { get; set; }
-        public DateTime ExpiredAt { get; set; }
     }
 }

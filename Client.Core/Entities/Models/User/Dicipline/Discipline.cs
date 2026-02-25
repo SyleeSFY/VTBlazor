@@ -1,7 +1,6 @@
-using Client.Core.Entities.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Client.Core.Shared.Models;
+namespace Client.Core.Entities.Models.User.Dicipline;
 
 public class Discipline
 {
@@ -10,10 +9,4 @@ public class Discipline
     public int Course { get; set; }
     public bool isMagistracy { get; set; } = false;
     public TrainedGroup? Group { get; set; }
-}
-
-public class DisciplineIndex
-{
-    public int Index { get; set; }
-    public Discipline Discipline { get; set; }
 }

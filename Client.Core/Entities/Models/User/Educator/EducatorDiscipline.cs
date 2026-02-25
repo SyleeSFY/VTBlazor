@@ -1,4 +1,6 @@
-namespace Client.Core.Shared.Models;
+using Client.Core.Entities.Models.User.Dicipline;
+
+namespace Client.Core.Entities.Models.User.Educator;
 
 public class EducatorDiscipline
 {
