@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Net.Http.Json;
 using System.Security.Claims;
 
-namespace Client.Core.Pages;
+namespace Client.Core.Pages.PrivateOffice;
  
 public partial class LK : ComponentBase
 {

@@ -1,16 +1,25 @@
 @page "/test"
-@layout MainLayout
-@attribute [Authorize]
+@using System.Security.Claims
+@* @layout MainLayout
+@attribute [Authorize] *@
 
 <h3>Тест авторизации</h3>
 
 <AuthorizeView>
     <Authorized>
-
-        <h4>Вы авторизованы!</h4>
-        @foreach (var claim in context.User.Claims)
+        @if (_isAuthenticated)
         {
-            <p><strong>@claim.Type:</strong> @claim.Value</p>
+            <div style="border:1px solid green; padding:20px; background:#e8f5e8;">
+                <h4 style="color:green;">✅ Вы авторизованы!</h4>
+                <p><strong>ID:</strong> @_userId</p>
+                <p><strong>Email:</strong> @_userEmail</p>
+                <p><strong>Роль:</strong> @_userRole</p>
+
+                @if (_userRole == "admin")
+                {
+                    <p style="color:darkgreen;">✓ У вас права администратора</p>
+                }
+            </div>
         }
     </Authorized>
     <NotAuthorized>

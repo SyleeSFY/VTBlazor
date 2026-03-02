@@ -2,6 +2,7 @@
 using Client.Core.Entities.Models.Authentication;
 using Client.Core.Entities.Models.User.Dicipline;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -38,6 +39,7 @@ namespace Client.Core.Pages.Public
                     ExpiredAt = DateTime.Now.AddDays(1) 
                 };
                 await LocalStorageService.SetAsync("VT", token);
+                Navigation.NavigateTo($"/LK");
             }
             else
                 _isState = !_isState;
