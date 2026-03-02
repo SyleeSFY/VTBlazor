@@ -1,6 +1,10 @@
 ﻿using Client.Core.App.Services;
 using Client.Core.Entities.Models.Authentication;
+using Client.Core.Entities.Models.User.Dicipline;
 using Microsoft.AspNetCore.Components;
+using System.ComponentModel.DataAnnotations;
+using System.Net.Http;
+using System.Net.Http.Json;
 
 namespace Client.Core.Pages.Public
 {
@@ -10,20 +14,33 @@ namespace Client.Core.Pages.Public
         public ILocalStorageService LocalStorageService { get; set; }
 
         private AuthorizationData _authorization;
-        
-        public Authorization() {
-            _authorization = new AuthorizationData();
-        }
+        private bool _isState = false;
 
+        public Authorization() 
+            => _authorization = new AuthorizationData();
+        
         protected async Task LoginAsync()
         {
-            var token = new SecurityToken()
-            {
-                AccessToken = _authorization.Password,
-                Email = _authorization.Email,
-                ExpiredAt = DateTime.UtcNow.AddDays(1)
+            _isState = false;
+
+            var authData = new AuthData() { 
+                Password = _authorization.Password, 
+                Email = _authorization.Email
             };
-            await LocalStorageService.SetAsync(nameof(SecurityToken), token);
+
+            var response = await Http.PostAsJsonAsync($"api/Auth/PostAuthUser", authData);
+            var result = await response.Content.ReadFromJsonAsync<AuthResponce>();
+
+            if (result != null && result.Success) {
+                var token = new Cookie() {
+                    Email = _authorization.Email, 
+                    JWT = result.JwtToken, 
+                    ExpiredAt = DateTime.Now.AddDays(1) 
+                };
+                await LocalStorageService.SetAsync("VT", token);
+            }
+            else
+                _isState = !_isState;
         }
     }
 }

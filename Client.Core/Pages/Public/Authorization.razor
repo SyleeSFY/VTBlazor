@@ -1,3 +1,5 @@
+@inject HttpClient Http
+
 @page "/Authorization"
 
 @layout LayoutWithoutBackground
@@ -11,11 +13,11 @@
                     <p class="Tittle">ВХОД</p>
                     <p class="Tittle Menu-Left-Authorization-Tittle-Lower">в аккаунт</p>
                     <EditForm Model="@_authorization" OnValidSubmit="@LoginAsync">
-                        <InputText @bind-Value="_authorization.Email" class="input" type="" placeholder="Почта" />
-                        <InputText @bind-Value="_authorization.Password" class="input" type="password" placeholder="Пароль" />
-                        <button class="button-black"><span>Войти</span></button>
-@*                         <a href="" class="forgot-password">Забыли пароль?</a>
- *@                 </EditForm>
+                            <InputText @bind-Value="_authorization.Email" class="input" type="" placeholder="Почта" />
+                            <InputText @bind-Value="_authorization.Password" class="input" type="password" placeholder="Пароль" />
+                            <p style="color: red; display: @(_isState ? "block" : "none")">Ошибка: неверная почта или пароль</p>
+                            <button class="button-black"><span>Войти</span></button>
+                    </EditForm>
                 </div>
             </div>
         </div>
