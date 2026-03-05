@@ -105,7 +105,14 @@ body.authorization-page {
     margin-bottom: 0px;
 }
 
+.Nav__btn{
+    background: none;
+    border: none;
+}
 
+.Nav__btn:hover {
+    background: #1b5e20;
+}
 
 
 

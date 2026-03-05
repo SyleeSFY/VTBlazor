@@ -39,7 +39,7 @@ namespace Client.Core.Pages.Public
                     ExpiredAt = DateTime.Now.AddDays(1) 
                 };
                 await LocalStorageService.SetAsync("VT", token);
-                Navigation.NavigateTo($"/LK");
+                Navigation.NavigateTo($"/profile", true);
             }
             else
                 _isState = !_isState;

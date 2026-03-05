@@ -1,4 +1,4 @@
-.nav_bar {
+﻿.nav_bar {
     position: fixed;
     top: 0;
     left: 0;
@@ -86,9 +86,9 @@
         height: auto;
     }
 
-    .nav_menu.mobile-open {
-        display: block;
-    }
+        .nav_menu.mobile-open {
+            display: block;
+        }
 
     .nav_li {
         flex-direction: column;

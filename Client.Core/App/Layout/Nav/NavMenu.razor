@@ -1,4 +1,5 @@
-﻿<nav class="nav_bar">
+﻿@using Client.Core.Features
+<nav class="nav_bar">
     <img src="/image/Shared/nav_bar.png" alt="Логотип кафедры" class='nav_bar_IMG' />
     
     <button class="mobile-menu-button" @onclick="ToggleMenu">
@@ -28,9 +29,21 @@
             </NavLink>
         </ul>
         
+        @if (isAuth)
+        {
+            <div class="nav__right">
+                <NavLink href="profile" class="nav_link auth-link Cursor" style=" text-decoration: none">
+                    <p class="nav_item Cursor">ПРОФИЛЬ</p>
+                </NavLink>
+                <ButtonExit />
+            </div>
+        }
+
+        else {
         <NavLink href="authorization" class="nav_link auth-link Cursor" style="margin-left: auto; text-decoration: none">
             <p class="nav_item Cursor">Авторизация</p>
         </NavLink>
+        }
     </nav>
 
 </nav>

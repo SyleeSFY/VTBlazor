@@ -39,7 +39,7 @@ namespace Server.BLL.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
+                new Claim(ClaimTypes.Role, ((byte)user?.Role).ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("QsA1!2cASo0O3FVCXs2saQsxcA@1SA8XCbvcDFQWAasx123;,9aQxzc4vcSx3bvc2jj"));

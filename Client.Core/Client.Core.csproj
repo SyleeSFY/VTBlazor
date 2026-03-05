@@ -28,7 +28,7 @@
     <ItemGroup>
       <AdditionalFiles Include="App\Layout\LayoutWithoutBackground.razor" />
       <AdditionalFiles Include="App\Layout\MainLayout.razor" />
-      <AdditionalFiles Include="App\Layout\NavMenu.razor" />
+      <AdditionalFiles Include="App\Layout\Nav\NavMenu.razor" />
     </ItemGroup>
 
 </Project>

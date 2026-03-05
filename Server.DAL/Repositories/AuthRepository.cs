@@ -13,7 +13,7 @@ namespace Server.DAL.Repositories
             => _context = context;
 
         public async Task<User?> GetUserByEmailAsync(string email)
-            => await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            => await _context.Users.FirstOrDefaultAsync(x => x.Email == email.ToLower());
 
         //var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == tokenUser.Email && x.PasswordHash == tokenUser.AccessToken);
 

@@ -1,4 +1,4 @@
-using Client.Core.Entities.Models;
+﻿using Client.Core.Entities.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -7,8 +7,8 @@ using System.Net.Http.Json;
 using System.Security.Claims;
 
 namespace Client.Core.Pages.PrivateOffice;
- 
-public partial class LK : ComponentBase
+
+public partial class Profile : ComponentBase
 {
     [CascadingParameter] private Task<AuthenticationState> AuthStateTask { get; set; }
 
