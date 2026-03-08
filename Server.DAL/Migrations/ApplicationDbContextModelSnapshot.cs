@@ -58,15 +58,17 @@ namespace Server.DLL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Profession")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Educators");
                 });
@@ -165,6 +167,116 @@ namespace Server.DLL.Migrations
                     b.ToTable("TrainedGroups");
                 });
 
+            modelBuilder.Entity("Server.DAL.Models.Entities.Users.Admin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Admins", (string)null);
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Users.Student", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("GroupId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Students", (string)null);
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Users.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("MiddleName")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<byte>("Role")
+                        .HasColumnType("smallint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Educators.Educator", b =>
+                {
+                    b.HasOne("Server.DAL.Models.Entities.Users.User", "User")
+                        .WithOne("Educator")
+                        .HasForeignKey("Server.DAL.Models.Entities.Educators.Educator", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Server.DAL.Models.Entities.Educators.EducatorAdditionalInfo", b =>
                 {
                     b.HasOne("Server.DAL.Models.Entities.Educators.Educator", null)
@@ -201,6 +313,28 @@ namespace Server.DLL.Migrations
                     b.Navigation("Discipline");
                 });
 
+            modelBuilder.Entity("Server.DAL.Models.Entities.Users.Admin", b =>
+                {
+                    b.HasOne("Server.DAL.Models.Entities.Users.User", "User")
+                        .WithOne("Administrator")
+                        .HasForeignKey("Server.DAL.Models.Entities.Users.Admin", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Users.Student", b =>
+                {
+                    b.HasOne("Server.DAL.Models.Entities.Users.User", "User")
+                        .WithOne("Student")
+                        .HasForeignKey("Server.DAL.Models.Entities.Users.Student", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Server.DAL.Models.Entities.Educators.Discipline", b =>
                 {
                     b.Navigation("Group");
@@ -215,6 +349,15 @@ namespace Server.DLL.Migrations
             modelBuilder.Entity("Server.DAL.Models.Entities.Educators.EducatorAdditionalInfo", b =>
                 {
                     b.Navigation("EducatorDisciplines");
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Users.User", b =>
+                {
+                    b.Navigation("Administrator");
+
+                    b.Navigation("Educator");
+
+                    b.Navigation("Student");
                 });
 #pragma warning restore 612, 618
         }

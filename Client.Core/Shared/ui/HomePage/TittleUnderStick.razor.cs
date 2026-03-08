@@ -10,5 +10,8 @@ namespace Client.Core.Shared.ui.HomePage
         [Parameter] public bool State { get; set; } = true;
         [Parameter] public int FontSize { get; set; } = 48;
         [Parameter] public int PaddinLeft { get; set; } = 5;
+        [Parameter] public string ColorText { get; set; } = "000000";
+        [Parameter] public string ColorStick { get; set; } = "009639";
+
     }
 }

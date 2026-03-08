@@ -1,0 +1,25 @@
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+@page "/Authorization"
+
+@layout LayoutWithoutBackground
+
+<PageTitle>Authorization</PageTitle>
+
+    <div class="authorization-page">
+        <div class="Menu" id="menu">
+            <div class="Menu-Left">
+                <div class="Menu-Left-Authorization">
+                    <p class="Tittle">ВХОД</p>
+                    <p class="Tittle Menu-Left-Authorization-Tittle-Lower">в аккаунт</p>
+                    <EditForm Model="@_authorization" OnValidSubmit="@LoginAsync">
+                            <InputText @bind-Value="_authorization.Email" class="input" type="" placeholder="Почта" />
+                            <InputText @bind-Value="_authorization.Password" class="input" type="password" placeholder="Пароль" />
+                            <p style="color: red; display: @(_isState ? "block" : "none")">Ошибка: неверная почта или пароль</p>
+                            <button class="button-black"><span>Войти</span></button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>

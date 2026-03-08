@@ -1,0 +1,34 @@
+﻿@using Client.Core.Entities.Enums
+@using Client.Core.Features
+
+<nav class="nav_bar">
+    <img src="/image/Shared/nav_bar.png" alt="Логотип кафедры" class='nav_bar_IMG' />
+    <nav class="nav_menu">
+        <ul class="nav_li">
+
+            <NavLink href="/" class="nav_link auth-link Cursor" style="text-decoration: none">
+                <li class="nav_item Cursor">КАФЕДРА</li>
+            </NavLink>
+
+            @if (isAuth && role == (int)Role.student)
+            {
+                <NavLink href="profile" class="nav_link auth-link Cursor" style="text-decoration: none">
+                    <p class="nav_item Cursor">Профиль</p>
+                </NavLink>
+            }
+            else if (isAuth && role == (int)Role.educator)
+            {
+                <NavLink href="authorization" class="nav_link auth-link Cursor" style="margin-left: auto; text-decoration: none">
+                    <p class="nav_item Cursor">Авторизация</p>
+                </NavLink>
+            }
+            else if (isAuth && role == (int)Role.admin)
+            {
+                <NavLink href="authorization" class="nav_link auth-link Cursor" style="text-decoration: none">
+                    <p class="nav_item Cursor">Авторизация</p>
+                </NavLink>
+            }
+        </ul>
+        <ButtonExit />
+    </nav>
+</nav>
