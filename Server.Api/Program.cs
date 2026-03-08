@@ -45,7 +45,8 @@ public class Program
         builder.Services.AddScoped<IDiciplineService, DiciplineService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
 
         var app = builder.Build();
         
