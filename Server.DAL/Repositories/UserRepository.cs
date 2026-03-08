@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Server.DAL.Context.ApplicationDbContext;
 using Server.DAL.Interfaces;
-using Server.DAL.Models.Entities.Educators;
 using Server.DAL.Models.Entities.Users;
 
 namespace Server.DAL.Repositories;
@@ -17,10 +16,22 @@ public class UserRepository : IUserRepository
     /// Получение всего списка user's
     /// </summary>
     /// <returns></returns>
-    public async Task<List<User>> GetUserAsync()
+    public async Task<List<User>> GetUsersAsync()
         => await _context.Users
             .Include(x => x.Educator)
             .Include(x => x.Student)
             .Include(x => x.Administrator)
             .ToListAsync();
+
+    public async Task<User> GetUserSimpleAsync(int userId)
+        => await _context.Users
+            .FirstOrDefaultAsync(x => x.Id == userId);
+
+    public async Task<User> GetUserAsync(int userId)
+        => await _context.Users
+            .Include(x => x.Educator)
+            .Include(x => x.Student)
+            .Include(x => x.Administrator)
+            .FirstOrDefaultAsync(x => x.Id == userId);
+
 }

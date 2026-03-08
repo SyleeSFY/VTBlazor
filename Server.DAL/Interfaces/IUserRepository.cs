@@ -4,5 +4,7 @@ namespace Server.DAL.Interfaces;
 
 public interface IUserRepository
 {
-    Task<List<User>> GetUserAsync();
+    Task<List<User>> GetUsersAsync();
+    Task<User> GetUserSimpleAsync(int userId);
+    Task<User> GetUserAsync(int userId);
 }

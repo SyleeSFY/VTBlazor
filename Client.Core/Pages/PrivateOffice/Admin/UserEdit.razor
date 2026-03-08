@@ -1,0 +1,14 @@
+﻿@page "/UserEdit/{UserId:int}/{RoleEdit:int}"
+@inject HttpClient Http
+@layout PrivateOfficeLayout
+
+<AuthorizeView>
+    <Authorized>
+        <div class="container">
+         <h6>@_user?.LastName</h6>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>Вы не авторизованы</p>
+    </NotAuthorized>
+</AuthorizeView>
