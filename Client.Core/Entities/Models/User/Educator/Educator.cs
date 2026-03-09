@@ -1,10 +1,11 @@
-namespace Client.Core.Entities.Models.User.Educator;
-
-public class Educator
+namespace Client.Core.Entities.Models.User.Educator
 {
-    public required int Id { get; set; }
-    public string Profession { get; set; }
-    public required string FullName { get; set; } = string.Empty;
-    public string? AcademicDegree { get; set; }
-    public EducatorAdditionalInfo EducatorAdditionalInfo { get; set; }
+    public class Educator
+    {
+        public required int Id { get; set; }
+        public string Profession { get; set; }
+        public required string FullName { get; set; } = string.Empty;
+        public string? AcademicDegree { get; set; }
+        public EducatorAdditionalInfo EducatorAdditionalInfo { get; set; }
+    }
 }

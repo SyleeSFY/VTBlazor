@@ -13,19 +13,22 @@
             @if (isAuth && role == (int)Role.student)
             {
                 <NavLink href="profile" class="nav_link auth-link Cursor" style="text-decoration: none">
-                    <p class="nav_item Cursor">Профиль</p>
+                    <p class="nav_item Cursor">ЗАДАНИЯ</p>
                 </NavLink>
             }
             else if (isAuth && role == (int)Role.educator)
             {
                 <NavLink href="authorization" class="nav_link auth-link Cursor" style="margin-left: auto; text-decoration: none">
-                    <p class="nav_item Cursor">Авторизация</p>
+                    <p class="nav_item Cursor">ЗАДАНИЯ</p>
                 </NavLink>
             }
             else if (isAuth && role == (int)Role.admin)
             {
-                <NavLink href="authorization" class="nav_link auth-link Cursor" style="text-decoration: none">
-                    <p class="nav_item Cursor">Авторизация</p>
+                <NavLink href="Users" class="nav_link auth-link Cursor" style="text-decoration: none">
+                    <p class="nav_item Cursor">ПОЛЬЗОВАТЕЛИ</p>
+                </NavLink>
+                <NavLink href="" class="nav_link auth-link Cursor" style="text-decoration: none">
+                    <p class="nav_item Cursor">ПРЕДМЕТЫ</p>
                 </NavLink>
             }
         </ul>

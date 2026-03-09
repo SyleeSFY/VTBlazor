@@ -1,0 +1,49 @@
+@page "/users"
+@using Client.Core.Shared
+@inject HttpClient Http
+@layout PrivateOfficeLayout
+
+<AuthorizeView>
+    <Authorized>
+        <div class="container">
+            <div class="table-container">
+                <table class="disciplines-table">
+                    <thead>
+                    <tr class="table_tr">
+                        <th rowSpan="2">ИД</th>
+                        <th rowSpan="2">ФИО</th>
+                        <th rowSpan="2">Роль</th>
+                        <th rowSpan="2">Группа</th>
+                        <th rowSpan="2" class="profile-header">Статус</th>
+                        <th colSpan="2" class="profile-header">Статус</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach(var item in _users)
+                    {
+                        <tr> 
+                            <td>@item.Id</td>
+                            <td style="text-align: left">@item.LastName @item.FirstName @item.MiddleName</td>
+                            <td>@GlobalData.GetRusRole[item.Role]</td>
+                            <td>@(!string.IsNullOrEmpty(item.Student?.GroupId) ? item.Student?.GroupId : "-")</td>
+                            <td>@item.IsActive</td>
+                            <td>
+                                <NavLink href="@($"UserEdit/{(int)item.Role}/{item.Id}")" class="nav_link auth-link Cursor" style=" text-decoration: none">
+                                    <p class="nav_item Cursor">Редакт.</p>
+                                </NavLink>
+                            </td>
+                            <td><button class="btn__delete" @onclick="() => BtnDelete(item.Id)">Удалить</button></td>
+                        </tr>
+                                                
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </Authorized>
+    <NotAuthorized>
+        <p>Вы не авторизованы</p>
+    </NotAuthorized>
+</AuthorizeView>
+
