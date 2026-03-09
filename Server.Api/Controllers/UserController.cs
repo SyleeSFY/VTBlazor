@@ -24,9 +24,8 @@ public class UserController : ControllerBase
     public async Task<ActionResult<User>> GetUser(int id)
     {
         var user =  await _userService.GetUser(id);
-        if (user != null)
+        if (user.Id != 0)
             return Ok(user);
         return NotFound();
-
     }
 }

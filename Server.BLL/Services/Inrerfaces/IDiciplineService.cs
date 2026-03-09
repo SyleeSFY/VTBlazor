@@ -10,5 +10,6 @@ namespace Server.BLL.Services.Inrerfaces
     public interface IDiciplineService
     {
         Task<List<Discipline>> GetDiciplinesAsync();
+        Task<Discipline> GetDiciplineAsync(int diciplineId);
     }
 }

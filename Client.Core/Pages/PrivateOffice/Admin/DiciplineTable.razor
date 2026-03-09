@@ -1,0 +1,56 @@
+﻿@page "/DiciplineTable"
+@using Client.Core.Shared
+@inject HttpClient Http
+@layout PrivateOfficeLayout
+
+<AuthorizeView>
+    <Authorized>
+        <div class="container">
+            <div class="table-container">
+                <table class="disciplines-table">
+                    <thead>
+                        <tr class="table_tr">
+                            <th rowSpan="2">ИД</th>
+                            <th rowSpan="2">Наименование дисциплины</th>
+                            <th rowSpan="2">Курс</th>
+                            <th rowSpan="2">Магистратура</th>
+                            <th colspan="3" class="profile-header">Профиль подготовки</th>
+                            <th colSpan="2" rowSpan="2" class="profile-header">Изменение</th>
+                        </tr>
+                        <tr class='table_tr'>
+                            <th>АС</th>
+                            <th>ВМ</th>
+                            <th>ПО</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in _diciplines)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td style="text-align: left">@item.NameDiscipline</td>
+                                <td>@item.Course</td>
+                                <td>@(item.isMagistracy ? "+" : "–")</td>
+                                <td>@(!item.isMagistracy ? PlusOrMinus(item.Group.isAS) : "–")</td>
+                                <td>@(!item.isMagistracy ? PlusOrMinus(item.Group.isVM) : "–")</td>
+                                <td>@(!item.isMagistracy ? PlusOrMinus(item.Group.isPO) : "–")</td>
+                                <td>
+                                    <NavLink href="@($"DiciplineEdit/{item.Id}")" class="nav_link auth-link Cursor" style=" text-decoration: none">
+                                        <p class="nav_item Cursor">Редакт.</p>
+                                    </NavLink>
+                                </td>
+                                <td><button class="btn__delete" @onclick="() => BtnDelete(item.Id)">Удалить</button></td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </Authorized>
+    <NotAuthorized>
+        <p>Вы не авторизованы</p>
+    </NotAuthorized>
+</AuthorizeView>
+

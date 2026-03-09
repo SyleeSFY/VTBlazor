@@ -18,8 +18,13 @@ namespace Server.DAL.Repositories
             => _context = context;
 
         public async Task<List<Discipline>> GetDiciplinesAsync()
-        => await _context.Disciplines
-            .Include(x => x.Group)
-            .ToListAsync();
+            => await _context.Disciplines
+                .Include(x => x.Group)
+                .ToListAsync();
+
+        public async Task<Discipline> GetDiciplineByIdAsync(int diciplineId)
+            => await _context.Disciplines
+                .Include(x => x.Group)
+                .FirstOrDefaultAsync(x => x.Id == diciplineId);
     }
 }

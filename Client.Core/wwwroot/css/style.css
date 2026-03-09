@@ -114,6 +114,11 @@ body.authorization-page {
     background: #1b5e20;
 }
 
+.btn__delete {
+    border: none;
+    background: none;
+    color: #ff0000
+}
 
 
 /* OurGraduates */

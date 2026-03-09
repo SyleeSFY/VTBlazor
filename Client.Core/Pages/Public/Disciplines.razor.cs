@@ -28,12 +28,12 @@ namespace Client.Core.Pages.Public
 
         private async Task<List<Discipline>> GetEducators()
         {
-            _diciplines = await Http.GetFromJsonAsync<List<Discipline>>("api/Diciplines/GetDicipline");
+            _diciplines = await Http.GetFromJsonAsync<List<Discipline>>("api/Diciplines/GetDiciplines");
             return _diciplines;
         }
 
         private string PlusOrMinus(bool state)
-            => state ? "+" : "-";
+            => state ? "+" : "–";
 
         private bool isLastTr(int index,int course, List<DisciplineIndex> _diciplines)
             => _diciplines.Where(x => x.Discipline.Course == course).Max(x => x.Index) == index;

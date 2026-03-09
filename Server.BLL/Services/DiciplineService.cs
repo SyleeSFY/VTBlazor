@@ -18,10 +18,18 @@ namespace Server.BLL.Services
 
         public async Task<List<Discipline>> GetDiciplinesAsync()
         {
-            var educators = await _diciplineRepository.GetDiciplinesAsync();
-            if (educators.Count != 0)
-                return educators;
+            var diciplines = await _diciplineRepository.GetDiciplinesAsync();
+            if (diciplines.Count != 0)
+                return diciplines;
             return new List<Discipline>();
+        }
+
+        public async Task<Discipline> GetDiciplineAsync(int diciplineId)
+        {
+            var dicipline = await _diciplineRepository.GetDiciplineByIdAsync(diciplineId);
+            if (dicipline is not null)
+                return dicipline;
+            return new Discipline();
         }
     }
 }
