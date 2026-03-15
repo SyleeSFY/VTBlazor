@@ -1,0 +1,90 @@
+﻿@page "/DiciplineAdd"
+@using Client.Core.Features
+@inject HttpClient Http
+@layout PrivateOfficeLayout
+
+<AuthorizeView>
+    <Authorized>
+        <div class="container">
+            <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Добавление новой дисциплины" />
+
+            <div class="row justify-content-center" style="margin-top:auto;margin-bottom:auto">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <form>
+                                <!-- Название дисциплины -->
+                                <div class="form-group mb-3">
+                                    <label for="disciplineName" class="form-label">Название дисциплины</label>
+                                    <input type="text" class="form-control" id="disciplineName"
+                                            placeholder="Введите название дисциплины" required>
+                                    <div class="invalid-feedback">
+                                        Пожалуйста, введите название дисциплины
+                                    </div>
+                                </div>
+                                <!-- Курс -->
+                                <div class="form-group mb-3">
+                                    <label for="semester" class="form-label">Курс</label>
+                                    <select class="form-control" id="semester">
+                                        <option value="">Выберите курс</option>
+                                        <option value="1">1 курс</option>
+                                        <option value="2">2 курс</option>
+                                        <option value="3">3 курс</option>
+                                        <option value="4">4 курс</option>
+                                    </select>
+                                </div>
+                                <!-- Форма контроля -->
+                                <div class="form-group mb-3">
+@*                                     <label class="form-label">Магистратура</label> *@
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="examCheck">
+                                        <label class="form-check-label" for="examCheck">
+                                            Магистратура
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- Форма контроля -->
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Обучаемая группа</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="examCheck">
+                                        <label class="form-check-label" for="examCheck">
+                                            АС
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="creditCheck">
+                                        <label class="form-check-label" for="creditCheck">
+                                            ПО
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="courseworkCheck">
+                                        <label class="form-check-label" for="courseworkCheck">
+                                            ВМ
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Кнопки -->
+                                <div class="form-group mt-4">
+                                    <button type="submit" class="btn btn-primary me-2">
+                                        <i class="bi bi-save"></i> Сохранить
+                                    </button>
+                                    <button type="reset" class="btn btn-light">
+                                        <i class="bi bi-arrow-counterclockwise"></i> Очистить
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <ButtonRedirect Redirect="DiciplineTable" Text="Назад" MT="auto" />
+ 
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>Вы не авторизованы</p>
+    </NotAuthorized>
+</AuthorizeView>
