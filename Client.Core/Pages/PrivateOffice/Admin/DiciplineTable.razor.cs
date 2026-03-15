@@ -1,6 +1,7 @@
 ﻿using Client.Core.Entities.Models.User.Dicipline;
 using Client.Core.Pages.Public;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Net.Http.Json;
 
 namespace Client.Core.Pages.PrivateOffice.Admin
@@ -20,9 +21,14 @@ namespace Client.Core.Pages.PrivateOffice.Admin
             return _diciplines;
         }
 
-        private async void BtnDelete(int userId)
+        private async void BtnDelete(int disciplineId)
         {
-
+            if (disciplineId > 0)
+            {
+                var responce = await Http.DeleteAsync($"api/Diciplines/DeleteDiscipline/{disciplineId}");
+                if (responce.IsSuccessStatusCode)
+                    Navigation.NavigateTo($"/DiciplineTable", true);
+            }
         }
 
         private string PlusOrMinus(bool state)

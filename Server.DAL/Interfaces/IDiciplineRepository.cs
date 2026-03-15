@@ -7,6 +7,7 @@ namespace Server.DAL.Interfaces
     {
         Task<List<Discipline>> GetDiciplinesAsync();
         Task<Discipline> GetDiciplineByIdAsync(int diciplineId);
+        Task<bool> DeleteDiciplineAsync(Discipline dicipline);
         Task<bool> AddDiciplineAsync(Discipline dicipline);
     }
 }

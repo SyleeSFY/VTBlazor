@@ -42,5 +42,16 @@ namespace Server.Api.Controllers
             }
             return NotFound();
         }
+
+        [HttpDelete("DeleteDiscipline/{disciplineId}")]
+        public async Task<ActionResult<bool>> DeleteDiscipline(int disciplineId)
+        {
+            if (disciplineId > 0)
+            {
+                var result = await _diciplineService.DeleteDiciplineAsync(disciplineId);
+                return result ? Ok(result) : NotFound(result);
+            }
+            return NotFound();
+        }
     }
 }

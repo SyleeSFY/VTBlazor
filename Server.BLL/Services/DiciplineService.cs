@@ -28,6 +28,16 @@ namespace Server.BLL.Services
             return new Discipline();
         }
 
+        public async Task<bool> DeleteDiciplineAsync(int diciplineId)
+        {
+            var dicipline = await _diciplineRepository.GetDiciplineByIdAsync(diciplineId);
+            if (dicipline is not null)
+            {
+                return await _diciplineRepository.DeleteDiciplineAsync(dicipline);
+            }
+            return false;
+        }
+
         public async Task<Discipline> AddDiciplineByDTOAsync(DisciplineDTO diciplineDTO)
         {
             var dicipline = await CreateDisciplineAsync(diciplineDTO);
