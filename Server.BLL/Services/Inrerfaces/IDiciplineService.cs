@@ -1,9 +1,5 @@
-﻿using Server.DAL.Models.Entities.Educators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Server.DAL.Models.DTO;
+using Server.DAL.Models.Entities.Educators;
 
 namespace Server.BLL.Services.Inrerfaces
 {
@@ -11,5 +7,7 @@ namespace Server.BLL.Services.Inrerfaces
     {
         Task<List<Discipline>> GetDiciplinesAsync();
         Task<Discipline> GetDiciplineAsync(int diciplineId);
+        Task<Discipline> AddDiciplineByDTOAsync(DisciplineDTO diciplineDTO);
+
     }
 }

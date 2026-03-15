@@ -1,11 +1,7 @@
 ﻿using Server.BLL.Services.Inrerfaces;
 using Server.DAL.Interfaces;
+using Server.DAL.Models.DTO;
 using Server.DAL.Models.Entities.Educators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Server.BLL.Services
 {
@@ -30,6 +26,31 @@ namespace Server.BLL.Services
             if (dicipline is not null)
                 return dicipline;
             return new Discipline();
+        }
+
+        public async Task<Discipline> AddDiciplineByDTOAsync(DisciplineDTO diciplineDTO)
+        {
+            var dicipline = await CreateDisciplineAsync(diciplineDTO);
+            var diciplineResponce = await _diciplineRepository.AddDiciplineAsync(dicipline);
+            if (dicipline is not null)
+                return dicipline;
+            return new Discipline();
+        }
+
+        private async Task<Discipline> CreateDisciplineAsync(DisciplineDTO diciplineDTO)
+        {
+            return new Discipline()
+            {
+                NameDiscipline = diciplineDTO.NameDiscipline,
+                Course = diciplineDTO.Course,
+                isMagistracy = diciplineDTO.isMagistracy,
+                Group = new TrainedGroup()
+                {
+                    isAS = diciplineDTO.Group.isAS,
+                    isPO = diciplineDTO.Group.isPO,
+                    isVM = diciplineDTO.Group.isVM
+                }
+            };
         }
     }
 }

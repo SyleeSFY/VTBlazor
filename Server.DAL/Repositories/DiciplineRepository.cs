@@ -26,5 +26,21 @@ namespace Server.DAL.Repositories
             => await _context.Disciplines
                 .Include(x => x.Group)
                 .FirstOrDefaultAsync(x => x.Id == diciplineId);
+
+        public async Task<bool> AddDiciplineAsync(Discipline dicipline)
+        {
+            try
+            {
+                await _context.Disciplines.AddAsync(dicipline);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+        }
+            
     }
 }
