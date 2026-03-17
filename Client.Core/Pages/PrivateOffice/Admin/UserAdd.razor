@@ -1,4 +1,5 @@
-﻿@page "/DiciplineAdd"
+@page "/UserAdd"
+@using Client.Core.Entities.Enums
 @using Client.Core.Features
 @inject HttpClient Http
 @layout PrivateOfficeLayout
@@ -6,24 +7,53 @@
 <AuthorizeView>
     <Authorized>
         <div class="container">
-            <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Добавление новой дисциплины" />
-
-            <div class="row justify-content-center" style="margin-top:auto;margin-bottom:auto">
+            <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Добавление нового пользователя" />
+            <div class="row justify-content-center" style="margin-top:auto;margin-bottom:auto;">
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
+                            <div class="change__nav">
+                                    <button @onclick="(() => SetActiveTable(Role.student))"
+                                            class="button_with_under_stick">
+
+                                        <TittleUnderStick Tittle="Студент"
+                                                          JustifyContent="JustifyContentEnum.Center"
+                                                          FontSize="20"
+                                                          State="(_activeBtn == Role.student) ? true : false"
+                                                          />
+                                    </button>
+                                    <button @onclick="(() => SetActiveTable(Role.educator))"
+                                            class="button_with_under_stick">
+
+                                        <TittleUnderStick Tittle="Преподаватель"
+                                                          JustifyContent="JustifyContentEnum.Center"
+                                                          FontSize="20"
+                                                          State="(_activeBtn == Role.educator) ? true : false"
+                                                          />
+                                    </button>
+                                    <button @onclick="(() => SetActiveTable(Role.admin))"
+                                            class="button_with_under_stick">
+
+                                        <TittleUnderStick Tittle="Админ"
+                                                          JustifyContent="JustifyContentEnum.Center"
+                                                          FontSize="20"
+                                                          State="(_activeBtn == Role.admin) ? true : false"
+                                        />
+                                    </button>
+                            </div>
                             <form>
+
                                 <div class="form-group mb-3">
                                     <label for="disciplineName" class="form-label">Название дисциплины</label>
                                     <input type="text" class="form-control" id="disciplineName"
-                                           placeholder="Введите название дисциплины" required @bind="_diciplineName">
+                                           placeholder="Введите название дисциплины" required>
                                     <div class="invalid-feedback">
                                         Пожалуйста, введите название дисциплины
                                     </div>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="semester" class="form-label">Курс</label>
-                                    <select class="form-control" id="semester" @bind="_diciplineCourse">
+                                    <select class="form-control" id="semester">
                                         <option value="">Выберите курс</option>
                                         <option value="1">1 курс</option>
                                         <option value="2">2 курс</option>
@@ -33,7 +63,7 @@
                                 </div>
                                 <div class="form-group mb-3">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" @bind="_diciplineIsMaga">
+                                        <input class="form-check-input" type="checkbox">
                                         <label class="form-check-label" for="examCheck">
                                             Магистратура
                                         </label>
@@ -42,26 +72,26 @@
                                 <div class="form-group mb-3">
                                     <label class="form-label">Обучаемая группа</label>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" @bind="_diciplineTrainedGroup.isAS">
+                                        <input class="form-check-input" type="checkbox">
                                         <label class="form-check-label" for="examCheck">
                                             АС
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="creditCheck" @bind="_diciplineTrainedGroup.isPO">
+                                        <input class="form-check-input" type="checkbox" id="creditCheck">
                                         <label class="form-check-label" for="creditCheck">
                                             ПО
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="courseworkCheck" @bind="_diciplineTrainedGroup.isVM">
+                                        <input class="form-check-input" type="checkbox" id="courseworkCheck">
                                         <label class="form-check-label" for="courseworkCheck">
                                             ВМ
                                         </label>
                                     </div>
                                 </div>
                                 <div class="form-group mt-4">
-                                    <button type="submit" class="btn btn-primary me-2" @onclick="OnClickAddDicipline">
+                                    <button type="submit" class="btn btn-primary me-2">
                                         <i class="bi bi-save"></i> Сохранить
                                     </button>
                                     <button type="reset" class="btn btn-light">
