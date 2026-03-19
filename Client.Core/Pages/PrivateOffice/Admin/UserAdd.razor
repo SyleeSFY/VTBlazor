@@ -42,72 +42,351 @@
                                     </button>
                             </div>
                             <form>
-
+                                <!-- Общие поля для всех пользователей -->
                                 <div class="form-group mb-3">
-                                    <label for="disciplineName" class="form-label">Название дисциплины</label>
-                                    <input type="text" class="form-control" id="disciplineName"
-                                           placeholder="Введите название дисциплины" required>
+                                    <label for="lastName" class="form-label">Фамилия</label>
+                                    <input type="text" class="form-control" id="lastName"
+                                           placeholder="Введите фамилию" @bind="lastName" required>
                                     <div class="invalid-feedback">
-                                        Пожалуйста, введите название дисциплины
+                                        Пожалуйста, введите фамилию
                                     </div>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label for="semester" class="form-label">Курс</label>
-                                    <select class="form-control" id="semester">
-                                        <option value="">Выберите курс</option>
-                                        <option value="1">1 курс</option>
-                                        <option value="2">2 курс</option>
-                                        <option value="3">3 курс</option>
-                                        <option value="4">4 курс</option>
-                                    </select>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox">
-                                        <label class="form-check-label" for="examCheck">
-                                            Магистратура
-                                        </label>
+                                    <label for="firstName" class="form-label">Имя</label>
+                                    <input type="text" class="form-control" id="firstName"
+                                           placeholder="Введите имя" @bind="firstName" required>
+                                    <div class="invalid-feedback">
+                                        Пожалуйста, введите имя
                                     </div>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label class="form-label">Обучаемая группа</label>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox">
-                                        <label class="form-check-label" for="examCheck">
-                                            АС
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="creditCheck">
-                                        <label class="form-check-label" for="creditCheck">
-                                            ПО
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="courseworkCheck">
-                                        <label class="form-check-label" for="courseworkCheck">
-                                            ВМ
-                                        </label>
+                                    <label for="patronymic" class="form-label">Отчество</label>
+                                    <input type="text" class="form-control" id="patronymic"
+                                           placeholder="Введите отчество" @bind="patronymic">
+                                    <div class="invalid-feedback">
+                                        Пожалуйста, введите отчество
                                     </div>
                                 </div>
-                                <div class="form-group mt-4">
-                                    <button type="submit" class="btn btn-primary me-2">
-                                        <i class="bi bi-save"></i> Сохранить
-                                    </button>
-                                    <button type="reset" class="btn btn-light">
-                                        <i class="bi bi-arrow-counterclockwise"></i> Очистить
-                                    </button>
+                                <div class="form-group mb-3">
+                                    <label for="password" class="form-label">Пароль</label>
+                                    <input type="password" class="form-control" id="password"
+                                           placeholder="Введите пароль" @bind="password" required>
+                                    <div class="invalid-feedback">
+                                        Пожалуйста, введите пароль
+                                    </div>
                                 </div>
+                                <div class="form-group mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email"
+                                           placeholder="Введите email" @bind="email" required>
+                                    <div class="invalid-feedback">
+                                        Пожалуйста, введите корректный email
+                                    </div>
+                                </div>
+                                
+                                @{
+                                    switch (_activeBtn)
+                                    {
+                                        case Role.student:
+                                            <div class="form-group mb-3">
+                                                <label for="studentGroup" class="form-label">Обучаемая группа</label>
+                                                <select class="form-control" id="studentGroup" @bind="studentGroup">
+                                                    <option value="">Выберите группу</option>
+                                                    <option value="АС-211">АС-211</option>
+                                                    <option value="ПО-211">ПО-211</option>
+                                                    <option value="ВМ-211">ВМ-211</option>
+                                                    <option value="АС-212">АС-212</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="course" class="form-label">Курс</label>
+                                                <select class="form-control" id="course" @bind="course">
+                                                    <option value="">Выберите курс</option>
+                                                    <option value="1">1 курс</option>
+                                                    <option value="2">2 курс</option>
+                                                    <option value="3">3 курс</option>
+                                                    <option value="4">4 курс</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="isMaster" @bind="isMaster">
+                                                    <label class="form-check-label" for="isMaster">
+                                                        Магистратура
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            break;
+                                            
+                                        case Role.educator:
+                                            <h5 class="mt-4 mb-3">Основная информация о преподавателе</h5>
+                                            
+                                            <div class="form-group mb-3">
+                                                <label for="profession" class="form-label">Должность</label>
+                                                <input type="text" class="form-control" id="profession"
+                                                       placeholder="Введите должность" @bind="profession" required>
+                                            </div>
+                                            
+                                            <div class="form-group mb-3">
+                                                <label for="academicDegree" class="form-label">Ученая степень</label>
+                                                <select class="form-control" id="academicDegree" @bind="academicDegree">
+                                                    <option value="">Выберите ученую степень</option>
+                                                    <option value="Кандидат наук">Кандидат наук</option>
+                                                    <option value="Доктор наук">Доктор наук</option>
+                                                    <option value="Доцент">Доцент</option>
+                                                    <option value="Профессор">Профессор</option>
+                                                    <option value="Без степени">Без степени</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <h5 class="mt-4 mb-3">Дополнительная информация</h5>
+                                            
+                                            <div class="form-group mb-3">
+                                                <label for="educationLevel" class="form-label">Уровень образования</label>
+                                                <select class="form-control" id="educationLevel" @bind="educationLevel">
+                                                    <option value="">Выберите уровень образования</option>
+                                                    <option value="Высшее образование - бакалавриат">Высшее образование - бакалавриат</option>
+                                                    <option value="Высшее образование - магистратура">Высшее образование - магистратура</option>
+                                                    <option value="Высшее образование - специалитет">Высшее образование - специалитет</option>
+                                                    <option value="Высшее образование - подготовка кадров высшей квалификации">Высшее образование - подготовка кадров высшей квалификации</option>
+                                                    <option value="Среднее профессиональное образование">Среднее профессиональное образование</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="form-group mb-3">
+                                                <label for="academicTitle" class="form-label">Ученое звание</label>
+                                                <input type="text" class="form-control" id="academicTitle"
+                                                       placeholder="Введите ученое звание" @bind="academicTitle">
+                                            </div>
+                                            
+                                            <div class="form-group mb-3">
+                                                <label for="specialty" class="form-label">Специальность или направление подготовки</label>
+                                                <input type="text" class="form-control" id="specialty"
+                                                       placeholder="Введите специальность" @bind="specialty" required>
+                                            </div>
+                                            
+                                            <div class="form-group mb-3">
+                                                <label for="qualification" class="form-label">Квалификация</label>
+                                                <input type="text" class="form-control" id="qualification"
+                                                       placeholder="Введите квалификацию" @bind="qualification" required>
+                                            </div>
+                                            
+                                            <div class="form-group mb-3">
+                                                <label for="additionalInfo" class="form-label">Дополнительная информация</label>
+                                                <textarea class="form-control" id="additionalInfo" rows="3"
+                                                          placeholder="Введите дополнительную информацию" @bind="additionalInfo"></textarea>
+                                            </div>
+                                            
+                                            <div class="form-group mb-3">
+                                                <label for="educatorImage" class="form-label">Фотография (Base64)</label>
+                                                <input type="file" class="form-control" id="educatorImage" 
+                                                       @onchange="OnImageSelected" accept="image/*">
+                                                @if (!string.IsNullOrEmpty(imagePreview))
+                                                {
+                                                    <div class="mt-2">
+                                                        <img src="@imagePreview" alt="Preview" style="max-width: 200px; max-height: 200px;" />
+                                                    </div>
+                                                }
+                                            </div>
+                                            
+                                            <h5 class="mt-4 mb-3">Преподаваемые дисциплины</h5>
+                                            
+                                            <div class="form-group mb-3">
+                                                <label class="form-label">Выберите дисциплины</label>
+                                                @* @foreach (var discipline in availableDisciplines) *@
+                                                @* { *@
+                                                @*     <div class="form-check"> *@
+                                                @*         <input class="form-check-input" type="checkbox"  *@
+                                                @*                id="@($"discipline_{discipline.Id}")"  *@
+                                                @*                @onchange="@(e => ToggleDiscipline(discipline.Id, e.Value))"> *@
+                                                @*         <label class="form-check-label" for="@($"discipline_{discipline.Id}")"> *@
+                                                @*             @discipline.Name *@
+                                                @*         </label> *@
+                                                @*     </div> *@
+                                                @* } *@
+                                            </div>
+                                            @* @onclick="SaveEducator" *@
+                                            <div class="form-group mt-4">
+                                                <button type="button" class="btn btn-primary me-2" > 
+                                                    <i class="bi bi-save"></i> Сохранить преподавателя
+                                                </button>
+                                                <button type="reset" class="btn btn-light" @onclick="ResetForm">
+                                                    <i class="bi bi-arrow-counterclockwise"></i> Очистить
+                                                </button>
+                                            </div>
+                                            break;
+                                            
+                                        case Role.admin:
+                                            <div class="form-group mb-3">
+                                                <label for="adminPosition" class="form-label">Должность</label>
+                                                <input type="text" class="form-control" id="adminPosition"
+                                                       placeholder="Введите должность" @bind="adminPosition" required>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="adminDepartment" class="form-label">Отдел</label>
+                                                <input type="text" class="form-control" id="adminDepartment"
+                                                       placeholder="Введите отдел" @bind="adminDepartment">
+                                            </div>
+                                            <div class="form-group mt-4">
+                                                <button type="button" class="btn btn-primary me-2" @onclick="SaveAdmin">
+                                                    <i class="bi bi-save"></i> Сохранить администратора
+                                                </button>
+                                                <button type="reset" class="btn btn-light" @onclick="ResetForm">
+                                                    <i class="bi bi-arrow-counterclockwise"></i> Очистить
+                                                </button>
+                                            </div>
+                                            break;
+                                    }
+                                }
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-                <ButtonRedirect Redirect="DiciplineTable" Text="Назад" MT="auto" />
- 
+            <ButtonRedirect Redirect="DiciplineTable" Text="Назад" MT="auto" />
         </div>
     </Authorized>
     <NotAuthorized>
         <p>Вы не авторизованы</p>
     </NotAuthorized>
 </AuthorizeView>
+
+@code {
+    
+    // Общие поля
+    private string lastName = string.Empty;
+    private string firstName = string.Empty;
+    private string patronymic = string.Empty;
+    private string password = string.Empty;
+    private string email = string.Empty;
+    
+    // Поля для студента
+    private string studentGroup = string.Empty;
+    private string course = string.Empty;
+    private bool isMaster;
+    
+    // Поля для преподавателя (Educator)
+    private string profession = string.Empty;
+    private string academicDegree = string.Empty;
+    
+    // Поля для EducatorAdditionalInfo
+    private string educationLevel = string.Empty;
+    private string academicTitle = string.Empty;
+    private string specialty = string.Empty;
+    private string qualification = string.Empty;
+    private string additionalInfo = string.Empty;
+    private string imageBase64 = string.Empty;
+    private string imagePreview = string.Empty;
+    private List<int> selectedDisciplineIds = new();
+    
+    // Поля для администратора
+    private string adminPosition = string.Empty;
+    private string adminDepartment = string.Empty;
+    
+    // // Список доступных дисциплин (в реальном приложении загружается из БД)
+    // private List<Discipline> availableDisciplines = new()
+    // {
+    //     new Discipline { Id = 1, Name = "Математика" },
+    //     new Discipline { Id = 2, Name = "Физика" },
+    //     new Discipline { Id = 3, Name = "Программирование" },
+    //     new Discipline { Id = 4, Name = "Базы данных" },
+    //     new Discipline { Id = 5, Name = "Компьютерные сети" },
+    //     new Discipline { Id = 6, Name = "Операционные системы" }
+    // };
+
+    // private void SetActiveTable(Role role)
+    // {
+    //     _activeBtn = role;
+    //     ResetForm();
+    // }
+    
+    private async Task OnImageSelected(ChangeEventArgs e)
+    {
+        var file = e.Value as Microsoft.AspNetCore.Components.Forms.IBrowserFile;
+        if (file != null)
+        {
+            var buffer = new byte[file.Size];
+            await file.OpenReadStream().ReadAsync(buffer);
+            imageBase64 = Convert.ToBase64String(buffer);
+            imagePreview = $"data:{file.ContentType};base64,{imageBase64}";
+        }
+    }
+    
+    private void ToggleDiscipline(int disciplineId, object value)
+    {
+        if (value is bool isChecked)
+        {
+            if (isChecked && !selectedDisciplineIds.Contains(disciplineId))
+                selectedDisciplineIds.Add(disciplineId);
+            else if (!isChecked && selectedDisciplineIds.Contains(disciplineId))
+                selectedDisciplineIds.Remove(disciplineId);
+        }
+    }
+    
+    // private async Task SaveEducator()
+    // {
+    //     // Создание объекта Educator
+    //     var educator = new Educator
+    //     {
+    //         Id = 0, // ID будет присвоен при сохранении в БД
+    //         Profession = profession,
+    //         FullName = $"{lastName} {firstName} {patronymic}".Trim(),
+    //         AcademicDegree = academicDegree,
+    //         EducatorAdditionalInfo = new EducatorAdditionalInfo
+    //         {
+    //             EducationLevel = educationLevel,
+    //             AcademicTitle = academicTitle,
+    //             SpecialtyOrFieldOfStudy = specialty,
+    //             Qualification = qualification,
+    //             AdditionalInfo = additionalInfo,
+    //             Image = imageBase64,
+    //             EducatorDisciplines = selectedDisciplineIds.Select(id => new EducatorDiscipline
+    //             {
+    //                 DisciplineId = id
+    //             }).ToList()
+    //         }
+    //     };
+    @*      *@
+    @*     // Здесь будет код для сохранения через API *@
+    @*     // await Http.PostAsJsonAsync("api/educators", educator); *@
+    @*      *@
+    @*     Console.WriteLine($"Преподаватель сохранен: {educator.FullName}"); *@
+    @*     ResetForm(); *@
+    @* } *@
+    
+    private async Task SaveAdmin()
+    {
+        // Логика сохранения администратора
+        Console.WriteLine($"Администратор сохранен: {lastName} {firstName}");
+        ResetForm();
+    }
+    
+    private void ResetForm()
+    {
+        // Сброс всех полей
+        lastName = string.Empty;
+        firstName = string.Empty;
+        patronymic = string.Empty;
+        password = string.Empty;
+        email = string.Empty;
+        studentGroup = string.Empty;
+        course = string.Empty;
+        isMaster = false;
+        
+        // Сброс полей преподавателя
+        profession = string.Empty;
+        academicDegree = string.Empty;
+        educationLevel = string.Empty;
+        academicTitle = string.Empty;
+        specialty = string.Empty;
+        qualification = string.Empty;
+        additionalInfo = string.Empty;
+        imageBase64 = string.Empty;
+        imagePreview = string.Empty;
+        selectedDisciplineIds.Clear();
+        
+        // Сброс полей администратора
+        adminPosition = string.Empty;
+        adminDepartment = string.Empty;
+    }
+}
