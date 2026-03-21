@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Server.DAL.Models.Entities.Users
@@ -15,7 +16,7 @@ namespace Server.DAL.Models.Entities.Users
         public int UserId { get; set; }
         [MaxLength(100)]
         public string Position { get; set; } = string.Empty;
-
+        [JsonIgnore]
         public User User { get; set; }
     }
 }

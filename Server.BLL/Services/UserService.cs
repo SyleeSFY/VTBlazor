@@ -45,34 +45,39 @@ public class UserService : IUserService
     {
         var user = new User()
         {
-            Email = userDTO.Email, 
+            Email = userDTO.Email,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.PasswordHash),
             FirstName = userDTO.FirstName, 
             LastName = userDTO.LastName, 
             MiddleName = userDTO.MiddleName, 
             Role = userDTO.Role
         };
 
-        switch (userDTO.Role)
+            switch (userDTO.Role)
         {
             case Role.admin:
+                user.Administrator = new Admin();
                 user.Administrator.Position = userDTO.Administrator.Position;
                 break;
             case Role.educator:
+                user.Educator = new Educator();
                 user.Educator.Profession = userDTO.Educator.Profession;
                 user.Educator.AcademicDegree = userDTO.Educator.AcademicDegree;
                 user.Educator.EducatorAdditionalInfo.EducationLevel = userDTO.Educator.EducatorAdditionalInfo.EducationLevel;
                 user.Educator.EducatorAdditionalInfo.SpecialtyOrFieldOfStudy = userDTO.Educator.EducatorAdditionalInfo.SpecialtyOrFieldOfStudy;
                 user.Educator.EducatorAdditionalInfo.Qualification = userDTO.Educator.EducatorAdditionalInfo.Qualification;
                 user.Educator.EducatorAdditionalInfo.AdditionalInfo = userDTO.Educator.EducatorAdditionalInfo.AdditionalInfo;
-                // user.Educator.EducatorAdditionalInfo.Image = userDTO.Educator.EducatorAdditionalInfo.Image;
-                user.Educator.EducatorAdditionalInfo.Image = new byte[0];
+                user.Educator.EducatorAdditionalInfo.Image = Convert.FromBase64String(userDTO.Educator.EducatorAdditionalInfo.Image);
+                user.Educator.EducatorAdditionalInfo.AcademicTitle = userDTO.Educator.EducatorAdditionalInfo.AcademicTitle;
                 user.Educator.EducatorAdditionalInfo.EducatorDisciplines = userDTO.Educator.EducatorAdditionalInfo.EducatorDisciplines
                     .Select(x => new EducatorDiscipline() { DisciplineId = x.DisciplineId})
                     .ToList();
 
                 break;
             case Role.student:
-                user.Student.GroupId = userDTO.Student?.GroupId;
+                user.Student = new Student();
+                user.Student.GroupId = userDTO.Student.GroupId;
+                user.Student.StudentId = "123321321";
                 break;
             default:
                 break;

@@ -1,4 +1,5 @@
 using Server.DAL.Models.Entities.Users;
+using System.Text.Json.Serialization;
 
 namespace Server.DAL.Models.Entities.Educators;
 
@@ -17,6 +18,11 @@ public class Educator
     public string AcademicDegree { get; set; }
     
     public EducatorAdditionalInfo EducatorAdditionalInfo { get; set; }
-
+    [JsonIgnore]
     public User? User { get; set; }
+
+    public Educator()
+    {
+        EducatorAdditionalInfo = new EducatorAdditionalInfo();
+    }
 }
