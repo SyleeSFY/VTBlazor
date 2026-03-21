@@ -33,11 +33,11 @@ public class UserController : ControllerBase
     [HttpPost("PostAddUser")]
     public async Task<ActionResult<bool>> PostAddUser(UserDTO data)
     {
-        //if (data != null)
-        //{
-        //    var result = await _diciplineService.AddDiciplineByDTOAsync(data);
-        //    //return result.Success ? Ok(result) : NotFound(result);
-        //}
+        if (data != null)
+        {
+            var result = await _userService.AddUserByDTOAsync(data);
+            return result ? Ok(result) : NotFound(result);
+        }
         return NotFound();
     }
 }
