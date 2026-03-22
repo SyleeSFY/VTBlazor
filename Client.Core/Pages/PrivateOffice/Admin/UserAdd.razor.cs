@@ -17,6 +17,7 @@ namespace Client.Core.Pages.PrivateOffice.Admin
         private string _email = string.Empty;
 
         private string _studentGroup = string.Empty;
+        private string _studentCardId = string.Empty;
 
         private string _profession = string.Empty;
         private string _academicDegree = string.Empty;
@@ -99,7 +100,8 @@ namespace Client.Core.Pages.PrivateOffice.Admin
         private async Task<StudentDTO> CreateStudent()
             => new StudentDTO
             {
-                GroupId = _studentGroup
+                GroupId = _studentGroup,
+                 StudentCardId= _studentCardId
             };
 
         private async Task<EducatorDTO> CreateEducator()

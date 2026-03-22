@@ -7,7 +7,9 @@
 <AuthorizeView>
     <Authorized>
         <div class="container">
-            <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Добавление нового пользователя" />
+            <div style="margin-bottom: 30px;">
+                <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Добавление нового пользователя" />
+            </div>
             <div class="row justify-content-center" style="margin-top:auto;margin-bottom:auto;">
                 <div class="col-md-8">
                     <div class="card">
@@ -91,11 +93,16 @@
                                             <div class="form-group mb-3">
                                                 <label for="studentGroup" class="form-label">Обучаемая группа</label>
                                                 <select class="form-control" id="studentGroup" @bind="_studentGroup">
-                                                    <option value="">Выберите группу</option>
+                                                    <option value="" disabled selected>Выберите группу</option>
                                                     <option value="АС-22">АС-22</option>
                                                     <option value="ПО1-22">ПО1-22</option>
                                                     <option value="ПО2-22">ПО2-22</option>
                                                 </select>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="profession" class="form-label">Номер студенческого билета</label>
+                                                <input type="text" class="form-control" id="profession"
+                                                        placeholder="Введите студенческий" @bind="_studentCardId" required>
                                             </div>
                                             break;
                                             
@@ -203,7 +210,7 @@
                                     }
                                 }
                                 <div class="form-group mt-4">
-                                    <button type="button" class="btn btn-primary me-2" @onclick="SaveUser">
+                                    <button type="button" class="btn btn-primary me-2" style="background: #009c15" @onclick="SaveUser">
                                         <i class="bi bi-save"></i> Сохранить
                                     </button>
                                     <button type="reset" class="btn btn-light" @onclick="ResetForm">
@@ -215,7 +222,7 @@
                     </div>
                 </div>
             </div>
-            <ButtonRedirect Redirect="DiciplineTable" Text="Назад" MT="auto" />
+            <ButtonRedirect Redirect="UserTable" Text="Назад" MT="auto" />
         </div>
     </Authorized>
     <NotAuthorized>

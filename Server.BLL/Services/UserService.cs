@@ -2,10 +2,7 @@ using Server.BLL.Services.Inrerfaces;
 using Server.DAL.Interfaces;
 using Server.DAL.Models.Entities.Educators;
 using Server.DAL.Models.Entities.Users;
-using Server.BLL.Services.Inrerfaces;
-using Server.DAL.Interfaces;
 using Server.DAL.Models.DTO;
-using Server.DAL.Models.Entities.Educators;
 using Server.DAL.Models.Enums;
 
 namespace Server.BLL.Services {
@@ -54,38 +51,44 @@ public class UserService : IUserService
         };
 
             switch (userDTO.Role)
-        {
-            case Role.admin:
-                user.Administrator = new Admin();
-                user.Administrator.Position = userDTO.Administrator.Position;
-                break;
-            case Role.educator:
-                user.Educator = new Educator();
-                user.Educator.Profession = userDTO.Educator.Profession;
-                user.Educator.AcademicDegree = userDTO.Educator.AcademicDegree;
-                user.Educator.EducatorAdditionalInfo.EducationLevel = userDTO.Educator.EducatorAdditionalInfo.EducationLevel;
-                user.Educator.EducatorAdditionalInfo.SpecialtyOrFieldOfStudy = userDTO.Educator.EducatorAdditionalInfo.SpecialtyOrFieldOfStudy;
-                user.Educator.EducatorAdditionalInfo.Qualification = userDTO.Educator.EducatorAdditionalInfo.Qualification;
-                user.Educator.EducatorAdditionalInfo.AdditionalInfo = userDTO.Educator.EducatorAdditionalInfo.AdditionalInfo;
-                user.Educator.EducatorAdditionalInfo.Image = Convert.FromBase64String(userDTO.Educator.EducatorAdditionalInfo.Image);
-                user.Educator.EducatorAdditionalInfo.AcademicTitle = userDTO.Educator.EducatorAdditionalInfo.AcademicTitle;
-                user.Educator.EducatorAdditionalInfo.EducatorDisciplines = userDTO.Educator.EducatorAdditionalInfo.EducatorDisciplines
-                    .Select(x => new EducatorDiscipline() { DisciplineId = x.DisciplineId})
-                    .ToList();
-
+            {
+                case Role.admin:
+                    user.Administrator = new Admin()
+                    {
+                        Position = userDTO.Administrator.Position
+                    };
+                    break;
+                case Role.educator:
+                    user.Educator = new Educator()
+                    {
+                        Profession = userDTO.Educator.Profession,
+                        AcademicDegree = userDTO.Educator.AcademicDegree,
+                        EducatorAdditionalInfo = new EducatorAdditionalInfo
+                        {
+                            EducationLevel = userDTO.Educator.EducatorAdditionalInfo.EducationLevel,
+                            SpecialtyOrFieldOfStudy = userDTO.Educator.EducatorAdditionalInfo.SpecialtyOrFieldOfStudy,
+                            Qualification = userDTO.Educator.EducatorAdditionalInfo.Qualification,
+                            AdditionalInfo = userDTO.Educator.EducatorAdditionalInfo.AdditionalInfo,
+                            Image = Convert.FromBase64String(userDTO.Educator.EducatorAdditionalInfo.Image),
+                            AcademicTitle = userDTO.Educator.EducatorAdditionalInfo.AcademicTitle,
+                            EducatorDisciplines = userDTO.Educator.EducatorAdditionalInfo.EducatorDisciplines
+                            .Select(x => new EducatorDiscipline() { DisciplineId = x.DisciplineId })
+                            .ToList()
+                        }
+                    };
                 break;
             case Role.student:
-                user.Student = new Student();
-                user.Student.GroupId = userDTO.Student.GroupId;
-                user.Student.StudentId = "123321321";
+                    user.Student = new Student()
+                    {
+                        GroupId = userDTO.Student.GroupId,
+                        StudentId = userDTO.Student.StudentCardId
+                    };
+
                 break;
             default:
                 break;
         }
         return user;
-    
-        //public string PasswordHash { get; set; }
-
         }
     }
 }

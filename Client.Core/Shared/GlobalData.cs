@@ -6,7 +6,7 @@ namespace Client.Core.Shared
     {
         public static Dictionary<Role, string> GetRusRole = new Dictionary<Role, string>()
         {
-            { Role.educator, "Преподаватель" },
+            { Role.educator, "Препод." },
             { Role.student, "Студент" },
             { Role.admin, "Админ" }
         };

@@ -3,3 +3,46 @@
     justify-content: center; 
     padding-bottom: 2rem;
 }
+
+.change__nav {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+form {
+    position: relative;
+}
+
+.card-body {
+    transition: min-height 0.2s ease;
+}
+
+.change__nav {
+    position: relative;
+    z-index: 10;
+}
+
+.form-container {
+    min-height: 600px;
+    transition: all 0.2s ease;
+}
+
+.form-group {
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

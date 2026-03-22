@@ -15,6 +15,7 @@ namespace Client.Core.Pages.Public
 
         protected override async Task OnInitializedAsync() { 
             _diciplines = await GetEducators();
+            _diciplines = _diciplines.OrderBy(x => x.Course).ThenBy(x => x.Id).ToList();
             if (_diciplines.Any())
             {
                 _diciplinesBachelor = _diciplines.Where(x => !x.isMagistracy).Select((item, index) => new DisciplineIndex{ Index = index + 1, Discipline = item }).ToList();

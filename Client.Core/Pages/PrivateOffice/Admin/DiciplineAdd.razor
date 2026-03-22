@@ -24,7 +24,7 @@
                                 <div class="form-group mb-3">
                                     <label for="semester" class="form-label">Курс</label>
                                     <select class="form-control" id="semester" @bind="_diciplineCourse">
-                                        <option value="">Выберите курс</option>
+                                        <option value="" disabled selected>Выберите курс</option>
                                         <option value="1">1 курс</option>
                                         <option value="2">2 курс</option>
                                         <option value="3">3 курс</option>
@@ -61,7 +61,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group mt-4">
-                                    <button type="submit" class="btn btn-primary me-2" @onclick="OnClickAddDicipline">
+                                    <button type="submit" class="btn btn-primary me-2" style="background: #009c15" @onclick="OnClickAddDicipline">
                                         <i class="bi bi-save"></i> Сохранить
                                     </button>
                                     <button type="reset" class="btn btn-light">

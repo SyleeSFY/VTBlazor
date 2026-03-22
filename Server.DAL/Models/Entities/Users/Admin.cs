@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace Server.DAL.Models.Entities.Users
 {
     public class Admin
     {
         public int Id { get; set; }
-
         [Required]
         public int UserId { get; set; }
         [MaxLength(100)]

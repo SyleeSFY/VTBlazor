@@ -1,4 +1,5 @@
-@page "/users"
+@page "/UserTable"
+@using Client.Core.Features
 @using Client.Core.Shared
 @inject HttpClient Http
 @layout PrivateOfficeLayout
@@ -6,6 +7,8 @@
 <AuthorizeView>
     <Authorized>
         <div class="container">
+            <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Пользователи" />
+            <ButtonRedirect Redirect="UserAdd" Text="Добавление пользователя"/>
             <div class="table-container">
                 <table class="disciplines-table">
                     <thead>

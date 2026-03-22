@@ -3,5 +3,6 @@
     public class StudentDTO
     {
         public string? GroupId { get; set; }
+        public string? StudentCardId { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace Client.Core.Pages.PrivateOffice.Admin
     public partial class DiciplineAdd : ComponentBase
     {
         private string _diciplineName;
-        private int _diciplineCourse;
+        private int? _diciplineCourse = null;
         private bool _diciplineIsMaga;
         private TrainedGroup _diciplineTrainedGroup;
 
@@ -39,7 +39,7 @@ namespace Client.Core.Pages.PrivateOffice.Admin
             => new DisciplineDTO()
             {
                 NameDiscipline = _diciplineName,
-                Course = _diciplineCourse,
+                Course = (int)_diciplineCourse,
                 isMagistracy = _diciplineIsMaga,
                 Group = new TrainedGroupDTO()
                 {
