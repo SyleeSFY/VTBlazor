@@ -7,4 +7,6 @@ public class Discipline
     public int Course { get; set; }
     public bool isMagistracy { get; set; } = false;
     public TrainedGroup? Group { get; set; }
+    public List<TaskEducation>? TaskEducations { get; set; }
+
 }
