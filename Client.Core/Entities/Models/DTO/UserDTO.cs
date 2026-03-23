@@ -1,13 +1,12 @@
-﻿using Server.DAL.Models.Entities.Educators;
-using Server.DAL.Models.Enums;
+﻿using Client.Core.Entities.Enums;
+using Client.Core.Entities.Models.User;
+using Client.Core.Entities.Models.User.Educator;
 using System.ComponentModel.DataAnnotations;
 
-namespace Server.DAL.Models.Entities.Users
+namespace Client.Core.Entities.Models.DTO
 {
-    public class User
+    public class UserDTO
     {
-        public int Id { get; set; }
-
         [Required]
         [EmailAddress]
         [MaxLength(256)]
@@ -29,10 +28,8 @@ namespace Server.DAL.Models.Entities.Users
 
         [Required]
         public Role Role { get; set; }
-        public bool IsActive { get; set; } = true;
-
-        public Educator? Educator { get; set; }
-        public Student? Student { get; set; }
-        public Admin? Administrator { get; set; }
+        public EducatorDTO? Educator { get; set; }
+        public StudentDTO? Student { get; set; }
+        public AdminDTO? Administrator { get; set; }
     }
 }

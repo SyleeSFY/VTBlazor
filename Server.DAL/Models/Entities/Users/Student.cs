@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Server.DAL.Models.Entities.Users;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Server.DAL.Models.Entities.Users
 {
@@ -16,7 +11,7 @@ namespace Server.DAL.Models.Entities.Users
         [MaxLength(20)]
         public string StudentId { get; set; }
         public string? GroupId { get; set; }
-
+        [JsonIgnore]
         public User User { get; set; }
     }
 }

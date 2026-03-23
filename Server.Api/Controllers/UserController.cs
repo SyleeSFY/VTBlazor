@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Server.BLL.Services.Inrerfaces;
+using Server.DAL.Models.DTO;
 using Server.DAL.Models.Entities.Users;
 
 namespace Server.Api.Controllers;
@@ -24,9 +25,19 @@ public class UserController : ControllerBase
     public async Task<ActionResult<User>> GetUser(int id)
     {
         var user =  await _userService.GetUser(id);
-        if (user != null)
+        if (user.Id != 0)
             return Ok(user);
         return NotFound();
+    }
 
+    [HttpPost("PostAddUser")]
+    public async Task<ActionResult<bool>> PostAddUser(UserDTO data)
+    {
+        if (data != null)
+        {
+            var result = await _userService.AddUserByDTOAsync(data);
+            return result ? Ok(result) : NotFound(result);
+        }
+        return NotFound();
     }
 }

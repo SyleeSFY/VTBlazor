@@ -11,6 +11,7 @@ public partial class UsersTable : ComponentBase
     protected override async Task OnInitializedAsync()
     {
         _users = await GetUsers();
+        _users = _users.OrderBy(x => x.Id).ToList();
     }
 
     private async void BtnDelete(int userId)

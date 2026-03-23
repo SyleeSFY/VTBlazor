@@ -11,4 +11,8 @@
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="9.0.4" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Client.Core\Client.Core.csproj" />
+    </ItemGroup>
+
 </Project>

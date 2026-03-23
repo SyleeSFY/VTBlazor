@@ -1,11 +1,11 @@
-﻿@page "/UserEdit/{RoleEdit:int}/{UserId:int}"
+﻿@page "/DiciplineEdit/{DiciplineId:int}"
 @inject HttpClient Http
 @layout PrivateOfficeLayout
 
 <AuthorizeView>
     <Authorized>
         <div class="container">
-         <h6>@_user?.LastName</h6>
+             <h6>@_discipline?.NameDiscipline</h6>
         </div>
     </Authorized>
     <NotAuthorized>

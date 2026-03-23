@@ -33,5 +33,20 @@ public class UserRepository : IUserRepository
             .Include(x => x.Student)
             .Include(x => x.Administrator)
             .FirstOrDefaultAsync(x => x.Id == userId);
+    
+    public async Task<bool> AddUserAsync(User user)
+    {
+        try
+        {
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+    }
 
 }

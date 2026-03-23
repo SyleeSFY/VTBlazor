@@ -15,6 +15,7 @@ namespace Client.Core.Pages.Public
 
         protected override async Task OnInitializedAsync() { 
             _diciplines = await GetEducators();
+            _diciplines = _diciplines.OrderBy(x => x.Course).ThenBy(x => x.Id).ToList();
             if (_diciplines.Any())
             {
                 _diciplinesBachelor = _diciplines.Where(x => !x.isMagistracy).Select((item, index) => new DisciplineIndex{ Index = index + 1, Discipline = item }).ToList();
@@ -28,12 +29,12 @@ namespace Client.Core.Pages.Public
 
         private async Task<List<Discipline>> GetEducators()
         {
-            _diciplines = await Http.GetFromJsonAsync<List<Discipline>>("api/Diciplines/GetDicipline");
+            _diciplines = await Http.GetFromJsonAsync<List<Discipline>>("api/Diciplines/GetDiciplines");
             return _diciplines;
         }
 
         private string PlusOrMinus(bool state)
-            => state ? "+" : "-";
+            => state ? "+" : "–";
 
         private bool isLastTr(int index,int course, List<DisciplineIndex> _diciplines)
             => _diciplines.Where(x => x.Discipline.Course == course).Max(x => x.Index) == index;

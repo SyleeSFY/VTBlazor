@@ -50,7 +50,7 @@ public class UniversityDbContext : DbContext
                 .HasForeignKey(ed => ed.DisciplineId);
         });
 
-        // Discipline - TrainedGroup
+        // Discipline
 
         modelBuilder.Entity<Discipline>(entity =>
         {
@@ -59,7 +59,7 @@ public class UniversityDbContext : DbContext
                 .WithOne(g => g.Discipline)
                 .HasForeignKey<TrainedGroup>(g => g.DisciplineId)
                 .IsRequired(false)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasIndex(d => d.Course);
 

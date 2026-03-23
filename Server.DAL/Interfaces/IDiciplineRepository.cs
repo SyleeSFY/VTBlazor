@@ -1,14 +1,13 @@
-﻿using Server.DAL.Models.Entities.Educators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Client.Core.Entities.Models.DTO;
+using Server.DAL.Models.Entities.Educators;
 
 namespace Server.DAL.Interfaces
 {
     public interface IDiciplineRepository
     {
         Task<List<Discipline>> GetDiciplinesAsync();
+        Task<Discipline> GetDiciplineByIdAsync(int diciplineId);
+        Task<bool> DeleteDiciplineAsync(Discipline dicipline);
+        Task<bool> AddDiciplineAsync(Discipline dicipline);
     }
 }
