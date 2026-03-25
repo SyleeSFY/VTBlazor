@@ -12,7 +12,7 @@ public class TaskEducation
     public List<Group> Groups { get; set; } = new List<Group>();
     public Educator Educator { get; set; }
     public Discipline Dicipline { get; set; }
-    public List<TaskFile> Files { get; set; } = new List<TaskFile>();
+    public List<TaskFile>? Files { get; set; } = new List<TaskFile>();
 }
 
 public class TaskFile
