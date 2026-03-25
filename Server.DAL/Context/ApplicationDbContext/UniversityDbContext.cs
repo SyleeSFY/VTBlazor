@@ -118,7 +118,11 @@ public class UniversityDbContext : DbContext
             entity.HasMany(e => e.Files)
                 .WithOne(f => f.Task)
                 .HasForeignKey(f => f.TaskId)
-                .OnDelete(DeleteBehavior.Cascade); 
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(e => e.Groups)
+                 .WithMany(g => g.TaskEducations)
+                 .UsingEntity(j => j.ToTable("TaskGroups"));
 
         });
         
@@ -128,12 +132,17 @@ public class UniversityDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.HasOne(e => e.Task).WithMany(t => t.Files).HasForeignKey(e => e.TaskId).OnDelete(DeleteBehavior.Cascade);
         });
-        
+
         modelBuilder.Entity<Group>(entity =>
         {
             entity.ToTable("Groups");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Name).HasMaxLength(30);
+
+            entity.HasMany(g => g.Students)
+                  .WithOne(s => s.Group)
+                  .HasForeignKey(s => s.GroupId)
+                  .OnDelete(DeleteBehavior.Restrict);
         });
 
         // Student
@@ -142,9 +151,8 @@ public class UniversityDbContext : DbContext
             entity.ToTable("Students");
 
             entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.StudentId).IsUnique();
-            entity.Property(e => e.StudentId).HasMaxLength(20);
-            entity.HasOne<Group>().WithMany(x => x.Students).HasForeignKey(e => e.GroupId);
+            entity.HasIndex(e => e.StudentCard).IsUnique();
+            entity.Property(e => e.StudentCard).HasMaxLength(20);
         });
 
         // Admin

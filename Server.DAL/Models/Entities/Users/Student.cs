@@ -7,10 +7,10 @@ namespace Server.DAL.Models.Entities.Users
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public string? GroupId { get; set; }
+        public int GroupId { get; set; }
 
         [MaxLength(20)]
-        public string StudentId { get; set; }
+        public string StudentCard { get; set; }
         [JsonIgnore]
         public User User { get; set; }
         public Group Group { get; set; }
