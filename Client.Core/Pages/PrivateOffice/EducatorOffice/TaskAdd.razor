@@ -1,0 +1,105 @@
+@page "/TaskAdd"
+@inject NavigationManager Navigation
+
+<AuthorizeView Context="AuthContext">
+    <Authorized>
+        <div class="container">
+            <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Добавление нового задания" />
+
+            <div class="row justify-content-center" style="margin-top: auto; margin-bottom: auto">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <EditForm Model="@newTask" OnValidSubmit="@HandleValidSubmit">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary class="text-danger" />
+
+                                <div class="form-group mb-3">
+                                    <label for="disciplineId" class="form-label">Дисциплина</label>
+                                    <select id="disciplineId" class="form-control" @bind="newTask.DiciplineId">
+                                        <option value="">Выберите дисциплину</option>
+@*                                         @foreach (var discipline in disciplines)
+                                        {
+                                            <option value="@discipline.Id">@discipline.Name</option>
+                                        } *@
+                                    </select>
+                                    <ValidationMessage For="@(() => newTask.DiciplineId)" />
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="educatorId" class="form-label">Преподаватель</label>
+                                    <select id="educatorId" class="form-control" @bind="newTask.EducatorId">
+                                        <option value="">Выберите преподавателя</option>
+                                        @* @foreach (var educator in educators)
+                                        {
+                                            <option value="@educator.Id">@educator.FullName</option>
+                                        } *@
+                                    </select>
+                                    <ValidationMessage For="@(() => newTask.EducatorId)" />
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="taskName" class="form-label">Название задания</label>
+                                    <input type="text" class="form-control" id="taskName"
+                                           placeholder="Введите название задания" @bind="newTask.TaskName" />
+                                    <ValidationMessage For="@(() => newTask.TaskName)" />
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="taskDescription" class="form-label">Описание задания</label>
+                                    <textarea class="form-control" id="taskDescription" rows="5"
+                                              placeholder="Введите описание задания" @bind="newTask.TaskDescription"></textarea>
+                                    <ValidationMessage For="@(() => newTask.TaskDescription)" />
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Группы</label>
+                                   @*  @foreach (var group in groups)
+                                    {
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox"
+                                                   @onchange="(e => ToggleGroup(group.Id, e.Value))" />
+                                            <label class="form-check-label">@group.Name</label>
+                                        </div>
+                                    } *@
+                                    <ValidationMessage For="@(() => selectedGroups)" />
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="files" class="form-label">Файлы задания</label>
+                                    <input type="file" class="form-control" id="files" multiple
+                                           @onchange="OnFileUpload" />
+                                    @if (uploadedFiles.Any())
+                                    {
+                                        <div class="mt-2">
+                                            <strong>Загруженные файлы:</strong>
+                                            <ul>
+                                                @foreach (var file in uploadedFiles)
+                                                {
+                                                    <li>@file.Name (@(file.Size / 1024) KB)</li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="form-group mt-4">
+                                    <button type="submit" class="btn btn-primary me-2" style="background: #009c15" disabled="@isSubmitting">
+                                        <i class="bi bi-save"></i> @(isSubmitting ? "Сохранение..." : "Сохранить")
+                                    </button>
+                                    <button type="button" class="btn btn-light" @onclick="ResetForm">
+                                        <i class="bi bi-arrow-counterclockwise"></i> Очистить
+                                    </button>
+                                </div>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ButtonRedirect Redirect="TaskTable" Text="Назад" MT="auto" />
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>Вы не авторизованы</p>
+    </NotAuthorized>
+</AuthorizeView>

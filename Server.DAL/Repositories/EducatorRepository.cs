@@ -20,13 +20,13 @@ public class EducatorRepository : IEducatorRepository
     /// <returns></returns>
     public async Task<List<Educator>> GetEducatorsSimpleAsync()
         => await _context.Educators.ToListAsync();
-    
+
     public async Task<List<Educator>> GetEducatorsAsync()
         => await _context.Educators
-            .Include(x => x.EducatorAdditionalInfo)
-                .ThenInclude(ai => ai.EducatorDisciplines)
-                    .ThenInclude(ed => ed.Discipline)
-            .ToListAsync();
+    .Include(x => x.EducatorAdditionalInfo)
+        .ThenInclude(ai => ai.EducatorDisciplines)
+            .ThenInclude(ed => ed.Discipline)
+    .ToListAsync();
 
     public async Task<Educator> GetByIdSimpleAsync(int id)
         => await _context.Educators.FindAsync(id);

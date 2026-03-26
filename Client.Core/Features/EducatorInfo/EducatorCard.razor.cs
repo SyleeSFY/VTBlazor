@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Client.Core.Entities.Models.User.Educator;
+using Client.Core.Entities.Models.User.EducatorModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.JSInterop;
