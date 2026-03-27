@@ -52,4 +52,7 @@ public class EducatorRepository : IEducatorRepository
         await _context.Educators.AddAsync(edc);
         await _context.SaveChangesAsync();   
     }
+    
+    public async Task<List<Group>> GetGroupsAsync()
+        => await _context.Groups.ToListAsync();
 }

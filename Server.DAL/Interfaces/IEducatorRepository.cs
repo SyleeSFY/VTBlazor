@@ -12,4 +12,5 @@ public interface IEducatorRepository
     Task<Educator> GetByIdAsync(int id);
     Task<Educator> GetSimpleByUserId(int userId);
     Task AddEducator(Educator edc);
+    Task<List<Group>> GetGroupsAsync();
 }

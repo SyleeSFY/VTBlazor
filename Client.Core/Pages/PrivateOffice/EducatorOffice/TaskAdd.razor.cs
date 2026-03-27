@@ -19,7 +19,7 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
         private List<Discipline> _disciplines;
 
 
-        private List<Group> groups = new();
+        private List<Group> _groups;
         private List<int> selectedGroups = new();
         private List<IBrowserFile> uploadedFiles = new();
         private bool isSubmitting = false;
@@ -27,6 +27,8 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
         public TaskAdd()
         {
             _newTask = new TaskEducation();
+            _disciplines = new List<Discipline>();
+            _groups = new List<Group>();
         }
 
         protected override async Task OnInitializedAsync()
@@ -36,7 +38,7 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
         {
             await GetEducator();
             _disciplines = await Http.GetFromJsonAsync<List<Discipline>>("api/Diciplines/GetDiciplines");
-            //groups = await GroupService.GetAllAsync();
+            _groups = await Http.GetFromJsonAsync<List<Group>>("api/educators/GetGroups");
         }
 
         private async Task GetEducator()
@@ -82,7 +84,7 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
             try
             {
                 // Устанавливаем выбранные группы
-                _newTask.Groups = groups.Where(g => selectedGroups.Contains(g.Id)).ToList();
+                _newTask.Groups = _groups.Where(g => selectedGroups.Contains(g.Id)).ToList();
                 _newTask.CreatedAt = DateTime.UtcNow;
 
                 // Сохраняем задание

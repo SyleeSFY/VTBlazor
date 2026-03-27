@@ -21,10 +21,10 @@
                                     <label for="disciplineId" class="form-label">Дисциплина</label>
                                     <select id="disciplineId" class="form-control" @bind="_newTask.DiciplineId">
                                         <option value="">Выберите дисциплину</option>
-@*                                         @foreach (var discipline in disciplines)
+                                        @foreach (var discipline in _disciplines)
                                         {
-                                            <option value="@discipline.Id">@discipline.Name</option>
-                                        } *@
+                                            <option value="@discipline.Id">@discipline.NameDiscipline</option>
+                                        }
                                     </select>
                                     <ValidationMessage For="@(() => _newTask.DiciplineId)" />
                                 </div>
@@ -45,14 +45,14 @@
 
                                 <div class="form-group mb-3">
                                     <label class="form-label">Группы</label>
-                                   @*  @foreach (var group in groups)
+                                    @foreach (var group in _groups)
                                     {
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox"
                                                    @onchange="(e => ToggleGroup(group.Id, e.Value))" />
                                             <label class="form-check-label">@group.Name</label>
                                         </div>
-                                    } *@
+                                    }
                                     <ValidationMessage For="@(() => selectedGroups)" />
                                 </div>
 

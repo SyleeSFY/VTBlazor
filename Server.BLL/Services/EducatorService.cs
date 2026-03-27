@@ -69,4 +69,19 @@ public class EducatorService : IEducatorService
         await _educatorRepository.AddEducator(educator);
     }
     
+    public async Task<List<Group>> GetGroupsAsync()
+    {
+        try
+        {
+            var groups = await _educatorRepository.GetGroupsAsync();
+            if (groups.Count != 0)
+                return groups;
+            return new List<Group>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            throw;
+        }
+    }
 }
