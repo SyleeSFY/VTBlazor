@@ -1,5 +1,8 @@
 @page "/TaskAdd"
+@inject HttpClient Http
 @inject NavigationManager Navigation
+@layout PrivateOfficeLayout
+@attribute [Authorize]
 
 <AuthorizeView Context="AuthContext">
     <Authorized>
@@ -10,46 +13,34 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
-                            <EditForm Model="@newTask" OnValidSubmit="@HandleValidSubmit">
+                            <EditForm Model="@_newTask" OnValidSubmit="@HandleValidSubmit">
                                 <DataAnnotationsValidator />
                                 <ValidationSummary class="text-danger" />
 
                                 <div class="form-group mb-3">
                                     <label for="disciplineId" class="form-label">Дисциплина</label>
-                                    <select id="disciplineId" class="form-control" @bind="newTask.DiciplineId">
+                                    <select id="disciplineId" class="form-control" @bind="_newTask.DiciplineId">
                                         <option value="">Выберите дисциплину</option>
 @*                                         @foreach (var discipline in disciplines)
                                         {
                                             <option value="@discipline.Id">@discipline.Name</option>
                                         } *@
                                     </select>
-                                    <ValidationMessage For="@(() => newTask.DiciplineId)" />
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label for="educatorId" class="form-label">Преподаватель</label>
-                                    <select id="educatorId" class="form-control" @bind="newTask.EducatorId">
-                                        <option value="">Выберите преподавателя</option>
-                                        @* @foreach (var educator in educators)
-                                        {
-                                            <option value="@educator.Id">@educator.FullName</option>
-                                        } *@
-                                    </select>
-                                    <ValidationMessage For="@(() => newTask.EducatorId)" />
+                                    <ValidationMessage For="@(() => _newTask.DiciplineId)" />
                                 </div>
 
                                 <div class="form-group mb-3">
                                     <label for="taskName" class="form-label">Название задания</label>
                                     <input type="text" class="form-control" id="taskName"
-                                           placeholder="Введите название задания" @bind="newTask.TaskName" />
-                                    <ValidationMessage For="@(() => newTask.TaskName)" />
+                                           placeholder="Введите название задания" @bind="_newTask.TaskName" />
+                                    <ValidationMessage For="@(() => _newTask.TaskName)" />
                                 </div>
 
                                 <div class="form-group mb-3">
                                     <label for="taskDescription" class="form-label">Описание задания</label>
                                     <textarea class="form-control" id="taskDescription" rows="5"
-                                              placeholder="Введите описание задания" @bind="newTask.TaskDescription"></textarea>
-                                    <ValidationMessage For="@(() => newTask.TaskDescription)" />
+                                              placeholder="Введите описание задания" @bind="_newTask.TaskDescription"></textarea>
+                                    <ValidationMessage For="@(() => _newTask.TaskDescription)" />
                                 </div>
 
                                 <div class="form-group mb-3">

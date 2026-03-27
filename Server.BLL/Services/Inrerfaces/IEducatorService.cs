@@ -6,6 +6,7 @@ namespace Server.BLL.Services.Inrerfaces;
 public interface IEducatorService
 {
     Task<Educator> GetByIdAsync(int id);
+    Task<Educator> GetSimpleByUserId(int userId);
     Task<Educator> GetByIdSimpleAsync(int id);
     Task<List<Educator>> GetEducatorsSimpleAsync();
     Task<List<Educator>> GetEducatorsAsync();

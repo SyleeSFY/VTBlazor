@@ -2,30 +2,54 @@
 using Client.Core.Entities.Models.User.Dicipline;
 using Client.Core.Entities.Models.User.EducatorModel;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
-
+using System.Net.Http.Json;
+using System.Security.Claims;
+  
 namespace Client.Core.Pages.PrivateOffice.EducatorOffice
 {
     public partial class TaskAdd : ComponentBase
     {
-        private TaskEducation newTask = new();
-        private List<Discipline> disciplines = new();
-        private List<Educator> educators = new();
+        [CascadingParameter] private Task<AuthenticationState> AuthStateTask { get; set; }
+
+        private Educator _educator;
+        private TaskEducation _newTask;
+
+        private List<Discipline> _disciplines;
+
+
         private List<Group> groups = new();
         private List<int> selectedGroups = new();
         private List<IBrowserFile> uploadedFiles = new();
         private bool isSubmitting = false;
 
-        protected override async Task OnInitializedAsync()
+        public TaskAdd()
         {
-            await LoadData();
+            _newTask = new TaskEducation();
         }
+
+        protected override async Task OnInitializedAsync()
+            => await LoadData();
 
         private async Task LoadData()
         {
-            //disciplines = await DisciplineService.GetAllAsync();
-            //educators = await EducatorService.GetAllAsync();
+            await GetEducator();
+            _disciplines = await Http.GetFromJsonAsync<List<Discipline>>("api/Diciplines/GetDiciplines");
             //groups = await GroupService.GetAllAsync();
+        }
+
+        private async Task GetEducator()
+        {
+            var authState = await AuthStateTask;
+            var user = authState.User;
+
+            if (!user.Identity?.IsAuthenticated ?? false)
+                return;
+
+            var userIdString = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (int.TryParse(userIdString, out int userId))
+                _educator = await Http.GetFromJsonAsync<Educator>($"api/educators/GetEducatorSimple/{userId}");
         }
 
         private void ToggleGroup(int groupId, object isChecked)
@@ -58,8 +82,8 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
             try
             {
                 // Устанавливаем выбранные группы
-                newTask.Groups = groups.Where(g => selectedGroups.Contains(g.Id)).ToList();
-                newTask.CreatedAt = DateTime.UtcNow;
+                _newTask.Groups = groups.Where(g => selectedGroups.Contains(g.Id)).ToList();
+                _newTask.CreatedAt = DateTime.UtcNow;
 
                 // Сохраняем задание
                 //var createdTask = await TaskService.CreateAsync(newTask);
@@ -85,7 +109,7 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
 
         private void ResetForm()
         {
-            newTask = new TaskEducation();
+            _newTask = new TaskEducation();
             selectedGroups.Clear();
             uploadedFiles.Clear();
         }

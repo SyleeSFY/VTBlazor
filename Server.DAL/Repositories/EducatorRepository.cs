@@ -38,6 +38,10 @@ public class EducatorRepository : IEducatorRepository
                     .ThenInclude(ed => ed.Discipline)
             .FirstOrDefaultAsync(x => x.Id == id);
 
+    public async Task<Educator> GetSimpleByUserId(int userId)
+        => await _context.Educators
+            .FirstOrDefaultAsync(x => x.UserId == userId);
+
     public async Task<List<Discipline>> GetDiciplinesAsync()
     => await _context.Disciplines
             .Include(x => x.Group)

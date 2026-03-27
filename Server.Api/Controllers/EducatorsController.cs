@@ -22,6 +22,16 @@ public class EducatorsController : ControllerBase
         
         return educator;
     }
+
+    [HttpGet("GetEducatorSimple/{id}")]
+    public async Task<ActionResult<Educator>> GetSimpleByUserId(int id)
+    {
+        var educator = await _educatorService.GetSimpleByUserId(id);
+        if (educator == null)
+            return NotFound();
+        
+        return educator;
+    }
     
     [HttpGet("GetEducatorsSimple")]
     public async Task<ActionResult<List<Educator>>> GetEducatorsSimple()

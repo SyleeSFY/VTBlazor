@@ -21,6 +21,11 @@ public class EducatorService : IEducatorService
     {
         return await _educatorRepository.GetByIdAsync(id);
     }
+
+    public async Task<Educator> GetSimpleByUserId(int userId)
+    {
+        return await _educatorRepository.GetSimpleByUserId(userId);
+    }
     
     /// <summary>
     /// Получение educator по id(упрощенный вариант)

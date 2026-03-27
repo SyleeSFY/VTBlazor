@@ -10,5 +10,6 @@ public interface IEducatorRepository
 
     Task<Educator> GetByIdSimpleAsync(int id);
     Task<Educator> GetByIdAsync(int id);
+    Task<Educator> GetSimpleByUserId(int userId);
     Task AddEducator(Educator edc);
 }
