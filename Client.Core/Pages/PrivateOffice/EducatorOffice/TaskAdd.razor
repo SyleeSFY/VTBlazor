@@ -13,7 +13,7 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
-                            <EditForm Model="@_newTask" OnValidSubmit="@HandleValidSubmit">
+                            <EditForm Model="@_newTaskDTO" OnValidSubmit="@HandleValidSubmit">
                                 <DataAnnotationsValidator />
                                 <ValidationSummary class="text-danger" />
 
@@ -26,20 +26,20 @@
                                             <option value="@discipline.Id">@discipline.NameDiscipline</option>
                                         }
                                     </select>
-                                    <ValidationMessage For="@(() => _newTask.DiciplineId)" />
+                                    <ValidationMessage For="@(() => _newTaskDTO.DiciplineId)" />
                                 </div>
 
                                 <div class="form-group mb-3">
                                     <label for="taskName" class="form-label">Название задания</label>
                                     <input type="text" class="form-control" id="taskName"
                                            placeholder="Введите название задания" @bind="_taskName" />
-                                    <ValidationMessage For="@(() => _newTask.TaskName)" />
+                                    <ValidationMessage For="@(() => _newTaskDTO.TaskName)" />
                                 </div>
 
                                 <div class="form-group mb-3">
                                     <label for="taskDescription" class="form-label">Описание задания</label>
                                     <textarea class="form-control" id="taskDescription" rows="5" placeholder="Введите описание задания" @bind="_taskDesc"></textarea>
-                                    <ValidationMessage For="@(() => _newTask.TaskDescription)" />
+                                    <ValidationMessage For="@(() => _newTaskDTO.TaskDescription)" />
                                 </div>
 
                                 <div class="form-group mb-3">

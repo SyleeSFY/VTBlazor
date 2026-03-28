@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Net.Http.Json;
 using System.Security.Claims;
+using Client.Core.Entities.Models.DTO;
+using Microsoft.AspNetCore.Components.Forms;
   
 namespace Client.Core.Pages.PrivateOffice.EducatorOffice
 {
@@ -14,7 +16,7 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
         [CascadingParameter] private Task<AuthenticationState> AuthStateTask { get; set; }
 
         private Educator _educator;
-        private TaskEducation _newTask;
+        private TaskEducationDTO _newTaskDTO;
 
         private List<Discipline> _disciplines;
         private List<Group> _groups;
@@ -28,7 +30,7 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
 
         public TaskAdd()
         {
-            _newTask = new TaskEducation();
+            _newTaskDTO = new TaskEducationDTO();
             _disciplines = new List<Discipline>();
             _groups = new List<Group>();
             _selectedGroups = new List<int>();
@@ -61,31 +63,55 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
             {
                 if(string.IsNullOrEmpty(_taskDesc) && string.IsNullOrEmpty(_taskName))
                     throw new InvalidOperationException("Необходимо заполнить описание или название задания");
-
-                _newTask.TaskDescription = _taskDesc;
-                _newTask.TaskName = _taskName;
-                _newTask.EducatorId = _educator.Id;
-                _newTask.Groups = _groups.Where(g => _selectedGroups.Contains(g.Id)).ToList();
-                _newTask.CreatedAt = DateTime.UtcNow;
-
-                // Сохраняем задание
-                //var createdTask = await TaskService.CreateAsync(newTask);
-
-                //// Загружаем файлы, если они есть
-                //if (uploadedFiles.Any())
-                //{
-                //    await TaskService.UploadFilesAsync(createdTask.Id, uploadedFiles);
-                //}
-
+                var taskDTO = FillTask(_newTaskDTO);
+                
                 Navigation.NavigateTo("/TaskTable");
             }
             catch (Exception ex)
             {
-                // Обработка ошибок
-                Console.WriteLine($"Ошибка при сохранении: {ex.Message}");
+
             }
         }
 
+        private async Task<TaskEducationDTO> FillTask(TaskEducationDTO taskDTO)
+        {
+            _newTaskDTO.TaskDescription = _taskDesc;
+            _newTaskDTO.TaskName = _taskName;
+            _newTaskDTO.EducatorId = _educator.Id;
+            _newTaskDTO.GroupId  = _selectedGroups;
+            _newTaskDTO.DiciplineId = _taskDicipline; 
+            if(_uploadedFiles.Count != 0)
+                AddFiles(_newTaskDTO.Files);
+            
+            return taskDTO;
+        }
+            
+        private async Task<List<TaskFileDTO>> AddFiles(List<TaskFileDTO> files)
+        {
+            files = new List<TaskFileDTO>();
+            
+            foreach (var file in _uploadedFiles)
+            {
+                using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+                using var memoryStream = new MemoryStream();
+                await stream.CopyToAsync(memoryStream);
+        
+                var bytes = memoryStream.ToArray();
+                var base64 = Convert.ToBase64String(bytes);
+        
+                var taskFileDTO = new TaskFileDTO
+                {
+                    FileName = file.Name,
+                    FileSize = file.Size,
+                    ContentBase64 = base64
+                };
+        
+                files.Add(taskFileDTO);
+            }
+    
+            return files;
+        }
+        
         private async Task OnFileUpload(InputFileChangeEventArgs e)
         {
             var files = e.GetMultipleFiles();
@@ -124,7 +150,7 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
 
         private void ResetForm()
         {
-            _newTask = new TaskEducation();
+            _newTaskDTO = new TaskEducationDTO();
             _selectedGroups.Clear();
             _uploadedFiles.Clear();
         }
