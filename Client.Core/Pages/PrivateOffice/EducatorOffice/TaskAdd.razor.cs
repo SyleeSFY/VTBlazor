@@ -17,22 +17,90 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
         private TaskEducation _newTask;
 
         private List<Discipline> _disciplines;
-
-
         private List<Group> _groups;
-        private List<int> selectedGroups = new();
-        private List<IBrowserFile> uploadedFiles = new();
-        private bool isSubmitting = false;
+
+        private List<int> _selectedGroups;
+        private List<IBrowserFile> _uploadedFiles;
+
+        private int _taskDicipline;
+        private string _taskName = string.Empty;
+        private string _taskDesc = string.Empty;
 
         public TaskAdd()
         {
             _newTask = new TaskEducation();
             _disciplines = new List<Discipline>();
             _groups = new List<Group>();
+            _selectedGroups = new List<int>();
+            _uploadedFiles = new List<IBrowserFile>();
         }
 
         protected override async Task OnInitializedAsync()
             => await LoadData();
+
+        private void ClearFiles()
+           => _uploadedFiles.Clear();
+
+        private void RemoveFile(IBrowserFile fileToRemove)
+            => _uploadedFiles.Remove(fileToRemove);
+
+        private void SelectGroup(int groupId, bool isChecked)
+        {
+            if (isChecked)
+            {
+                if (!_selectedGroups.Contains(groupId))
+                    _selectedGroups.Add(groupId);
+            }
+            else
+                _selectedGroups.Remove(groupId);
+        }
+
+        private async Task HandleValidSubmit()
+        {
+            try
+            {
+                if(string.IsNullOrEmpty(_taskDesc) && string.IsNullOrEmpty(_taskName))
+                    throw new InvalidOperationException("Необходимо заполнить описание или название задания");
+
+                _newTask.TaskDescription = _taskDesc;
+                _newTask.TaskName = _taskName;
+                _newTask.EducatorId = _educator.Id;
+                _newTask.Groups = _groups.Where(g => _selectedGroups.Contains(g.Id)).ToList();
+                _newTask.CreatedAt = DateTime.UtcNow;
+
+                // Сохраняем задание
+                //var createdTask = await TaskService.CreateAsync(newTask);
+
+                //// Загружаем файлы, если они есть
+                //if (uploadedFiles.Any())
+                //{
+                //    await TaskService.UploadFilesAsync(createdTask.Id, uploadedFiles);
+                //}
+
+                Navigation.NavigateTo("/TaskTable");
+            }
+            catch (Exception ex)
+            {
+                // Обработка ошибок
+                Console.WriteLine($"Ошибка при сохранении: {ex.Message}");
+            }
+        }
+
+        private async Task OnFileUpload(InputFileChangeEventArgs e)
+        {
+            var files = e.GetMultipleFiles();
+            _uploadedFiles.Clear();
+            _uploadedFiles.AddRange(files);
+        }
+
+        private string FormatFileSize(long bytes)
+        {
+            if (bytes < 1024)
+                return $"{bytes} B";
+            if (bytes < 1024 * 1024)
+                return $"{bytes / 1024} KB";
+            return $"{bytes / (1024 * 1024):F1} MB";
+        }
 
         private async Task LoadData()
         {
@@ -54,66 +122,11 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
                 _educator = await Http.GetFromJsonAsync<Educator>($"api/educators/GetEducatorSimple/{userId}");
         }
 
-        private void ToggleGroup(int groupId, object isChecked)
-        {
-            if ((bool)isChecked)
-            {
-                if (!selectedGroups.Contains(groupId))
-                    selectedGroups.Add(groupId);
-            }
-            else
-            {
-                selectedGroups.Remove(groupId);
-            }
-        }
-
-        private async Task OnFileUpload(ChangeEventArgs e)
-        {
-            var files = e.Value as IEnumerable<IBrowserFile>;
-            if (files != null)
-            {
-                uploadedFiles.Clear();
-                uploadedFiles.AddRange(files);
-            }
-        }
-
-        private async Task HandleValidSubmit()
-        {
-            isSubmitting = true;
-
-            try
-            {
-                // Устанавливаем выбранные группы
-                _newTask.Groups = _groups.Where(g => selectedGroups.Contains(g.Id)).ToList();
-                _newTask.CreatedAt = DateTime.UtcNow;
-
-                // Сохраняем задание
-                //var createdTask = await TaskService.CreateAsync(newTask);
-
-                //// Загружаем файлы, если они есть
-                //if (uploadedFiles.Any())
-                //{
-                //    await TaskService.UploadFilesAsync(createdTask.Id, uploadedFiles);
-                //}
-
-                Navigation.NavigateTo("/TaskTable");
-            }
-            catch (Exception ex)
-            {
-                // Обработка ошибок
-                Console.WriteLine($"Ошибка при сохранении: {ex.Message}");
-            }
-            finally
-            {
-                isSubmitting = false;
-            }
-        }
-
         private void ResetForm()
         {
             _newTask = new TaskEducation();
-            selectedGroups.Clear();
-            uploadedFiles.Clear();
+            _selectedGroups.Clear();
+            _uploadedFiles.Clear();
         }
     }
 }

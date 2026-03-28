@@ -10,10 +10,10 @@ public class TaskEducation
     public string TaskName { get; set; } = string.Empty;
     public string TaskDescription { get; set; } = string.Empty;
     public List<Group> Groups { get; set; } = new List<Group>();
-    public Educator Educator { get; set; }
-    public Discipline Dicipline { get; set; }
     public DateTime CreatedAt { get; set; }
     public List<TaskFile>? Files { get; set; }
+    public Educator Educator { get; set; }
+    public Discipline Dicipline { get; set; }
 }
 
 public class TaskFile
