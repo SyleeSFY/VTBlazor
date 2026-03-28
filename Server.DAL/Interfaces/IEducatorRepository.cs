@@ -13,4 +13,6 @@ public interface IEducatorRepository
     Task<Educator> GetSimpleByUserId(int userId);
     Task AddEducator(Educator edc);
     Task<List<Group>> GetGroupsAsync();
+    Task<int> AddTask(TaskEducation task);
+    Task<bool> AddTaskFile(List<TaskFile> task);
 }

@@ -1,5 +1,6 @@
 using Server.BLL.Services.Inrerfaces;
 using Server.DAL.Interfaces;
+using Server.DAL.Models.DTO;
 using Server.DAL.Models.Entities;
 using Server.DAL.Models.Entities.Educators;
 
@@ -8,9 +9,15 @@ namespace Server.BLL.Services;
 public class EducatorService : IEducatorService
 {
     private readonly IEducatorRepository _educatorRepository;
+    private readonly IDiciplineService _diciplineService;
+    private readonly IFileService _fileService;
 
-    public EducatorService(IEducatorRepository educatorRepository)
-        => _educatorRepository = educatorRepository;
+    public EducatorService(IEducatorRepository educatorRepository, IDiciplineService diciplineService, IFileService fileService)
+    { 
+       _educatorRepository = educatorRepository;
+       _diciplineService = diciplineService;
+       _fileService = fileService;
+    }
     
     /// <summary>
     /// Получение единичного преподавателя,
@@ -83,5 +90,46 @@ public class EducatorService : IEducatorService
             Console.WriteLine(ex);
             throw;
         }
+    }
+
+    public async Task<bool> AddTask(TaskEducationDTO taskDto)
+    {
+        var compFiles = new List<TaskFile>();
+        var groups = await GetGroupsAsync();
+        var dicipline = await _diciplineService.GetDiciplineAsync(taskDto.DiciplineId);
+
+        var task = new TaskEducation
+        {
+            TaskName = taskDto.TaskName,
+            TaskDescription = taskDto.TaskDescription,
+            EducatorId = taskDto.EducatorId,
+            DiciplineId = taskDto.DiciplineId,
+            CreatedAt = DateTime.UtcNow,
+            Groups = groups.Where(x => taskDto.GroupId.Contains(x.Id)).ToList(),
+        };
+
+        var taskId = await _educatorRepository.AddTask(task);
+        if (taskId is not 0 && taskDto.Files.Any() && taskDto.Files != null)
+        {
+            foreach (var file in taskDto.Files)
+            {
+                var bytes = Convert.FromBase64String(file.ContentBase64);
+                var physicalPath = await _fileService.SaveFileToDisk(bytes, file.FileName, taskId, dicipline.NameDiscipline);
+                compFiles.Add(new TaskFile()
+                {
+                    TaskId = taskId,
+                    FileName = file.FileName,
+                    PhysicalPath = physicalPath,
+                    FileSize = file.FileSize,
+                    UploadedAt = DateTime.UtcNow,
+                    FileType = file.FileType
+                });
+            }
+
+            if (compFiles.Any())
+                await _educatorRepository.AddTaskFile(compFiles);
+        }
+
+        return true;
     }
 }

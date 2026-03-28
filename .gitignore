@@ -45,3 +45,5 @@ rider.project.restore.info
 
 *.nuget.info
 **/obj/
+
+Server.DAL/Tasks/

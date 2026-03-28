@@ -24,6 +24,7 @@ public class TaskFile
     public string PhysicalPath { get; set; } = string.Empty;
     public long FileSize { get; set; }
     public DateTime UploadedAt { get; set; }
+    public string FileType { get; set; } = string.Empty;
 
     public TaskEducation Task { get; set; }
 }

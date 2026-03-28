@@ -1,4 +1,4 @@
-namespace Client.Core.Entities.Models.DTO;
+namespace Server.DAL.Models.DTO;
 
 public class TaskEducationDTO
 {

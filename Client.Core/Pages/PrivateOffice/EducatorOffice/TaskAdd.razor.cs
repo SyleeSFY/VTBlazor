@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Components.Forms;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using Client.Core.Entities.Models.DTO;
-using Microsoft.AspNetCore.Components.Forms;
   
 namespace Client.Core.Pages.PrivateOffice.EducatorOffice
 {
@@ -63,8 +62,9 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
             {
                 if(string.IsNullOrEmpty(_taskDesc) && string.IsNullOrEmpty(_taskName))
                     throw new InvalidOperationException("Необходимо заполнить описание или название задания");
-                var taskDTO = FillTask(_newTaskDTO);
-                
+                var taskDTO = await FillTask(_newTaskDTO);
+                var response = await Http.PostAsJsonAsync($"api/educators/PostAddTask", taskDTO);
+
                 Navigation.NavigateTo("/TaskTable");
             }
             catch (Exception ex)
@@ -80,17 +80,18 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
             _newTaskDTO.EducatorId = _educator.Id;
             _newTaskDTO.GroupId  = _selectedGroups;
             _newTaskDTO.DiciplineId = _taskDicipline; 
-            if(_uploadedFiles.Count != 0)
-                AddFiles(_newTaskDTO.Files);
+
+            if (_uploadedFiles.Count != 0)
+                _newTaskDTO.Files = await AddFiles(_uploadedFiles);
             
             return taskDTO;
         }
             
-        private async Task<List<TaskFileDTO>> AddFiles(List<TaskFileDTO> files)
+        private async Task<List<TaskFileDTO>> AddFiles(List<IBrowserFile> uploadedFiles)
         {
-            files = new List<TaskFileDTO>();
+            var files = new List<TaskFileDTO>();
             
-            foreach (var file in _uploadedFiles)
+            foreach (var file in uploadedFiles)
             {
                 using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
                 using var memoryStream = new MemoryStream();
@@ -103,7 +104,8 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
                 {
                     FileName = file.Name,
                     FileSize = file.Size,
-                    ContentBase64 = base64
+                    ContentBase64 = base64,
+                    FileType = Path.GetExtension(file.Name)
                 };
         
                 files.Add(taskFileDTO);

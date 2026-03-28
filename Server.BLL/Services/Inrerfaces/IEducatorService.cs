@@ -1,3 +1,4 @@
+using Server.DAL.Models.DTO;
 using Server.DAL.Models.Entities;
 using Server.DAL.Models.Entities.Educators;
 
@@ -12,4 +13,5 @@ public interface IEducatorService
     Task<List<Educator>> GetEducatorsAsync();
     Task AddEducator(Educator educator);
     Task<List<Group>> GetGroupsAsync();
+    Task<bool> AddTask(TaskEducationDTO taskDto);
 }

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Server.BLL.Services;
 using Server.BLL.Services.Inrerfaces;
+using Server.DAL.Models.DTO;
 using Server.DAL.Models.Entities;
 using Server.DAL.Models.Entities.Educators;
 
@@ -63,5 +65,16 @@ public class EducatorsController : ControllerBase
     {
         var users =  await _educatorService.GetGroupsAsync();
         return users;
+    }
+
+    [HttpPost("PostAddTask")]
+    public async Task<ActionResult<bool>> PostAddTask(TaskEducationDTO data)
+    {
+        if (data != null)
+        {
+            var result = await _educatorService.AddTask(data);
+            return result ? Ok(result) : NotFound(result);
+        }
+        return NotFound();
     }
 }

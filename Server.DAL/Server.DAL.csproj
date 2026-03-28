@@ -15,4 +15,8 @@
       <ProjectReference Include="..\Client.Core\Client.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Tasks\" />
+    </ItemGroup>
+
 </Project>

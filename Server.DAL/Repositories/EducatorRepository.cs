@@ -3,7 +3,6 @@ using Server.DAL.Context.ApplicationDbContext;
 using Server.DAL.Interfaces;
 using Server.DAL.Models.Entities;
 using Server.DAL.Models.Entities.Educators;
-using Server.DAL.Interfaces;
 
 namespace Server.DAL.Repositories;
 
@@ -55,4 +54,35 @@ public class EducatorRepository : IEducatorRepository
     
     public async Task<List<Group>> GetGroupsAsync()
         => await _context.Groups.ToListAsync();
+
+    public async Task<int> AddTask(TaskEducation task)
+    {
+        try
+        {
+            await _context.TaskEducations.AddAsync(task);
+            await _context.SaveChangesAsync();
+
+            return task.Id;
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+    public async Task<bool> AddTaskFile(List<TaskFile> task)
+    {
+        try
+        {
+            await _context.TaskFiles.AddRangeAsync(task);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
 }
