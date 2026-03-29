@@ -1,4 +1,5 @@
 using Server.DAL.Models.Entities.Educators;
+using System.Text.Json.Serialization;
 
 namespace Server.DAL.Models.Entities;
 
@@ -25,6 +26,6 @@ public class TaskFile
     public long FileSize { get; set; }
     public DateTime UploadedAt { get; set; }
     public string FileType { get; set; } = string.Empty;
-
+    [JsonIgnore]
     public TaskEducation Task { get; set; }
 }

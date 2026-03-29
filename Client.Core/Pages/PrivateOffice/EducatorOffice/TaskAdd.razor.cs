@@ -1,17 +1,18 @@
-﻿using Client.Core.Entities.Models.User;
+﻿using Client.Core.Entities.Interfaces;
+using Client.Core.Entities.Models.DTO;
+using Client.Core.Entities.Models.User;
 using Client.Core.Entities.Models.User.Dicipline;
 using Client.Core.Entities.Models.User.EducatorModel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Net.Http.Json;
-using System.Security.Claims;
-using Client.Core.Entities.Models.DTO;
   
 namespace Client.Core.Pages.PrivateOffice.EducatorOffice
 {
     public partial class TaskAdd : ComponentBase
     {
+        [Inject] private IApiService _apiService { get; set; }
         [CascadingParameter] private Task<AuthenticationState> AuthStateTask { get; set; }
 
         private Educator _educator;
@@ -37,7 +38,11 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
         }
 
         protected override async Task OnInitializedAsync()
-            => await LoadData();
+        {
+            _educator = await _apiService.GetEducatorByAuth(await AuthStateTask);
+            _disciplines = await _apiService.GetDisciplines();
+            _groups = await _apiService.GetGroups();
+        }
 
         private void ClearFiles()
            => _uploadedFiles.Clear();
@@ -65,7 +70,7 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
                 var taskDTO = await FillTask(_newTaskDTO);
                 var response = await Http.PostAsJsonAsync($"api/educators/PostAddTask", taskDTO);
 
-                Navigation.NavigateTo("/TaskTable");
+                Navigation.NavigateTo("/TaskEducator");
             }
             catch (Exception ex)
             {
@@ -128,26 +133,6 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
             if (bytes < 1024 * 1024)
                 return $"{bytes / 1024} KB";
             return $"{bytes / (1024 * 1024):F1} MB";
-        }
-
-        private async Task LoadData()
-        {
-            await GetEducator();
-            _disciplines = await Http.GetFromJsonAsync<List<Discipline>>("api/Diciplines/GetDiciplines");
-            _groups = await Http.GetFromJsonAsync<List<Group>>("api/educators/GetGroups");
-        }
-
-        private async Task GetEducator()
-        {
-            var authState = await AuthStateTask;
-            var user = authState.User;
-
-            if (!user.Identity?.IsAuthenticated ?? false)
-                return;
-
-            var userIdString = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (int.TryParse(userIdString, out int userId))
-                _educator = await Http.GetFromJsonAsync<Educator>($"api/educators/GetEducatorSimple/{userId}");
         }
 
         private void ResetForm()

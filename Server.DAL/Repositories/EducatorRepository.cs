@@ -55,6 +55,35 @@ public class EducatorRepository : IEducatorRepository
     public async Task<List<Group>> GetGroupsAsync()
         => await _context.Groups.ToListAsync();
 
+    public async Task<List<TaskEducation>> GetTasksEducatorByIdSimple(int EducatorId)
+    {
+        try
+        {
+            return await _context.TaskEducations.Where(x => x.EducatorId == EducatorId).Include(x => x.Groups).ToListAsync();
+        } 
+
+    
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    public async Task<TaskEducation> GetTasksEducatorById(int id)
+    {
+        try
+        {
+            return await _context.TaskEducations.Include(x => x.Files).Include(x => x.Groups).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
     public async Task<int> AddTask(TaskEducation task)
     {
         try

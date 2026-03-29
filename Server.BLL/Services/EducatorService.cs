@@ -76,6 +76,35 @@ public class EducatorService : IEducatorService
         await _educatorRepository.AddEducator(educator);
     }
     
+    public async Task<List<TaskEducation>> GetTasksEducatorByIdSimple(int EducatorId)
+    {
+        try
+        {
+            var groups = await _educatorRepository.GetTasksEducatorByIdSimple(EducatorId);
+            if (groups.Count != 0)
+                return groups;
+            return new List<TaskEducation>();
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+    public async Task<TaskEducation> GetTasksEducatorById(int id)
+    {
+        try
+        {
+            var task = await _educatorRepository.GetTasksEducatorById(id);
+            if (task != null)
+                return task;
+            return new TaskEducation();
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
     public async Task<List<Group>> GetGroupsAsync()
     {
         try

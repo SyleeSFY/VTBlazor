@@ -67,6 +67,19 @@ public class EducatorsController : ControllerBase
         return users;
     }
 
+    [HttpGet("GetEducatorTask/{id}")]
+    public async Task<TaskEducation> GetEducatorTask(int id)
+    {
+        var users =  await _educatorService.GetTasksEducatorById(id);
+        return users;
+    }
+
+    [HttpGet("GetTasksEducatorByIdSimple/{EducatorId}")]
+    public async Task<List<TaskEducation>> GeTasksByIdSimple(int EducatorId)
+    {
+        return  await _educatorService.GetTasksEducatorByIdSimple(EducatorId);
+    }
+
     [HttpPost("PostAddTask")]
     public async Task<ActionResult<bool>> PostAddTask(TaskEducationDTO data)
     {

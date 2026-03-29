@@ -17,29 +17,20 @@
                             <th rowSpan="2">Наименование задания</th>
                             <th rowSpan="2">Предмет</th>
                             <th rowSpan="2">Группы</th>
-                            <th rowSpan="2" class="profile-header">Дата добавления</th>
+                            <th rowSpan="1" class="profile-header">Дата добавления</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @* @foreach (var item in _diciplines) *@
-                        @* { *@
-                        @*     <tr> *@
-                        @*         <td>@item.Id</td> *@
-                        @*         <td style="text-align: left">@item.NameDiscipline</td> *@
-                        @*         <td>@item.Course</td> *@
-                        @*         <td>@(item.isMagistracy ? "+" : "–")</td> *@
-                        @*         <td>@(!item.isMagistracy ? PlusOrMinus(item.Group.isAS) : "–")</td> *@
-                        @*         <td>@(!item.isMagistracy ? PlusOrMinus(item.Group.isVM) : "–")</td> *@
-                        @*         <td>@(!item.isMagistracy ? PlusOrMinus(item.Group.isPO) : "–")</td> *@
-                        @*         <td> *@
-                        @*             <NavLink href="@($"DiciplineEdit/{item.Id}")" class="nav_link auth-link Cursor" style=" text-decoration: none"> *@
-                        @*                 <p class="nav_item Cursor">Редакт.</p> *@
-                        @*             </NavLink> *@
-                        @*         </td> *@
-                        @*         <td><button class="btn__delete" @onclick="() => BtnDelete(item.Id)">Удалить</button></td> *@
-                        @*     </tr> *@
-                        @* *@
-                        @* } *@
+                        @foreach (var item in _taskEducator)
+                        { 
+                            <tr> 
+                                <td>@item.Id</td> 
+                                <td style="text-align: left" @onclick="() => GoTaskInfo(item.Id)">@item.TaskName</td>
+                                <td>@(_diciplines.FirstOrDefault(x => x.Id == item.DiciplineId).NameDiscipline)</td> 
+                                <td>@(string.Join(", ", item.Groups.Select(x => x.Name)))</td>
+                                <td>@item.CreatedAt.ToString("dd.MM.yyyy")</td> 
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
