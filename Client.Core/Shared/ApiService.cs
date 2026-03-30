@@ -45,5 +45,8 @@ namespace Client.Core.Shared
 
             return new Educator();
         }
+        
+        public async Task<byte[]> GetFileFromBD(int fileId)
+            => await _http.GetFromJsonAsync<byte[]>($"api/educators/GetFile/{fileId}") ?? new byte[0];
     }
 }

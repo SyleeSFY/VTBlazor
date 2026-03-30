@@ -14,5 +14,6 @@ namespace Client.Core.Entities.Interfaces
         Task<Educator> GetEducatorByIdSimple(int id);
         Task<TaskEducation> GetTaskEducationById(int id);
         Task<Educator> GetEducatorByAuth(AuthenticationState authState);
+        Task<byte[]> GetFileFromBD(int fileId);
     }
 }

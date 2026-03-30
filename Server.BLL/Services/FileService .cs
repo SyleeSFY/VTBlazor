@@ -37,12 +37,14 @@ namespace Server.BLL.Services
 
         public async Task<byte[]> GetFileFromDisk(string physicalPath)
         {
+            var pathReolase = physicalPath.Replace("Tasks", "");
+            var qwe = $"{_Path}{pathReolase}";
             var fullPath = Path.Combine(_Path, physicalPath.Replace("Tasks", ""));
 
-            if (!File.Exists(fullPath))
+            if (!File.Exists(qwe))
                 throw new FileNotFoundException($"File not found: {fullPath}");
 
-            return await File.ReadAllBytesAsync(fullPath);
+            return await File.ReadAllBytesAsync(qwe);
         }
 
         public async Task DeleteFileFromDisk(string physicalPath)

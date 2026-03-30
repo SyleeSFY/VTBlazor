@@ -90,4 +90,16 @@ public class EducatorsController : ControllerBase
         }
         return NotFound();
     }
+    
+    [HttpGet("GetFile/{fileId}")]
+    public async Task<byte[]> GeFile(int fileId)
+    {
+        if (fileId > 0)
+        {
+            var result = await _educatorService.GetFile(fileId);
+            return result;
+        }
+        return new byte[0];
+    }
+    
 }
