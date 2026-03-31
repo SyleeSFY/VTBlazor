@@ -1,6 +1,5 @@
 using Client.Core.Entities.Interfaces;
 using Client.Core.Entities.Models.User;
-using Client.Core.Pages.Public;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -10,6 +9,8 @@ public partial class TaskInfo : ComponentBase
 {
     [Inject] private IApiService _apiService { get; set; }
     [Parameter] public required int Id { get; set; }
+
+    private IJSObjectReference? _module;
 
     private TaskEducation _task;
 
@@ -24,19 +25,21 @@ public partial class TaskInfo : ComponentBase
         _task.Dicipline = await _apiService.GetDisciplineById(_task.DiciplineId);
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            _module = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/PrivateOffice/EducatorOffice/TaskInfo.razor.js");
+    }
+
     private async Task GetFile(TaskFile entitie)
     {
-        var qwe = await _apiService.GetFileFromBD(entitie.Id);
-        var tretretre = qwe;
-        await DownloadFile(qwe, entitie.FileName);
+        var file = await _apiService.GetFileByte(entitie.Id);
+        await DownloadFile(file, entitie.FileName);
     }
     
     private async Task DownloadFile(byte[] fileBytes, string fileName)
     {
-        // Преобразуем byte[] в base64
         var base64 = Convert.ToBase64String(fileBytes);
-        
-        // Создаем data URL и инициируем скачивание через JS
-        await JS.InvokeVoidAsync("downloadFile", base64, fileName);
+        await _module.InvokeVoidAsync("downloadFile", base64, fileName);
     }
 }

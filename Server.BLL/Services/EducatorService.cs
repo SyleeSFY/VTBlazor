@@ -160,29 +160,4 @@ public class EducatorService : IEducatorService
 
         return true;
     }
-
-    public async Task<TaskFile> GetFileEntitie(int fileId)
-    {
-        try
-        {
-            var file = await _educatorRepository.GetTaskFile(fileId);
-            if (file != null)
-                return file;
-            return new TaskFile();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-            throw;
-        }
-    }
-
-    public async Task<byte[]> GetFile(int fileId)
-    {
-        var file = await GetFileEntitie(fileId);
-        var qwe = await _fileService.GetFileFromDisk(file.PhysicalPath);
-        if (qwe is not null && qwe.Length > 0)
-            return qwe;
-        return new byte[0];
-    }
 }

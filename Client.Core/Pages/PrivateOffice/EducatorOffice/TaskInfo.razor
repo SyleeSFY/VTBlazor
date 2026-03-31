@@ -21,7 +21,6 @@
                                 @foreach (var item in _task.Files)
                                 {
                                     <button @onclick="() => GetFile(item)" style="color: #0a53be; border: none; background: none;">
-                                        @* @(string.Join(", ", _task.Files.Select(x => x.FileName))) *@
                                         @item.FileName
                                     </button>
                                 }
@@ -36,13 +35,3 @@
         <p>Вы не авторизованы</p>
     </NotAuthorized>
 </AuthorizeView>
-<script>
-        window.downloadFile = (base64Data, fileName) => {
-            const link = document.createElement('a');
-            link.href = `data:application/octet-stream;base64,${base64Data}`;
-            link.download = fileName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
-    </script>
