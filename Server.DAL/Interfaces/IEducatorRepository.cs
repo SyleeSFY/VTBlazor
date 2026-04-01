@@ -16,6 +16,4 @@ public interface IEducatorRepository
     Task<List<TaskEducation>> GetTasksEducatorByIdSimple(int EducatorId);
     Task<TaskEducation> GetTasksEducatorById(int id);
     Task<int> AddTask(TaskEducation task);
-    Task<bool> AddTaskFile(List<TaskFile> task);
-    Task<TaskFile> GetTaskFile(int fileId);
 }

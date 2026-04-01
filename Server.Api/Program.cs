@@ -48,6 +48,7 @@ public class Program
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IFileService, FileService>();
+        builder.Services.AddScoped<IFileRepository, FileRepository>();
 
         var app = builder.Build();
         

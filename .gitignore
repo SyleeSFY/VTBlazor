@@ -47,3 +47,4 @@ rider.project.restore.info
 **/obj/
 
 Server.DAL/Tasks/
+Server.DAL/File/

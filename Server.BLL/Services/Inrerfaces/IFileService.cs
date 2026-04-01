@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Server.DAL.Models.Entities;
+using Server.DAL.Models.Enums;
 
 namespace Server.BLL.Services.Inrerfaces
 {
     public interface IFileService
     {
-        Task<string> SaveFileToDisk(byte[] fileBytes, string fileName, int taskId, string name);
-        Task<byte[]> GetFileFromDisk(string physicalPath);
-        Task DeleteFileFromDisk(string physicalPath);
+        Task<string> SaveFileToDisk(byte[] fileBytes, string fileName, string disciplineName, FileType fileType);
+        Task<byte[]> GetFile(int fileId, FileType fileType);
+        Task DeleteFileFromDisk(string physicalPath, FileType fileType);
+        Task<TaskFile> GetTaskFileFromBD(int fileId);
+        Task<TaskFile> GetSolutionFileFromBD(int fileId);
     }
 }

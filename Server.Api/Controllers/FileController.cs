@@ -2,6 +2,7 @@
 using Server.BLL.Services.Inrerfaces;
 using Server.DAL.Models.DTO;
 using Server.DAL.Models.Entities;
+using Server.DAL.Models.Enums;
 
 namespace Server.Api.Controllers
 {
@@ -10,9 +11,13 @@ namespace Server.Api.Controllers
     public class FileController : ControllerBase
     {
         private readonly IEducatorService _educatorService;
+        private readonly IFileService _fileService;
 
-        public FileController(IEducatorService educatorService)
-            => _educatorService = educatorService;
+        public FileController(IEducatorService educatorService, IFileService fileService)
+        {
+            _educatorService = educatorService;
+            _fileService = fileService;
+        }
 
         [HttpGet("GetEducatorTask/{id}")]
         public async Task<TaskEducation> GetEducatorTask(int id)
@@ -38,12 +43,12 @@ namespace Server.Api.Controllers
             return NotFound();
         }
 
-        [HttpGet("GetFile/{fileId}")]
-        public async Task<byte[]> GeFile(int fileId)
+        [HttpGet("GetTaskFile/{fileId}")]
+        public async Task<byte[]> GetTaskFile(int fileId)
         {
             if (fileId > 0)
             {
-                var result = await _educatorService.GetFile(fileId);
+                var result = await _fileService.GetFile(fileId, FileType.Task);
                 return result;
             }
             return Array.Empty<byte>();

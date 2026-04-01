@@ -3,6 +3,7 @@ using Server.DAL.Interfaces;
 using Server.DAL.Models.DTO;
 using Server.DAL.Models.Entities;
 using Server.DAL.Models.Entities.Educators;
+using Server.DAL.Models.Enums;
 
 namespace Server.BLL.Services;
 
@@ -11,12 +12,14 @@ public class EducatorService : IEducatorService
     private readonly IEducatorRepository _educatorRepository;
     private readonly IDiciplineService _diciplineService;
     private readonly IFileService _fileService;
+    private readonly IFileRepository _fileRepository;
 
-    public EducatorService(IEducatorRepository educatorRepository, IDiciplineService diciplineService, IFileService fileService)
+    public EducatorService(IEducatorRepository educatorRepository, IDiciplineService diciplineService, IFileService fileService, IFileRepository fileRepository)
     { 
-       _educatorRepository = educatorRepository;
-       _diciplineService = diciplineService;
-       _fileService = fileService;
+        _educatorRepository = educatorRepository;
+        _diciplineService = diciplineService;
+        _fileService = fileService;
+        _fileRepository = fileRepository;
     }
     
     /// <summary>
@@ -142,7 +145,7 @@ public class EducatorService : IEducatorService
             foreach (var file in taskDto.Files)
             {
                 var bytes = Convert.FromBase64String(file.ContentBase64);
-                var physicalPath = await _fileService.SaveFileToDisk(bytes, file.FileName, taskId, dicipline.NameDiscipline);
+                var physicalPath = await _fileService.SaveFileToDisk(bytes, file.FileName, dicipline.NameDiscipline, FileType.Task);
                 compFiles.Add(new TaskFile()
                 {
                     TaskId = taskId,
@@ -155,7 +158,7 @@ public class EducatorService : IEducatorService
             }
 
             if (compFiles.Any())
-                await _educatorRepository.AddTaskFile(compFiles);
+                await _fileRepository.AddTaskFile(compFiles);
         }
 
         return true;

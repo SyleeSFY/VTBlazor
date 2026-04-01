@@ -24,13 +24,13 @@ namespace Client.Core.Shared
             => await _http.GetFromJsonAsync<List<Group>>("api/educators/GetGroups") ?? new List<Group>();
         
         public async Task<List<TaskEducation>> GetTasksEducatorByIdSimple(int educatorId)
-            => await _http.GetFromJsonAsync<List<TaskEducation>>($"api/educators/GetTasksEducatorByIdSimple/{educatorId}") ?? new List<TaskEducation>();
+            => await _http.GetFromJsonAsync<List<TaskEducation>>($"api/file/GetTasksEducatorByIdSimple/{educatorId}") ?? new List<TaskEducation>();
 
         public async Task<Educator> GetEducatorByIdSimple(int id)
             => await _http.GetFromJsonAsync<Educator>($"api/educators/GetEducatorSimple/{id}") ?? new Educator();
         
         public async Task<TaskEducation> GetTaskEducationById(int id)
-            => await _http.GetFromJsonAsync<TaskEducation>($"api/educators/GetEducatorTask/{id}") ?? new TaskEducation();
+            => await _http.GetFromJsonAsync<TaskEducation>($"api/file/GetEducatorTask/{id}") ?? new TaskEducation();
 
         public async Task<Educator> GetEducatorByAuth(AuthenticationState authState)
         {
@@ -47,6 +47,6 @@ namespace Client.Core.Shared
         }
         
         public async Task<byte[]> GetFileByte(int fileId)
-            => await _http.GetFromJsonAsync<byte[]>($"api/educators/GetFile/{fileId}") ?? new byte[0];
+            => await _http.GetFromJsonAsync<byte[]>($"api/file/GetTaskFile/{fileId}") ?? new byte[0];
     }
 }

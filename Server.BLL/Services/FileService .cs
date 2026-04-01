@@ -1,98 +1,111 @@
 ﻿using Server.BLL.Services.Inrerfaces;
 using Server.DAL.Interfaces;
 using Server.DAL.Models.Entities;
+using Server.DAL.Models.Enums;
 
 namespace Server.BLL.Services
 {
     public class FileService : IFileService
     {
-        private IFileRepository _fileRepository;
-        
-        private readonly string _Path;
-        
-        private string _educatorDirectoryPath;
-        private string _studentDirectoryPath;
+        private readonly IFileRepository _fileRepository;
+        private string _taskDirectoryPath;
+        private string _solutionDirectoryPath;
 
         public FileService(IFileRepository fileRepository)
         {
-            _fileRepository = fileRepository;
+            _fileRepository = fileRepository ?? throw new ArgumentNullException(nameof(fileRepository));
             InitDirectory();
-
         }
 
-        public void InitDirectory()
+        private void InitDirectory()
         {
-            var _currentPath = Directory.GetCurrentDirectory();
-            
-            var projectPath = Path.GetFullPath(Path.Combine(_currentPath, "..", "Server.DAL"));
+            var currentPath = Directory.GetCurrentDirectory();
+
+            var projectPath = Path.GetFullPath(Path.Combine(currentPath, "..", "Server.DAL"));
 
             if (!Directory.Exists(projectPath))
-                projectPath = _currentPath;
+                projectPath = currentPath;
 
-            _educatorDirectoryPath = Path.Combine(projectPath, "Tasks/educatorFile");
-            _studentDirectoryPath = Path.Combine(projectPath, "Tasks/studentFile");
+            _taskDirectoryPath = Path.Combine(projectPath, "File", "Tasks");
+            _solutionDirectoryPath = Path.Combine(projectPath, "File", "Solutions");
 
-                Directory.CreateDirectory(_educatorDirectoryPath);
-                Directory.CreateDirectory(_studentDirectoryPath);
+            Directory.CreateDirectory(_taskDirectoryPath);
+            Directory.CreateDirectory(_solutionDirectoryPath);
         }
 
-        public async Task<TaskFile> GetFileFromBD(int fileId)
+        public async Task<byte[]> GetFile(int fileId, FileType fileType)
         {
-            try
-            {
-                var file = await _educatorRepository.GetTaskFile(fileId);
-                if (file != null)
-                    return file;
-                return new TaskFile();
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            var fileBD = fileType == FileType.Task
+                ? await GetTaskFileFromBD(fileId)
+                : await GetSolutionFileFromBD(fileId);
+
+            if (fileBD == null || string.IsNullOrEmpty(fileBD.PhysicalPath))
+                return Array.Empty<byte>();
+
+            var file = await GetFileFromDisk(fileBD.PhysicalPath, fileType);
+            return file.Length > 0 ? file : Array.Empty<byte>();
         }
 
-        public async Task<byte[]> GetFile(int fileId)
-        {
-            var file = await GetFileFromBD(fileId);
-            var qwe = await _fileService.GetFileFromDisk(file.PhysicalPath);
-            if (qwe is not null && qwe.Length > 0)
-                return qwe;
-            return new byte[0];
-        }
-
-        public async Task<string> SaveFileToDisk(byte[] fileBytes, string fileName, int taskId, string disciplineName)
+        public async Task<string> SaveFileToDisk(byte[] fileBytes, string fileName, string disciplineName, FileType fileType)
         {
             var safeDisciplineName = string.Join("_", disciplineName.Split(Path.GetInvalidFileNameChars()));
-            var taskFolder = Path.Combine(_Path, safeDisciplineName);
+            var taskFolder = fileType == FileType.Task
+                ? Path.Combine(_taskDirectoryPath, safeDisciplineName)
+                : Path.Combine(_solutionDirectoryPath, safeDisciplineName);
 
-            if (!Directory.Exists(taskFolder))
-                Directory.CreateDirectory(taskFolder);
+            Directory.CreateDirectory(taskFolder);
 
             var uniqueFileName = $"{Guid.NewGuid()}_{fileName}";
             var fullPath = Path.Combine(taskFolder, uniqueFileName);
 
             await File.WriteAllBytesAsync(fullPath, fileBytes);
-            return Path.Combine("Tasks", safeDisciplineName, uniqueFileName).Replace("\\", "/");
+
+            var relativePath = fileType == FileType.Task
+                ? Path.Combine("File", "Tasks", safeDisciplineName, uniqueFileName)
+                : Path.Combine("File", "Solutions", safeDisciplineName, uniqueFileName);
+
+            return relativePath.Replace("\\", "/");
         }
 
-        public async Task<byte[]> GetFileFromDisk(string physicalPath)
+        private async Task<byte[]> GetFileFromDisk(string physicalPath, FileType fileType)
         {
-            var pathReolase = physicalPath.Replace("Tasks", "");
-            var qwe = $"{_Path}{pathReolase}";
-            var fullPath = Path.Combine(_Path, physicalPath.Replace("Tasks", ""));
+            var fullPath = GetFullPath(physicalPath, fileType);
 
-            if (!File.Exists(qwe))
+            if (!File.Exists(fullPath))
                 throw new FileNotFoundException($"File not found: {fullPath}");
 
-            return await File.ReadAllBytesAsync(qwe);
+            return await File.ReadAllBytesAsync(fullPath);
         }
 
-        public async Task DeleteFileFromDisk(string physicalPath)
+        private string GetFullPath(string physicalPath, FileType fileType)
         {
-            var fullPath = Path.Combine(_Path, physicalPath.Replace("Tasks", ""));
+            var relativePath = fileType == FileType.Task
+                ? physicalPath.Replace("File/Tasks/", "")
+                : physicalPath.Replace("File/Solutions/", "");
+
+            var basePath = fileType == FileType.Task ? _taskDirectoryPath : _solutionDirectoryPath;
+            return Path.Combine(basePath, relativePath);
+        }
+
+        public async Task DeleteFileFromDisk(string physicalPath, FileType fileType)
+        {
+            if (string.IsNullOrEmpty(physicalPath))
+                return;
+
+            var fullPath = GetFullPath(physicalPath, fileType);
 
             if (File.Exists(fullPath))
                 File.Delete(fullPath);
+        }
+
+        public async Task<TaskFile> GetTaskFileFromBD(int fileId)
+        {
+            return await _fileRepository.GetTaskFile(fileId) ?? new TaskFile();
+        }
+
+        public async Task<TaskFile> GetSolutionFileFromBD(int fileId)
+        {
+            return await _fileRepository.GetSolutionFile(fileId) ?? new TaskFile();
         }
     }
 }

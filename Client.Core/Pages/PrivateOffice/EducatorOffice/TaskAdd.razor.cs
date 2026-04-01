@@ -68,7 +68,7 @@ namespace Client.Core.Pages.PrivateOffice.EducatorOffice
                 if(string.IsNullOrEmpty(_taskDesc) && string.IsNullOrEmpty(_taskName))
                     throw new InvalidOperationException("Необходимо заполнить описание или название задания");
                 var taskDTO = await FillTask(_newTaskDTO);
-                var response = await Http.PostAsJsonAsync($"api/educators/PostAddTask", taskDTO);
+                var response = await Http.PostAsJsonAsync($"api/file/PostAddTask", taskDTO);
 
                 Navigation.NavigateTo("/TaskEducator");
             }
