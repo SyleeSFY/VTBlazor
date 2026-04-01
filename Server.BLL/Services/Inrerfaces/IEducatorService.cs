@@ -16,6 +16,4 @@ public interface IEducatorService
     Task<TaskEducation> GetTasksEducatorById(int id);
     Task<List<Group>> GetGroupsAsync();
     Task<bool> AddTask(TaskEducationDTO taskDto);
-    Task<TaskFile> GetFileEntitie(int fileId);
-    Task<byte[]> GetFile(int fileId);
 }

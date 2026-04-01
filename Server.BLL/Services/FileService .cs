@@ -1,26 +1,42 @@
 ﻿using Server.BLL.Services.Inrerfaces;
+using Server.DAL.Interfaces;
+using Server.DAL.Models.Entities;
 
 namespace Server.BLL.Services
 {
     public class FileService : IFileService
     {
+        private IFileRepository _fileRepository;
+        
         private readonly string _Path;
+        
+        private string _educatorDirectoryPath;
+        private string _studentDirectoryPath;
 
-        public FileService()
+        public FileService(IFileRepository fileRepository)
         {
-            var currentDir = Directory.GetCurrentDirectory();
-            var projectPath = Path.GetFullPath(Path.Combine(currentDir, "..", "Server.DAL"));
+            _fileRepository = fileRepository;
+            InitDirectory();
 
-            if (!Directory.Exists(projectPath))
-                projectPath = currentDir;
-
-            _Path = Path.Combine(projectPath, "Tasks");
-
-            if (!Directory.Exists(_Path))
-                Directory.CreateDirectory(_Path);
         }
 
-        public async Task<TaskFile> GetFileEntitie(int fileId)
+        public void InitDirectory()
+        {
+            var _currentPath = Directory.GetCurrentDirectory();
+            
+            var projectPath = Path.GetFullPath(Path.Combine(_currentPath, "..", "Server.DAL"));
+
+            if (!Directory.Exists(projectPath))
+                projectPath = _currentPath;
+
+            _educatorDirectoryPath = Path.Combine(projectPath, "Tasks/educatorFile");
+            _studentDirectoryPath = Path.Combine(projectPath, "Tasks/studentFile");
+
+                Directory.CreateDirectory(_educatorDirectoryPath);
+                Directory.CreateDirectory(_studentDirectoryPath);
+        }
+
+        public async Task<TaskFile> GetFileFromBD(int fileId)
         {
             try
             {
@@ -31,14 +47,13 @@ namespace Server.BLL.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
                 throw;
             }
         }
 
         public async Task<byte[]> GetFile(int fileId)
         {
-            var file = await GetFileEntitie(fileId);
+            var file = await GetFileFromBD(fileId);
             var qwe = await _fileService.GetFileFromDisk(file.PhysicalPath);
             if (qwe is not null && qwe.Length > 0)
                 return qwe;
