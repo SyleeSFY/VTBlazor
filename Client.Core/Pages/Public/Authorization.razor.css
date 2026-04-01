@@ -69,11 +69,6 @@
 
 /* ----------------------------------------------------------------------------------------------------- */
 /* Форма и внутренности */
-form {
-    display: grid;
-    margin-top: -20px;
-    padding-top: 20px;
-}
 
 button {
     border-radius: 40px;
@@ -248,7 +243,7 @@ button span {
 
 
     .Menu-Left-Authorization {
-        margin-top: 40px;
+
     }
 
     .Menu-Left {
