@@ -13,11 +13,11 @@
                 <div class="Menu-Left-Authorization">
                     <p class="Tittle">ВХОД</p>
                     <p class="Tittle Menu-Left-Authorization-Tittle-Lower">в аккаунт</p>
-                    <EditForm Model="@_authorization" OnValidSubmit="@LoginAsync">
-                            <InputText @bind-Value="_authorization.Email" class="input" type="" placeholder="Почта" />
-                            <InputText @bind-Value="_authorization.Password" class="input" type="password" placeholder="Пароль" />
-                            <p style="color: red; display: @(_isState ? "block" : "none")">Ошибка: неверная почта или пароль</p>
-                            <button class="button-black"><span>Войти</span></button>
+                    <EditForm Model="@_authorization" OnValidSubmit="@LoginAsync" style="display: grid; margin-top: -20px; padding-top: 20px;">
+                        <InputText @bind-Value="_authorization.Email" class="input" type="email" placeholder="Почта" style="margin: 10px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border: none; border-radius: 40px; width: 397px; height: 61px; padding-left: 27px; text-align: left; font-size: 30px; line-height: 61px; font-family: 'Rubik', sans-serif; font-weight: bold; outline: none;" />
+                        <InputText @bind-Value="_authorization.Password" class="input" type="password" placeholder="Пароль" style="margin: 10px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border: none; border-radius: 40px; width: 397px; height: 61px; padding-left: 27px; text-align: left; font-size: 30px; line-height: 61px; font-family: 'Rubik', sans-serif; font-weight: bold; outline: none;" />
+                        <p style="color: red; display: @(_isState ? "block" : "none")">Ошибка: неверная почта или пароль</p>
+                        <button class="button-black" style="margin-bottom: 27px"><span>Войти</span></button>
                     </EditForm>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Client.Core.Entities.Enums;
-using Client.Core.Entities.Models.User.Educator;
+using Client.Core.Entities.Models.User.EducatorModel;
 
 namespace Client.Core.Entities.Models.User
 {
@@ -31,7 +31,7 @@ namespace Client.Core.Entities.Models.User
         public Role Role { get; set; }
         public bool IsActive { get; set; } = true;
 
-        public Educator.Educator? Educator { get; set; }
+        public Educator? Educator { get; set; }
         public Student? Student { get; set; }
         public Admin? Administrator { get; set; }
     }

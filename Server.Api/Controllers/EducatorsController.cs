@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Server.BLL.Services.Inrerfaces;
+using Server.DAL.Models.Entities;
 using Server.DAL.Models.Entities.Educators;
 
 namespace Server.Api.Controllers;
@@ -17,6 +18,16 @@ public class EducatorsController : ControllerBase
     public async Task<ActionResult<Educator>> GetById(int id)
     {
         var educator = await _educatorService.GetByIdAsync(id);
+        if (educator == null)
+            return NotFound();
+        
+        return educator;
+    }
+
+    [HttpGet("GetEducatorSimple/{id}")]
+    public async Task<ActionResult<Educator>> GetSimpleByUserId(int id)
+    {
+        var educator = await _educatorService.GetSimpleByUserId(id);
         if (educator == null)
             return NotFound();
         
@@ -45,5 +56,12 @@ public class EducatorsController : ControllerBase
     public async Task AddEducator(Educator id)
     {
         await _educatorService.AddEducator(id);
+    }
+    
+    [HttpGet("GetGroups")]
+    public async Task<List<Group>> GetGroups()
+    {
+        var users =  await _educatorService.GetGroupsAsync();
+        return users;
     }
 }

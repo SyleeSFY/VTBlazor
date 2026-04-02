@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Server.DAL.Context.ApplicationDbContext;
 using Server.DAL.Interfaces;
+using Server.DAL.Models.Entities;
 using Server.DAL.Models.Entities.Users;
 
 namespace Server.DAL.Repositories;
@@ -48,5 +49,4 @@ public class UserRepository : IUserRepository
             return false;
         }
     }
-
 }

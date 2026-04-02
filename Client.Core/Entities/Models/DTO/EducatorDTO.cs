@@ -1,6 +1,4 @@
-﻿using Client.Core.Entities.Models.User.Educator;
-
-namespace Client.Core.Entities.Models.DTO
+﻿namespace Client.Core.Entities.Models.DTO
 {
     public class EducatorDTO
     {

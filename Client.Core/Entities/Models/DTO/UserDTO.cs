@@ -1,6 +1,6 @@
 ﻿using Client.Core.Entities.Enums;
 using Client.Core.Entities.Models.User;
-using Client.Core.Entities.Models.User.Educator;
+using Client.Core.Entities.Models.User.EducatorModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Client.Core.Entities.Models.DTO

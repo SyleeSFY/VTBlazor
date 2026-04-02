@@ -16,4 +16,6 @@ public class Educator
     public EducatorAdditionalInfo EducatorAdditionalInfo { get; set; }
     [JsonIgnore]
     public User? User { get; set; }
+    [JsonIgnore]
+    public List<TaskEducation>? TaskEducations { get; set; }
 }

@@ -1,6 +1,6 @@
 using Client.Core.Entities.Models.User.Dicipline;
 
-namespace Client.Core.Entities.Models.User.Educator;
+namespace Client.Core.Entities.Models.User.EducatorModel;
 
 public class EducatorDiscipline
 {

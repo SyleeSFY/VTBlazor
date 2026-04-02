@@ -3,7 +3,6 @@ using Server.DAL.Context.ApplicationDbContext;
 using Server.DAL.Interfaces;
 using Server.DAL.Models.Entities;
 using Server.DAL.Models.Entities.Educators;
-using Server.DAL.Interfaces;
 
 namespace Server.DAL.Repositories;
 
@@ -20,13 +19,13 @@ public class EducatorRepository : IEducatorRepository
     /// <returns></returns>
     public async Task<List<Educator>> GetEducatorsSimpleAsync()
         => await _context.Educators.ToListAsync();
-    
+
     public async Task<List<Educator>> GetEducatorsAsync()
         => await _context.Educators
-            .Include(x => x.EducatorAdditionalInfo)
-                .ThenInclude(ai => ai.EducatorDisciplines)
-                    .ThenInclude(ed => ed.Discipline)
-            .ToListAsync();
+    .Include(x => x.EducatorAdditionalInfo)
+        .ThenInclude(ai => ai.EducatorDisciplines)
+            .ThenInclude(ed => ed.Discipline)
+    .ToListAsync();
 
     public async Task<Educator> GetByIdSimpleAsync(int id)
         => await _context.Educators.FindAsync(id);
@@ -38,6 +37,10 @@ public class EducatorRepository : IEducatorRepository
                     .ThenInclude(ed => ed.Discipline)
             .FirstOrDefaultAsync(x => x.Id == id);
 
+    public async Task<Educator> GetSimpleByUserId(int userId)
+        => await _context.Educators
+            .FirstOrDefaultAsync(x => x.UserId == userId);
+
     public async Task<List<Discipline>> GetDiciplinesAsync()
     => await _context.Disciplines
             .Include(x => x.Group)
@@ -47,5 +50,53 @@ public class EducatorRepository : IEducatorRepository
     {
         await _context.Educators.AddAsync(edc);
         await _context.SaveChangesAsync();   
+    }
+    
+    public async Task<List<Group>> GetGroupsAsync()
+        => await _context.Groups.ToListAsync();
+
+    public async Task<List<TaskEducation>> GetTasksEducatorByIdSimple(int EducatorId)
+    {
+        try
+        {
+            return await _context.TaskEducations.Where(x => x.EducatorId == EducatorId).Include(x => x.Groups).ToListAsync();
+        } 
+
+    
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    public async Task<TaskEducation> GetTasksEducatorById(int id)
+    {
+        try
+        {
+            return await _context.TaskEducations.Include(x => x.Files).Include(x => x.Groups).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+    public async Task<int> AddTask(TaskEducation task)
+    {
+        try
+        {
+            await _context.TaskEducations.AddAsync(task);
+            await _context.SaveChangesAsync();
+
+            return task.Id;
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
     }
 }

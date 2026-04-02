@@ -1,4 +1,4 @@
-namespace Client.Core.Entities.Models.User.Educator;
+namespace Client.Core.Entities.Models.User.EducatorModel;
 
 /// <summary>
 /// EducationLevel - Уровень образования

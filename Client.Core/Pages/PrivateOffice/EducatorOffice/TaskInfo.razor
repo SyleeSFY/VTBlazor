@@ -1,0 +1,37 @@
+@page "/TaskInfo/{Id:int}"
+@inject HttpClient Http
+@layout PrivateOfficeLayout
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<AuthorizeView>
+    <Authorized>
+        <div class="container">
+            <div style="display: flex; margin-top:50px">
+                <div style="width: 70%;">
+                    <div class="EducatorCardInfo">
+                        <p><span style="font-weight: 500;">Название задания:</span>@_task.TaskName</p>
+                        <p><span style="font-weight: 500;">Дисциплина:</span>@_task.Dicipline?.NameDiscipline</p>
+                        <p><span style="font-weight: 500;">Время создания:</span>@_task.CreatedAt.ToString("dd.MM.yyyy")</p>
+                        <p><span style="font-weight: 500;">Задание:</span>@_task.TaskDescription</p>
+                        @if (_task.Files != null && _task.Files.Any())
+                        {
+                            <p>
+                                <span style="font-weight: 500;">Файлы:</span>
+                                @foreach (var item in _task.Files)
+                                {
+                                    <button @onclick="() => GetFile(item)" style="color: #0a53be; border: none; background: none;">
+                                        @item.FileName
+                                    </button>
+                                }
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>Вы не авторизованы</p>
+    </NotAuthorized>
+</AuthorizeView>

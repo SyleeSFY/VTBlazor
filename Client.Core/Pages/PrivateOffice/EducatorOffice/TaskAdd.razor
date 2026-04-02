@@ -1,0 +1,109 @@
+@page "/TaskAdd"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@layout PrivateOfficeLayout
+@attribute [Authorize]
+
+<AuthorizeView Context="AuthContext">
+    <Authorized>
+        <div class="container">
+            <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Добавление нового задания" />
+
+            <div class="row justify-content-center" style="margin-top: auto; margin-bottom: auto">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <EditForm Model="@_newTaskDTO" OnValidSubmit="@HandleValidSubmit">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary class="text-danger" />
+
+                                <div class="form-group mb-3">
+                                    <label for="disciplineId" class="form-label">Дисциплина</label>
+                                    <select id="disciplineId" class="form-control" @bind="_taskDicipline">
+                                        <option value="">Выберите дисциплину</option>
+                                        @foreach (var discipline in _disciplines)
+                                        {
+                                            <option value="@discipline.Id">@discipline.NameDiscipline</option>
+                                        }
+                                    </select>
+                                    <ValidationMessage For="@(() => _newTaskDTO.DiciplineId)" />
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="taskName" class="form-label">Название задания</label>
+                                    <input type="text" class="form-control" id="taskName"
+                                           placeholder="Введите название задания" @bind="_taskName" />
+                                    <ValidationMessage For="@(() => _newTaskDTO.TaskName)" />
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="taskDescription" class="form-label">Описание задания</label>
+                                    <textarea class="form-control" id="taskDescription" rows="5" placeholder="Введите описание задания" @bind="_taskDesc"></textarea>
+                                    <ValidationMessage For="@(() => _newTaskDTO.TaskDescription)" />
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Группы</label>
+                                    @foreach (var group in _groups)
+                                    {
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" @onchange="(e => SelectGroup(group.Id, (bool)e.Value))" />
+                                            <label class="form-check-label">@group.Name</label>
+                                        </div>
+                                    }
+                                    <ValidationMessage For="@(() => _selectedGroups)" />
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="files" class="form-label">Файлы задания</label>
+                                    <div class="input-group">
+                                        <InputFile id="files" multiple OnChange="@OnFileUpload" class="form-control" style="padding: 0.375rem 0.75rem;" />
+                                        @if (_uploadedFiles.Any())
+                                        {
+                                            <button type="button" class="btn btn-outline-danger" @onclick="ClearFiles">
+                                                <i class="bi bi-trash"></i> Очистить
+                                            </button>
+                                        }
+                                    </div>
+                                    @if (_uploadedFiles.Any())
+                                    {
+                                        <div class="mt-2">
+                                            <strong>Выбранные файлы (@_uploadedFiles.Count):</strong>
+                                            <div class="list-group mt-2">
+                                                @foreach (var file in _uploadedFiles)
+                                                {
+                                                    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                                        <span>@file.Name</span>
+                                                        <div>
+                                                            <span class="badge bg-secondary me-2"> @(FormatFileSize(file.Size)) </span>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => RemoveFile(file)">
+                                                                <i class="bi bi-x"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="form-group mt-4">
+                                    <button type="submit" class="btn btn-primary me-2" style="background: #009c15">
+                                        Сохранить
+                                    </button>
+                                    <button type="button" class="btn btn-light" @onclick="ResetForm">
+                                        Очистить
+                                    </button>
+                                </div>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ButtonRedirect Redirect="TaskTable" Text="Назад" MT="auto" />
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>Вы не авторизованы</p>
+    </NotAuthorized>
+</AuthorizeView>

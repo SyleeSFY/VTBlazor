@@ -80,8 +80,8 @@ public class UserService : IUserService
             case Role.student:
                     user.Student = new Student()
                     {
-                        GroupId = userDTO.Student.GroupId,
-                        StudentId = userDTO.Student.StudentCardId
+                        GroupId = 1,
+                        StudentCard = userDTO.Student.StudentCardId
                     };
 
                 break;

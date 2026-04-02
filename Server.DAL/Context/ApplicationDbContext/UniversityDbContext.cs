@@ -16,7 +16,11 @@ public class UniversityDbContext : DbContext
     public DbSet<EducatorDiscipline> EducatorDisciplines { get; set; }
     public DbSet<Discipline> Disciplines { get; set; }
     public DbSet<TrainedGroup> TrainedGroups { get; set; }
-
+    
+    public DbSet<Group> Groups { get; set; }
+    public DbSet<TaskEducation> TaskEducations { get; set; }
+    public DbSet<TaskFile> TaskFiles { get; set; }
+    
     //Таблицы пользователей
     public DbSet<User> Users { get; set; }
     public DbSet<Student> Students { get; set; }
@@ -95,6 +99,51 @@ public class UniversityDbContext : DbContext
                 .HasForeignKey<Educator>(e => e.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
+        
+        modelBuilder.Entity<TaskEducation>(entity =>
+        {
+            entity.ToTable("TaskEducation");
+            entity.HasKey(e => e.Id);
+            
+            entity.HasOne(e => e.Dicipline)
+                .WithMany(d => d.TaskEducations) 
+                .HasForeignKey(e => e.DiciplineId)
+                .OnDelete(DeleteBehavior.Restrict);
+    
+            entity.HasOne(e => e.Educator)
+                .WithMany(ed => ed.TaskEducations)
+                .HasForeignKey(e => e.EducatorId)
+                .OnDelete(DeleteBehavior.Restrict);
+    
+            entity.HasMany(e => e.Files)
+                .WithOne(f => f.Task)
+                .HasForeignKey(f => f.TaskId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(e => e.Groups)
+                 .WithMany(g => g.TaskEducations)
+                 .UsingEntity(j => j.ToTable("TaskGroups"));
+
+        });
+        
+        modelBuilder.Entity<TaskFile>(entity =>
+        {
+            entity.ToTable("TaskFile");
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.Task).WithMany(t => t.Files).HasForeignKey(e => e.TaskId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Group>(entity =>
+        {
+            entity.ToTable("Groups");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name).HasMaxLength(30);
+
+            entity.HasMany(g => g.Students)
+                  .WithOne(s => s.Group)
+                  .HasForeignKey(s => s.GroupId)
+                  .OnDelete(DeleteBehavior.Restrict);
+        });
 
         // Student
         modelBuilder.Entity<Student>(entity =>
@@ -102,8 +151,8 @@ public class UniversityDbContext : DbContext
             entity.ToTable("Students");
 
             entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.StudentId).IsUnique();
-            entity.Property(e => e.StudentId).HasMaxLength(20);
+            entity.HasIndex(e => e.StudentCard).IsUnique();
+            entity.Property(e => e.StudentCard).HasMaxLength(20);
         });
 
         // Admin
