@@ -9,4 +9,5 @@ public interface IUserRepository
     Task<User> GetUserSimpleAsync(int userId);
     Task<User> GetUserAsync(int userId);
     Task<bool> AddUserAsync(User user);
+    Task<Student> GetStudentByUserIdAsync(int userId);
 }

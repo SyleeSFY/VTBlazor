@@ -26,6 +26,13 @@ namespace Server.Api.Controllers
             return users;
         }
 
+        [HttpGet("GetEducatorTaskByGroup/{id}")]
+        public async Task<List<TaskEducation>> GetEducatorTaskByGroup(int id)
+        {
+            var users = await _educatorService.GetEducatorTaskByGroup(id);
+            return users;
+        }
+
         [HttpGet("GetTasksEducatorByIdSimple/{EducatorId}")]
         public async Task<List<TaskEducation>> GeTasksByIdSimple(int EducatorId)
         {

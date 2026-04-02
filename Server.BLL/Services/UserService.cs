@@ -28,6 +28,14 @@ public class UserService : IUserService
             return new User();
         return user;
     }
+
+    public async Task<Student> GetStudentByUserId(int userId)
+    {
+        var user = await _userRepository.GetStudentByUserIdAsync(userId);
+        if (user is null)
+            return new Student();
+        return user;
+    }
     
     public async Task<bool> AddUserByDTOAsync(UserDTO userDTO)
     {

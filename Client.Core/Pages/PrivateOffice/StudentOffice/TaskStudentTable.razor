@@ -1,0 +1,40 @@
+﻿@page "/TaskStudentTable"
+@using Client.Core.Features
+@inject HttpClient Http
+@layout PrivateOfficeLayout
+@inject NavigationManager Navigation
+
+<AuthorizeView>
+    <Authorized>
+        <div class="container">
+            <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Задания" />
+            <div class="table-container">
+                <table class="disciplines-table">
+                    <thead>
+                        <tr class="table_tr">
+                            <th rowSpan="2">ИД</th>
+                            <th rowSpan="2">Наименование задания</th>
+                            <th rowSpan="2">Предмет</th>
+                            <th rowSpan="1" class="profile-header">Дата добавления</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in _taskEducator)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td style="text-align: left; cursor: pointer;" @onclick="() => GoTaskInfo(item.Id)">@item.TaskName</td>
+                                <td>@(_diciplines.FirstOrDefault(x => x.Id == item.DiciplineId).NameDiscipline)</td>
+                                <td>@item.CreatedAt.ToString("dd.MM.yyyy")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </Authorized>
+    <NotAuthorized>
+        <p>Вы не авторизованы</p>
+    </NotAuthorized>
+</AuthorizeView>

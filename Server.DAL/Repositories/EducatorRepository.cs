@@ -84,6 +84,26 @@ public class EducatorRepository : IEducatorRepository
             throw;
         }
     }
+
+    public async Task<List<TaskEducation>> GetTasksEducatorByGroup(int id)
+    {
+        try
+        {
+            return await _context.TaskEducations
+                .Include(x => x.Files)
+                .Include(x => x.Groups)
+                .Where(x => x.Groups.Any(g => g.Id == id))
+                .ToListAsync();
+        }
+
+
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
     public async Task<int> AddTask(TaskEducation task)
     {
         try

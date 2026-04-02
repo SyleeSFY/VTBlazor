@@ -21,6 +21,7 @@ public class UserRepository : IUserRepository
         => await _context.Users
             .Include(x => x.Educator)
             .Include(x => x.Student)
+                .ThenInclude(x => x.Group)
             .Include(x => x.Administrator)
             .ToListAsync();
 
@@ -34,7 +35,12 @@ public class UserRepository : IUserRepository
             .Include(x => x.Student)
             .Include(x => x.Administrator)
             .FirstOrDefaultAsync(x => x.Id == userId);
-    
+
+    public async Task<Student> GetStudentByUserIdAsync(int userId)
+    => await _context.Students
+        .Include(x => x.Group)
+        .FirstOrDefaultAsync(x => x.UserId == userId);
+
     public async Task<bool> AddUserAsync(User user)
     {
         try

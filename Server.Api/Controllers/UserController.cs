@@ -30,6 +30,15 @@ public class UserController : ControllerBase
         return NotFound();
     }
 
+    [HttpGet("GetStudentByUserId/{id}")]
+    public async Task<ActionResult<User>> GetStudent(int id)
+    {
+        var user = await _userService.GetStudentByUserId(id);
+        if (user.Id != 0)
+            return Ok(user);
+        return NotFound();
+    }
+
     [HttpPost("PostAddUser")]
     public async Task<ActionResult<bool>> PostAddUser(UserDTO data)
     {

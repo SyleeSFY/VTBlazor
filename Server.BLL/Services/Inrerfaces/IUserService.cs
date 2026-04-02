@@ -8,5 +8,5 @@ public interface IUserService
     Task<List<User>> GetUsersAsync();
     Task<User> GetUser(int userId);
     Task<bool> AddUserByDTOAsync(UserDTO userDTO);
-
+    Task<Student> GetStudentByUserId(int userId);
 }
