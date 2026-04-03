@@ -1,3 +1,4 @@
+using Server.DAL.Models.Entities.Education;
 using Server.DAL.Models.Entities.Educators;
 using System.Text.Json.Serialization;
 
@@ -15,6 +16,7 @@ public class TaskEducation
     public List<TaskFile>? Files { get; set; }
     public Educator Educator { get; set; }
     public Discipline Dicipline { get; set; }
+    public List<StudentSolution>? StudentSolutions { get; set; } = new List<StudentSolution>();
 }
 
 public class TaskFile

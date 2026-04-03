@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Server.DAL.Models.Entities.Education;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Server.DAL.Models.Entities.Users
@@ -14,5 +15,6 @@ namespace Server.DAL.Models.Entities.Users
         [JsonIgnore]
         public User User { get; set; }
         public Group Group { get; set; }
+        public List<StudentSolution>? Solutions { get; set; }
     }
 }
