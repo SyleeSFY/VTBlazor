@@ -63,11 +63,11 @@ namespace Server.DAL.Repositories
             }
         }
 
-        public async Task<TaskFile> GetSolutionFile(int fileId)
+        public async Task<SolutionFile> GetSolutionFile(int fileId)
         {
             try
             {
-                return await _context.TaskFiles.FirstOrDefaultAsync(x => x.Id == fileId);
+                return await _context.SolutionFiles.FirstOrDefaultAsync(x => x.Id == fileId);
             }
             catch (Exception)
             {

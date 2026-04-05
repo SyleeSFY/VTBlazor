@@ -77,7 +77,7 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
         }
 
         private void ClearFiles()
-   => _uploadedFiles.Clear();
+            => _uploadedFiles.Clear();
 
         private void RemoveFile(IBrowserFile fileToRemove)
             => _uploadedFiles.Remove(fileToRemove);

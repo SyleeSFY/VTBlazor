@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Server.BLL.Services.Inrerfaces;
 using Server.DAL.Models.Entities;
+using Server.DAL.Models.Entities.Education;
 using Server.DAL.Models.Entities.Educators;
 
 namespace Server.Api.Controllers;
@@ -50,6 +51,13 @@ public class EducatorsController : ControllerBase
         if (educators.Count == 0)
             return NotFound();
         return educators;
+    }
+
+    [HttpGet("GetSolutionById/{id}")]
+    public async Task<StudentSolution> GetSolutionById(int id)
+    {
+        var solution =  await _educatorService.GetSolutionByIdAsync(id);
+        return solution;
     }
 
     [HttpPost("educators")]

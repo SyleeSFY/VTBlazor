@@ -31,6 +31,15 @@ public class UserService : IUserService
             return new List<User>();
         return users;
     }
+
+    public async Task<List<StudentSolution>> GetSolutionsStudentByTaskIdSimple(int taskId)
+    {
+        var users = await _userRepository.GetSolutionStudentByTaskIdSimpleAsync(taskId);
+        if (users is null || users.Count <= 0)
+            return new List<StudentSolution>();
+        return users;
+    }
+
     public async Task<User> GetUser(int userId)
     {
         var user = await _userRepository.GetUserAsync(userId);
@@ -39,9 +48,34 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task<Student> GetStudentByUserId(int userId)
+    public async Task<bool> UpdateSolutionStatus(int solutionId, SolutionStatus status)
     {
-        var user = await _userRepository.GetStudentByUserIdAsync(userId);
+        var solution = await _userRepository.GetSolutionByIdAsync(solutionId);
+        if (solution is null)
+            return false;
+
+        solution.Status = status;
+        solution.UpdatedAt = DateTime.UtcNow.AddHours(3);
+
+        return await _userRepository.UpdateSolutionStatus(solution);
+    }
+
+        public async Task<List<User>> GetUserStudentByGroupId(int userId)
+    {
+        var user = await _userRepository.GetUsersStudentByGroupAsync(userId);
+        if (user is null)
+            return new List<User>();
+        return user;
+    }
+
+    public async Task<User> GetUserByUserId(int userId)
+    {
+        var user = await _userRepository.GetUserByUserIdAsync(userId);
+        return user;
+    }
+    public async Task<Student> GetStudentByStudentId(int userId)
+    {
+        var user = await _userRepository.GetStudentByStudentIdAsync(userId);
         if (user is null)
             return new Student();
         return user;

@@ -1,8 +1,8 @@
-﻿using Server.DAL.Models.Entities.Users;
-using Server.DAL.Models.Enums;
+﻿using Client.Core.Entities.Enums;
+using Client.Core.Entities.Models.User;
 using System.Text.Json.Serialization;
 
-namespace Server.DAL.Models.Entities.Education
+namespace Client.Core.Entities.Models.Education
 {
     /// <summary>
     /// Решение студента
@@ -25,8 +25,8 @@ namespace Server.DAL.Models.Entities.Education
         // Навигационные свойства
         [JsonIgnore]
         public TaskEducation Task { get; set; }
-        [JsonIgnore]
 
+        [JsonIgnore]
         public Student Student { get; set; }
     }
 }

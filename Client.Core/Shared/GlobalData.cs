@@ -10,5 +10,12 @@ namespace Client.Core.Shared
             { Role.student, "Студент" },
             { Role.admin, "Админ" }
         };
+
+        public static Dictionary<SolutionStatus, string> GetSolutionStatus = new Dictionary<SolutionStatus, string>()
+        {
+            { SolutionStatus.InReview, "Проверка" },
+            { SolutionStatus.Approved, "Одобрено" },
+            { SolutionStatus.Rejected, "Отклонено" }
+        };
     }
 }

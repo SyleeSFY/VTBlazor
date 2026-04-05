@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Server.DAL.Context.ApplicationDbContext;
 using Server.DAL.Interfaces;
 using Server.DAL.Models.Entities;
+using Server.DAL.Models.Entities.Education;
 using Server.DAL.Models.Entities.Educators;
 
 namespace Server.DAL.Repositories;
@@ -29,6 +30,19 @@ public class EducatorRepository : IEducatorRepository
 
     public async Task<Educator> GetByIdSimpleAsync(int id)
         => await _context.Educators.FindAsync(id);
+
+    public async Task<StudentSolution> GetSolutionByIdAsync(int id)
+    {
+        try
+        {
+            return await _context.StudentSolutions.Include(x => x.SolutionFiles).FirstOrDefaultAsync(x => x.Id == id);
+        }
+        catch (Exception)
+        {
+            return new StudentSolution();
+            throw;
+        }
+    }
     
     public async Task<Educator> GetByIdAsync(int id)
         => await _context.Educators

@@ -1,5 +1,6 @@
 using Server.DAL.Models.DTO;
 using Server.DAL.Models.Entities;
+using Server.DAL.Models.Entities.Education;
 using Server.DAL.Models.Entities.Educators;
 
 namespace Server.BLL.Services.Inrerfaces;
@@ -17,4 +18,5 @@ public interface IEducatorService
     Task<List<Group>> GetGroupsAsync();
     Task<bool> AddTask(TaskEducationDTO taskDto);
     Task<List<TaskEducation>> GetEducatorTaskByGroup(int id);
+    Task<StudentSolution> GetSolutionByIdAsync(int id);
 }

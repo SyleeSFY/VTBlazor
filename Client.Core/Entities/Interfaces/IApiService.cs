@@ -1,8 +1,10 @@
 ﻿using Client.Core.Entities.Models.DTO;
+using Client.Core.Entities.Models.Education;
 using Client.Core.Entities.Models.User;
 using Client.Core.Entities.Models.User.Dicipline;
 using Client.Core.Entities.Models.User.EducatorModel;
 using Microsoft.AspNetCore.Components.Authorization;
+using static System.Net.WebRequestMethods;
 
 namespace Client.Core.Entities.Interfaces
 {
@@ -17,8 +19,15 @@ namespace Client.Core.Entities.Interfaces
         Task<Educator> GetEducatorByAuth(AuthenticationState authState);
         Task<Student> GetStudentByAuth(AuthenticationState authState);
         Task<List<TaskEducation>> GetTasksEducatorByGroup(int educatorId);
+        Task<User> GetUserByUserId(int id);
         Task<Student> GetStudentById(int id);
         Task<byte[]> GetFileByte(int fileId);
         Task<HttpResponseMessage> PostSolutionStudent(SolutionStudentDTO solution);
+        Task<List<StudentSolution>> GetSolutionByTaskIdSimple(int taskId);
+        Task<List<User>> GetUsersStudentByGroup(int groupId);
+        Task<StudentSolution> GetSolutionById(int id);
+        Task<byte[]> GetSolutionFileByte(int fileId);
+        Task<bool> UpdateSolutionStatus(int solutionId, SolutionStudentDTO updateData);
+
     }
 }

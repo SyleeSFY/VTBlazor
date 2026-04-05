@@ -2,6 +2,7 @@ using Server.BLL.Services.Inrerfaces;
 using Server.DAL.Interfaces;
 using Server.DAL.Models.DTO;
 using Server.DAL.Models.Entities;
+using Server.DAL.Models.Entities.Education;
 using Server.DAL.Models.Entities.Educators;
 using Server.DAL.Models.Enums;
 
@@ -52,6 +53,14 @@ public class EducatorService : IEducatorService
         if (educators.Count != 0)
             return educators;
         return new List<Educator>();
+    }
+
+    public async Task<StudentSolution> GetSolutionByIdAsync(int id)
+    {
+        var solution = await _educatorRepository.GetSolutionByIdAsync(id);
+        if (solution != null)
+            return solution;
+        return new StudentSolution ();
     }
 
     /// <summary>

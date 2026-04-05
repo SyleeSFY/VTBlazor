@@ -1,6 +1,7 @@
 ﻿using Server.BLL.Services.Inrerfaces;
 using Server.DAL.Interfaces;
 using Server.DAL.Models.Entities;
+using Server.DAL.Models.Entities.Education;
 using Server.DAL.Models.Enums;
 
 namespace Server.BLL.Services
@@ -35,13 +36,14 @@ namespace Server.BLL.Services
 
         public async Task<byte[]> GetFile(int fileId, FileType fileType)
         {
-            var fileBD = fileType == FileType.Task
+            dynamic fileBD = fileType == FileType.Task
                 ? await GetTaskFileFromBD(fileId)
                 : await GetSolutionFileFromBD(fileId);
 
             if (fileBD == null || string.IsNullOrEmpty(fileBD.PhysicalPath))
                 return Array.Empty<byte>();
-
+            fileBD.PhysicalPath = fileBD.PhysicalPath.Replace('/', Path.DirectorySeparatorChar);
+            
             var file = await GetFileFromDisk(fileBD.PhysicalPath, fileType);
             return file.Length > 0 ? file : Array.Empty<byte>();
         }
@@ -80,8 +82,8 @@ namespace Server.BLL.Services
         private string GetFullPath(string physicalPath, FileType fileType)
         {
             var relativePath = fileType == FileType.Task
-                ? physicalPath.Replace("File/Tasks/", "")
-                : physicalPath.Replace("File/Solutions/", "");
+                ? physicalPath.Replace("File\\Tasks\\", "").Replace("File/Tasks/", "")
+                : physicalPath.Replace("File\\Solutions\\", "").Replace("File/Solutions/", "");
 
             var basePath = fileType == FileType.Task ? _taskDirectoryPath : _solutionDirectoryPath;
             return Path.Combine(basePath, relativePath);
@@ -103,9 +105,9 @@ namespace Server.BLL.Services
             return await _fileRepository.GetTaskFile(fileId) ?? new TaskFile();
         }
 
-        public async Task<TaskFile> GetSolutionFileFromBD(int fileId)
+        public async Task<SolutionFile> GetSolutionFileFromBD(int fileId)
         {
-            return await _fileRepository.GetSolutionFile(fileId) ?? new TaskFile();
+            return await _fileRepository.GetSolutionFile(fileId) ?? new SolutionFile();
         }
     }
 }

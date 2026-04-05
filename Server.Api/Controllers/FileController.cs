@@ -2,6 +2,7 @@
 using Server.BLL.Services.Inrerfaces;
 using Server.DAL.Models.DTO;
 using Server.DAL.Models.Entities;
+using Server.DAL.Models.Entities.Education;
 using Server.DAL.Models.Enums;
 
 namespace Server.Api.Controllers
@@ -41,6 +42,20 @@ namespace Server.Api.Controllers
             return await _educatorService.GetTasksEducatorByIdSimple(EducatorId);
         }
 
+        [HttpGet("GetSolutionByTaskIdSimple/{taskId}")]
+        public async Task<List<StudentSolution>> GetSolutionsByTaskIdSimple(int taskId)
+        {
+            return await _userService.GetSolutionsStudentByTaskIdSimple(taskId);
+        }
+
+        [HttpPost("UpdateSolutionStatus/{Id}")]
+        public async Task<bool> GetSolutionsByTaskIdSimple(int Id, SolutionStudentDTO solution)
+        {
+            return await _userService.UpdateSolutionStatus(Id, solution.Status);
+        }
+
+
+
         [HttpPost("PostAddTask")]
         public async Task<ActionResult<bool>> PostAddTask(TaskEducationDTO data)
         {
@@ -69,6 +84,17 @@ namespace Server.Api.Controllers
             if (fileId > 0)
             {
                 var result = await _fileService.GetFile(fileId, FileType.Task);
+                return result;
+            }
+            return Array.Empty<byte>();
+        }
+
+        [HttpGet("GetSolutionFile/{fileId}")]
+        public async Task<byte[]> GetSolutionFile(int fileId)
+        {
+            if (fileId > 0)
+            {
+                var result = await _fileService.GetFile(fileId, FileType.Solution);
                 return result;
             }
             return Array.Empty<byte>();
