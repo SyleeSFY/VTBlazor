@@ -12,11 +12,13 @@ namespace Server.Api.Controllers
     {
         private readonly IEducatorService _educatorService;
         private readonly IFileService _fileService;
+        private readonly IUserService _userService;
 
-        public FileController(IEducatorService educatorService, IFileService fileService)
+        public FileController(IEducatorService educatorService, IFileService fileService, IUserService userService)
         {
             _educatorService = educatorService;
             _fileService = fileService;
+            _userService = userService;
         }
 
         [HttpGet("GetEducatorTask/{id}")]
@@ -46,6 +48,17 @@ namespace Server.Api.Controllers
             {
                 var result = await _educatorService.AddTask(data);
                 return result ? Ok(result) : NotFound(result);
+            }
+            return NotFound();
+        }
+
+        [HttpPost("PostAddSolution")]
+        public async Task<ActionResult<bool>> PostAddSolution(SolutionStudentDTO data)
+        {
+            if (data != null)
+            {
+                var result = await _userService.AddSolutionByDTOAsync(data);
+                //return result ? Ok(result) : NotFound(result);
             }
             return NotFound();
         }

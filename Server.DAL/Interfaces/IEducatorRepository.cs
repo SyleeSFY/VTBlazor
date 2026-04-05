@@ -17,4 +17,5 @@ public interface IEducatorRepository
     Task<TaskEducation> GetTasksEducatorById(int id);
     Task<int> AddTask(TaskEducation task);
     Task<List<TaskEducation>> GetTasksEducatorByGroup(int id);
+    Task<TaskEducation> GetTasksEducatorByIdWithDicipline(int id);
 }

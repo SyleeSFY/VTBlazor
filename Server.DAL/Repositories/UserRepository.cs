@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Server.DAL.Context.ApplicationDbContext;
 using Server.DAL.Interfaces;
 using Server.DAL.Models.Entities;
+using Server.DAL.Models.Entities.Education;
 using Server.DAL.Models.Entities.Users;
 
 namespace Server.DAL.Repositories;
@@ -53,6 +54,21 @@ public class UserRepository : IUserRepository
         {
 
             return false;
+        }
+    }
+
+    public async Task<int> AddSolutionAsync(StudentSolution solution)
+    {
+        try
+        {
+            await _context.StudentSolutions.AddAsync(solution);
+            await _context.SaveChangesAsync();
+            return solution.Id;
+        }
+        catch (Exception)
+        {
+
+            return 0;
         }
     }
 }

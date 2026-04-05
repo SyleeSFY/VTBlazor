@@ -1,4 +1,5 @@
 ﻿using Client.Core.Entities.Interfaces;
+using Client.Core.Entities.Models.DTO;
 using Client.Core.Entities.Models.User;
 using Client.Core.Entities.Models.User.Dicipline;
 using Client.Core.Entities.Models.User.EducatorModel;
@@ -6,6 +7,7 @@ using Client.Core.Pages.PrivateOffice.Admin;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Json;
 using System.Security.Claims;
+using static System.Net.WebRequestMethods;
 
 namespace Client.Core.Shared
 {
@@ -38,6 +40,9 @@ namespace Client.Core.Shared
         
         public async Task<TaskEducation> GetTaskEducationById(int id)
             => await _http.GetFromJsonAsync<TaskEducation>($"api/file/GetEducatorTask/{id}") ?? new TaskEducation();
+
+        public async Task<HttpResponseMessage> PostSolutionStudent(SolutionStudentDTO solution)
+            => await _http.PostAsJsonAsync($"api/file/PostAddSolution", solution);
 
         public async Task<Educator> GetEducatorByAuth(AuthenticationState authState)
         {

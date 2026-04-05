@@ -9,4 +9,5 @@ public interface IUserService
     Task<User> GetUser(int userId);
     Task<bool> AddUserByDTOAsync(UserDTO userDTO);
     Task<Student> GetStudentByUserId(int userId);
+    Task<bool> AddSolutionByDTOAsync(SolutionStudentDTO solutionDTO);
 }

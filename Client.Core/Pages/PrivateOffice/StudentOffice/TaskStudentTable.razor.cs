@@ -32,7 +32,7 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
 
         private async Task GoTaskInfo(int taskId)
         {
-            Navigation.NavigateTo($"/TaskInfo/{taskId}");
+            Navigation.NavigateTo($"/TaskSolutionStudent/{taskId}");
         }
     }
 }

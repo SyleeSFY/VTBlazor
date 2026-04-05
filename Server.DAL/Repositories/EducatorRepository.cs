@@ -85,6 +85,12 @@ public class EducatorRepository : IEducatorRepository
         }
     }
 
+    public async Task<TaskEducation> GetTasksEducatorByIdWithDicipline(int id)
+    {
+
+        return await _context.TaskEducations.Include(x => x.Dicipline).FirstOrDefaultAsync(x => x.Id == id);
+    }
+
     public async Task<List<TaskEducation>> GetTasksEducatorByGroup(int id)
     {
         try

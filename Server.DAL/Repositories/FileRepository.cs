@@ -2,6 +2,7 @@
 using Server.DAL.Context.ApplicationDbContext;
 using Server.DAL.Interfaces;
 using Server.DAL.Models.Entities;
+using Server.DAL.Models.Entities.Education;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,22 @@ namespace Server.DAL.Repositories
             try
             {
                 await _context.TaskFiles.AddRangeAsync(task);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<bool> AddSolutionFile(List<SolutionFile> files)
+        {
+            try
+            {
+                await _context.SolutionFiles.AddRangeAsync(files);
                 await _context.SaveChangesAsync();
 
                 return true;

@@ -1,4 +1,5 @@
-﻿using Client.Core.Entities.Models.User;
+﻿using Client.Core.Entities.Models.DTO;
+using Client.Core.Entities.Models.User;
 using Client.Core.Entities.Models.User.Dicipline;
 using Client.Core.Entities.Models.User.EducatorModel;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -18,5 +19,6 @@ namespace Client.Core.Entities.Interfaces
         Task<List<TaskEducation>> GetTasksEducatorByGroup(int educatorId);
         Task<Student> GetStudentById(int id);
         Task<byte[]> GetFileByte(int fileId);
+        Task<HttpResponseMessage> PostSolutionStudent(SolutionStudentDTO solution);
     }
 }
