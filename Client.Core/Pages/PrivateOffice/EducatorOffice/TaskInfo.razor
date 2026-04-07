@@ -1,4 +1,5 @@
 @page "/TaskInfo/{Id:int}"
+@using Client.Core.Features
 @inject HttpClient Http
 @layout PrivateOfficeLayout
 @inject NavigationManager Navigation
@@ -7,28 +8,86 @@
 <AuthorizeView>
     <Authorized>
         <div class="container">
-            <div style="display: flex; margin-top:50px">
+            <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Информация о задании" />
+
+            <div class="" style="display: flex; margin-top:10px; margin-left: 40px">
                 <div style="width: 70%;">
                     <div class="EducatorCardInfo">
-                        <p><span style="font-weight: 500;">Название задания:</span>@_task.TaskName</p>
-                        <p><span style="font-weight: 500;">Дисциплина:</span>@_task.Dicipline?.NameDiscipline</p>
-                        <p><span style="font-weight: 500;">Время создания:</span>@_task.CreatedAt.ToString("dd.MM.yyyy")</p>
-                        <p><span style="font-weight: 500;">Задание:</span>@_task.TaskDescription</p>
-                        @if (_task.Files != null && _task.Files.Any())
-                        {
-                            <p>
-                                <span style="font-weight: 500;">Файлы:</span>
-                                @foreach (var item in _task.Files)
-                                {
-                                    <button @onclick="() => GetFile(item)" style="color: #0a53be; border: none; background: none;">
-                                        @item.FileName
-                                    </button>
-                                }
-                            </p>
-                        }
+                        <div class="mb-3">
+                            <TittleUnderStick Tittle="@_task.Dicipline?.NameDiscipline"
+                                              PaddinLeft="0"
+                                              JustifyContent="JustifyContentEnum.FlexStart"
+                                              FontSize="36"/>
+                        </div>
+
+                        <p><span style="font-weight: 500;">Название работы:</span> @_task.TaskName</p>
+                        <p><span style="font-weight: 500;">Задание:</span> @_task.TaskDescription</p>
+
+
+                        <p>
+                            <span style="font-weight: 500;">Файлы:</span>
+
+                            @if (_task.Files != null && _task.Files.Any())
+                            {
+                                <ul class="disciplines_list">
+                                    @foreach (var item in _task.Files)
+                                    {
+                                        <li>
+                                            <button @onclick="() => GetFile(item)" style="color: #0a53be; border: none; background: none;">
+                                                @item.FileName
+                                            </button>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span> Отсуствуют.</span>
+                            }
+                        </p>
+                        <p><span style="font-weight: 500;">Дата создания:</span> @_task.CreatedAt.ToString("dd.MM.yyyy")</p>
                     </div>
                 </div>
+               
             </div>
+            <div style="margin-bottom:auto;">
+                <table class="disciplines-table mt-2">
+                    <thead>
+                        <tr class="table_tr">
+                            <th rowSpan="2">ИД</th>
+                            <th rowSpan="2">ФИО</th>
+                            <th rowSpan="2">Группа</th>
+                            <th rowSpan="2">Статус</th>
+                            <th rowSpan="1" class="profile-header">Дата обновления</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (_solutions.Any())
+                        {
+                            @foreach (var item in _solutions)
+                            {
+                                <tr style="cursor: pointer" @onclick="() => GoTaskInfoDesc(item.Id)">
+                                    <td>@item.Id</td>
+                                    <td style="text-align: left">@GetStudentFullName(item.StudentId)</td>
+                                    <td>@GetStudentGroupName(item.StudentId)</td>
+                                    <td>@GetSolutionStatus(item.Status)</td>
+                                    <td>@item.CreatedAt.ToString("dd.MM.yyyy")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 20px;">
+                                    Отсуствуют студенческие работы.
+                                </td>
+                            </tr>
+                        }
+                        
+                    </tbody>
+                </table>
+            </div>
+            <ButtonRedirect Redirect="TaskEducator" Text="Назад" MT="0" />
         </div>
     </Authorized>
     <NotAuthorized>

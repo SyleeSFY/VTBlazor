@@ -1,11 +1,10 @@
 ﻿using Client.Core.App.Services;
+using Client.Core.Entities.Enums;
 using Client.Core.Entities.Models.Authentication;
-using Client.Core.Entities.Models.User.Dicipline;
+using Client.Core.Shared;
 using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations;
-using System.Net.Http;
 using System.Net.Http.Json;
+using System.Net.Mail;
 
 namespace Client.Core.Pages.Public
 {
@@ -16,33 +15,98 @@ namespace Client.Core.Pages.Public
 
         private AuthorizationData _authorization;
         private bool _isState = false;
+        private string _errorMessage = string.Empty;
 
         public Authorization() 
             => _authorization = new AuthorizationData();
         
         protected async Task LoginAsync()
         {
+            //await Validation();
             _isState = false;
-
-            var authData = new AuthData() { 
-                Password = _authorization.Password, 
-                Email = _authorization.Email
-            };
-
-            var response = await Http.PostAsJsonAsync($"api/Auth/PostAuthUser", authData);
-            var result = await response.Content.ReadFromJsonAsync<AuthResponce>();
-
-            if (result != null && result.Success) {
-                var token = new Cookie() {
-                    Email = _authorization.Email, 
-                    JWT = result.JwtToken, 
-                    ExpiredAt = DateTime.Now.AddDays(1) 
+            if (!_isState)
+            {
+                var authData = new AuthData()
+                {
+                    Password = _authorization.Password,
+                    Email = _authorization.Email.ToLower()
                 };
-                await LocalStorageService.SetAsync("VT", token);
-                Navigation.NavigateTo($"/profile", true);
+
+                var response = await Http.PostAsJsonAsync($"api/Auth/PostAuthUser", authData);
+                var result = await response.Content.ReadFromJsonAsync<AuthResponce>();
+
+                if (result != null && result.Success)
+                {
+                    var token = new Cookie()
+                    {
+                        Email = _authorization.Email.ToLower(),
+                        JWT = result.JwtToken,
+                        ExpiredAt = DateTime.Now.AddDays(1)
+                    };
+                    await LocalStorageService.SetAsync("VT", token);
+                    Navigation.NavigateTo($"/profile", true);
+                }
+                else
+                {
+                    _errorMessage = GlobalData.ValidError[ValidErrorAuth.InvalidCredentials];
+                    _isState = true;
+                }
             }
-            else
-                _isState = !_isState;
+            
+        }
+
+        private async Task Validation() 
+        {
+            _isState = false;
+            _errorMessage = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(_authorization.Email))
+            {
+                _errorMessage = GlobalData.ValidError[ValidErrorAuth.EmailRequired];
+                _isState = true;
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(_authorization.Password))
+            {
+                _errorMessage = GlobalData.ValidError[ValidErrorAuth.PasswordRequired];
+                _isState = true;
+                return;
+            }
+
+            if (_authorization.Password.Length > 50)
+            {
+                _errorMessage = GlobalData.ValidError[ValidErrorAuth.PasswordTooLong];
+                _isState = true;
+                return;
+            }
+
+            if (!IsValidEmail(_authorization.Email))
+            {
+                _errorMessage = GlobalData.ValidError[ValidErrorAuth.InvalidEmail];
+                _isState = true;
+                return ;
+            }
+
+            if (_authorization.Password.Length < 6)
+            {
+                _errorMessage = GlobalData.ValidError[ValidErrorAuth.PasswordTooShort];
+                _isState = true;
+                return ;
+            }
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var mailAddress = new MailAddress(email);
+                return mailAddress.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

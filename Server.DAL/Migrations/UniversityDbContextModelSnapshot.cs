@@ -37,6 +37,171 @@ namespace Server.DAL.Migrations
                     b.ToTable("TaskGroups", (string)null);
                 });
 
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.FileInChat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("FileType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("MessageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PhysicalPath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.ToTable("FilesInChat", (string)null);
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.MessageInChat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChatId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MessageText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("integer");
+
+                    b.Property<byte>("SenderRole")
+                        .HasColumnType("smallint");
+
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.ToTable("MessagesInChat", (string)null);
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.SolutionChat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("SolutionId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SolutionId")
+                        .IsUnique();
+
+                    b.ToTable("SolutionChats", (string)null);
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.SolutionFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("FileType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhysicalPath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("SolutionId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SolutionId");
+
+                    b.ToTable("SolutionFiles", (string)null);
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.StudentSolution", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("SolutionChatId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SolutionText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("StudentSolutions", (string)null);
+                });
+
             modelBuilder.Entity("Server.DAL.Models.Entities.Educators.Discipline", b =>
                 {
                     b.Property<int>("Id")
@@ -387,6 +552,69 @@ namespace Server.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.FileInChat", b =>
+                {
+                    b.HasOne("Server.DAL.Models.Entities.Education.MessageInChat", "Message")
+                        .WithMany("Files")
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Message");
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.MessageInChat", b =>
+                {
+                    b.HasOne("Server.DAL.Models.Entities.Education.SolutionChat", "Chat")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.SolutionChat", b =>
+                {
+                    b.HasOne("Server.DAL.Models.Entities.Education.StudentSolution", "Solution")
+                        .WithOne("SolutionChat")
+                        .HasForeignKey("Server.DAL.Models.Entities.Education.SolutionChat", "SolutionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Solution");
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.SolutionFile", b =>
+                {
+                    b.HasOne("Server.DAL.Models.Entities.Education.StudentSolution", "Solution")
+                        .WithMany("SolutionFiles")
+                        .HasForeignKey("SolutionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Solution");
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.StudentSolution", b =>
+                {
+                    b.HasOne("Server.DAL.Models.Entities.Users.Student", "Student")
+                        .WithMany("Solutions")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Server.DAL.Models.Entities.TaskEducation", "Task")
+                        .WithMany("StudentSolutions")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Task");
+                });
+
             modelBuilder.Entity("Server.DAL.Models.Entities.Educators.Educator", b =>
                 {
                     b.HasOne("Server.DAL.Models.Entities.Users.User", "User")
@@ -494,6 +722,23 @@ namespace Server.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.MessageInChat", b =>
+                {
+                    b.Navigation("Files");
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.SolutionChat", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.StudentSolution", b =>
+                {
+                    b.Navigation("SolutionChat");
+
+                    b.Navigation("SolutionFiles");
+                });
+
             modelBuilder.Entity("Server.DAL.Models.Entities.Educators.Discipline", b =>
                 {
                     b.Navigation("Group");
@@ -522,6 +767,13 @@ namespace Server.DAL.Migrations
             modelBuilder.Entity("Server.DAL.Models.Entities.TaskEducation", b =>
                 {
                     b.Navigation("Files");
+
+                    b.Navigation("StudentSolutions");
+                });
+
+            modelBuilder.Entity("Server.DAL.Models.Entities.Users.Student", b =>
+                {
+                    b.Navigation("Solutions");
                 });
 
             modelBuilder.Entity("Server.DAL.Models.Entities.Users.User", b =>

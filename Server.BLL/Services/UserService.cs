@@ -1,18 +1,28 @@
 using Server.BLL.Services.Inrerfaces;
 using Server.DAL.Interfaces;
+using Server.DAL.Models.DTO;
+using Server.DAL.Models.Entities.Education;
 using Server.DAL.Models.Entities.Educators;
 using Server.DAL.Models.Entities.Users;
-using Server.DAL.Models.DTO;
 using Server.DAL.Models.Enums;
+using Server.DAL.Repositories;
 
 namespace Server.BLL.Services {
 
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IEducatorRepository _educatorRepository;
+    private readonly IFileService _fileService;
+    private readonly IFileRepository _fileRepository;
 
-    public UserService(IUserRepository educatorRepository)
-        => _userRepository = educatorRepository;
+    public UserService(IUserRepository userRepository, IFileService fileService, IEducatorRepository educatorRepository, IFileRepository fileRepository)
+    {
+        _userRepository = userRepository;
+        _fileService = fileService;
+        _educatorRepository = educatorRepository;
+        _fileRepository = fileRepository;
+    }
     
     public async Task<List<User>> GetUsersAsync()
     {
@@ -21,11 +31,61 @@ public class UserService : IUserService
             return new List<User>();
         return users;
     }
+
+    public async Task<List<StudentSolution>> GetSolutionsStudentByTaskIdSimple(int taskId)
+    {
+        var users = await _userRepository.GetSolutionStudentByTaskIdSimpleAsync(taskId);
+        if (users is null || users.Count <= 0)
+            return new List<StudentSolution>();
+        return users;
+    }
+
     public async Task<User> GetUser(int userId)
     {
         var user = await _userRepository.GetUserAsync(userId);
         if (user is null)
             return new User();
+        return user;
+    }
+
+    public async Task<bool> UpdateSolutionStatus(int solutionId, SolutionStatus status)
+    {
+        var solution = await _userRepository.GetSolutionByIdAsync(solutionId);
+        if (solution is null)
+            return false;
+
+        solution.Status = status;
+        solution.UpdatedAt = DateTime.UtcNow.AddHours(3);
+
+        return await _userRepository.UpdateSolutionStatus(solution);
+    }
+
+        public async Task<List<User>> GetUserStudentByGroupId(int userId)
+    {
+        var user = await _userRepository.GetUsersStudentByGroupAsync(userId);
+        if (user is null)
+            return new List<User>();
+        return user;
+    }
+
+    public async Task<User> GetUserByUserId(int userId)
+    {
+        var user = await _userRepository.GetUserByUserIdAsync(userId);
+        return user;
+    }
+    public async Task<Student> GetStudentByStudentId(int userId)
+    {
+        var user = await _userRepository.GetStudentByStudentIdAsync(userId);
+        if (user is null)
+            return new Student();
+        return user;
+    }
+
+    public async Task<Student> GetStudentByUserId(int userId)
+    {
+        var user = await _userRepository.GetStudentByUserIdAsync(userId);
+        if (user is null)
+            return new Student();
         return user;
     }
     
@@ -38,7 +98,50 @@ public class UserService : IUserService
         return true;
     }
 
-    private async Task<User> ParseUserByDTOAsync(UserDTO userDTO)
+    public async Task<bool> AddSolutionByDTOAsync(SolutionStudentDTO solutionDTO)
+    {
+            var compFiles = new List<SolutionFile>();
+
+            var solution = new StudentSolution
+            {
+                TaskId = solutionDTO.TaskId,
+                StudentId = solutionDTO.StudentId,
+                SolutionChatId = solutionDTO.SolutionChatId,
+                SolutionText = solutionDTO.SolutionText,
+                Status = solutionDTO.Status,
+                CreatedAt = DateTime.SpecifyKind(solutionDTO.CreatedAt, DateTimeKind.Utc),
+                UpdatedAt = DateTime.SpecifyKind(solutionDTO.UpdatedAt, DateTimeKind.Utc),
+            };
+
+            var solutionId = await _userRepository.AddSolutionAsync(solution);
+            var task = await _educatorRepository.GetTasksEducatorByIdWithDicipline(solution.TaskId);
+
+            if (solutionId is not 0 && solutionDTO.SolutionFiles?.Count != 0 && solutionDTO.SolutionFiles != null)
+            {
+                foreach (var file in solutionDTO.SolutionFiles)
+                {
+                    var bytes = Convert.FromBase64String(file.ContentBase64);
+                    var physicalPath = await _fileService.SaveFileToDisk(bytes, file.FileName, task.Dicipline.NameDiscipline, FileType.Solution);
+                    compFiles.Add(new SolutionFile()
+                    {
+                        SolutionId = solutionId,
+                        FileName = file.FileName,
+                        OriginalFileName = file.FileName,
+                        PhysicalPath = physicalPath,
+                        FileSize = file.FileSize,
+                        UploadedAt = DateTime.UtcNow,
+                        FileType = file.FileType
+                    });
+                }
+
+                if (compFiles.Any())
+                    await _fileRepository.AddSolutionFile(compFiles);
+            }
+
+            return true;
+    }
+
+        private async Task<User> ParseUserByDTOAsync(UserDTO userDTO)
     {
         var user = new User()
         {

@@ -30,6 +30,31 @@ public class UserController : ControllerBase
         return NotFound();
     }
 
+    [HttpGet("GetUserByUserId/{id}")]
+    public async Task<ActionResult<User>> GetUserByUserId(int id)
+    {
+        var user = await _userService.GetUserByUserId(id);
+        if (user.Id != 0)
+            return Ok(user);
+        return NotFound();
+    }
+
+    [HttpGet("GetStudentById/{id}")]
+    public async Task<ActionResult<Student>> GetStudentByUserId(int id)
+    {
+        var user = await _userService.GetStudentByUserId(id);
+        if (user.Id != 0)
+            return Ok(user);
+        return NotFound();
+    }
+
+    [HttpGet("GetUserStudentByGroupId/{id}")]
+    public async Task<List<User>> GetUserStudentByGroupId(int id)
+    {
+        return await _userService.GetUserStudentByGroupId(id);
+       
+    }
+
     [HttpPost("PostAddUser")]
     public async Task<ActionResult<bool>> PostAddUser(UserDTO data)
     {

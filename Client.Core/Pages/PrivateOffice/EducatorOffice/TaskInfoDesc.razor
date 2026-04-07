@@ -1,2 +1,65 @@
-@page "/TaskInfoDesc"
-<h3>TaskInfoDesc</h3>
+@page "/TaskInfoDesc/{Id:int}"
+@using Client.Core.Features
+@inject HttpClient Http
+@layout PrivateOfficeLayout
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<AuthorizeView>
+    <Authorized>
+        <div class="container">
+            <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Решение студента" />
+            <div style="margin-left: 40px;" class="mb-auto">
+                <div class="mb-4">
+                    <TittleUnderStick Tittle="@($"Студент гр. {_student?.Group?.Name} {_userStudent.LastName} {_userStudent.FirstName} {_userStudent.MiddleName}")"
+                                      PaddinLeft="0"
+                                      JustifyContent="JustifyContentEnum.FlexStart"
+                                      FontSize="28" />
+                </div>
+                <div class="EducatorCardInfo">
+
+
+                    <p><span style="font-weight: 500;">Текст работы:</span> @_solution.SolutionText</p>
+
+
+                    <p>
+                        <span style="font-weight: 500;">Файлы:</span>
+                        @if (_solution.SolutionFiles != null && _solution.SolutionFiles.Any())
+                        {
+                            <ul class="disciplines_list">
+                                @foreach (var item in _solution.SolutionFiles)
+                                {
+                                    <li>
+                                        <button style="color: #0a53be; border: none; background: none;" @onclick="() => GetFile(item)">
+                                            @item.FileName
+                                        </button>
+                                    </li>
+                                }
+                            </ul>
+                        }
+
+                        else
+                        {
+                            <span> Отсуствуют.</span>
+                        }
+                    </p>
+                    <p><span style="font-weight: 500;">Дата обновления:</span> @_solution.UpdatedAt.ToString("dd.MM.yyyy HH:mm").</p>
+                    <p><span style="font-weight: 500;">Статус работы:</span><span style="@($"color: {GetSolutionColor(_solution.Status)};")">&nbsp; @GetSolutionStatus(_solution.Status).</span></p>
+                </div>
+                <div style="display:flex; gap: 2vw">
+                    <button class="double-border-button nav_item Cursor Nav__btn Cursor" style="width: 80px; height: 40px;" @onclick="() => UpdateStatus(Entities.Enums.SolutionStatus.Approved)">
+                        Подтвердить
+                    </button>
+                    <button class="double-border-button nav__second__item Cursor Nav__second__btn Cursor" style="width: 80px; height: 40px;" @onclick="() => UpdateStatus(Entities.Enums.SolutionStatus.Rejected)">
+                        Отказать
+                    </button>
+                </div>
+            </div>
+            <ButtonRedirect Redirect="@($"TaskInfo/{_solution.TaskId}")" Text="Назад" MT="0" />
+
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>Вы не авторизованы</p>
+    </NotAuthorized>
+</AuthorizeView>

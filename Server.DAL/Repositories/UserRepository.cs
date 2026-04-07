@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Server.DAL.Context.ApplicationDbContext;
 using Server.DAL.Interfaces;
 using Server.DAL.Models.Entities;
+using Server.DAL.Models.Entities.Education;
 using Server.DAL.Models.Entities.Users;
 
 namespace Server.DAL.Repositories;
@@ -21,8 +22,41 @@ public class UserRepository : IUserRepository
         => await _context.Users
             .Include(x => x.Educator)
             .Include(x => x.Student)
+                .ThenInclude(x => x.Group)
             .Include(x => x.Administrator)
             .ToListAsync();
+
+    public async Task<List<User>> GetUsersStudentByGroupAsync(int groupId)
+        => await _context.Users
+            .Include(x => x.Student)
+                .ThenInclude(x => x.Group).Where(x => x.Student.GroupId == groupId)
+       
+            .ToListAsync();
+
+    public async Task<List<StudentSolution>> GetSolutionStudentByTaskIdSimpleAsync(int taskId)
+        => await _context.StudentSolutions
+            .Where(x => x.TaskId == taskId)
+            .ToListAsync();
+
+    public async Task<StudentSolution> GetSolutionByIdAsync(int solutionId)
+        => await _context.StudentSolutions
+            .FirstOrDefaultAsync(x => x.Id == solutionId);
+
+    public async Task<bool> UpdateSolutionStatus(StudentSolution solution)
+    {
+        try
+        {
+            _context.StudentSolutions.Update(solution);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+
+    }
 
     public async Task<User> GetUserSimpleAsync(int userId)
         => await _context.Users
@@ -34,7 +68,21 @@ public class UserRepository : IUserRepository
             .Include(x => x.Student)
             .Include(x => x.Administrator)
             .FirstOrDefaultAsync(x => x.Id == userId);
-    
+
+    public async Task<User> GetUserByUserIdAsync(int userId)
+    => await _context.Users
+        .FirstOrDefaultAsync(x => x.Id == userId);
+
+    public async Task<Student> GetStudentByStudentIdAsync(int studentId)
+    => await _context.Students
+        .Include(x => x.Group)
+        .FirstOrDefaultAsync(x => x.Id == studentId);
+
+    public async Task<Student> GetStudentByUserIdAsync(int userId)
+    => await _context.Students
+        .Include(x => x.Group)
+        .FirstOrDefaultAsync(x => x.UserId == userId);
+
     public async Task<bool> AddUserAsync(User user)
     {
         try
@@ -47,6 +95,21 @@ public class UserRepository : IUserRepository
         {
 
             return false;
+        }
+    }
+
+    public async Task<int> AddSolutionAsync(StudentSolution solution)
+    {
+        try
+        {
+            await _context.StudentSolutions.AddAsync(solution);
+            await _context.SaveChangesAsync();
+            return solution.Id;
+        }
+        catch (Exception)
+        {
+
+            return 0;
         }
     }
 }

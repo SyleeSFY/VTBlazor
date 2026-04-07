@@ -1,4 +1,5 @@
 @page "/TaskAdd"
+@using Client.Core.Features
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @layout PrivateOfficeLayout
@@ -100,7 +101,7 @@
                     </div>
                 </div>
             </div>
-            <ButtonRedirect Redirect="TaskTable" Text="Назад" MT="auto" />
+            <ButtonRedirect Redirect="TaskEducator" Text="Назад" MT="auto" />
         </div>
     </Authorized>
     <NotAuthorized>

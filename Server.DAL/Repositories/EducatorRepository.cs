@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Server.DAL.Context.ApplicationDbContext;
 using Server.DAL.Interfaces;
 using Server.DAL.Models.Entities;
+using Server.DAL.Models.Entities.Education;
 using Server.DAL.Models.Entities.Educators;
 
 namespace Server.DAL.Repositories;
@@ -29,6 +30,32 @@ public class EducatorRepository : IEducatorRepository
 
     public async Task<Educator> GetByIdSimpleAsync(int id)
         => await _context.Educators.FindAsync(id);
+
+    public async Task<StudentSolution> GetSolutionByIdAsync(int id)
+    {
+        try
+        {
+            return await _context.StudentSolutions.Include(x => x.SolutionFiles).FirstOrDefaultAsync(x => x.Id == id);
+        }
+        catch (Exception)
+        {
+            return new StudentSolution();
+            throw;
+        }
+    }
+
+    public async Task<StudentSolution> GetSolutionByTaskIdAndStudentIdAsync(int taskId, int studentId)
+    {
+        try
+        {
+            return await _context.StudentSolutions.Include(x => x.SolutionFiles).FirstOrDefaultAsync(x => x.TaskId == taskId && x.StudentId == studentId);
+        }
+        catch (Exception)
+        {
+            return new StudentSolution();
+            throw;
+        }
+    }
     
     public async Task<Educator> GetByIdAsync(int id)
         => await _context.Educators
@@ -84,6 +111,32 @@ public class EducatorRepository : IEducatorRepository
             throw;
         }
     }
+
+    public async Task<TaskEducation> GetTasksEducatorByIdWithDicipline(int id)
+    {
+
+        return await _context.TaskEducations.Include(x => x.Dicipline).FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<List<TaskEducation>> GetTasksEducatorByGroup(int id)
+    {
+        try
+        {
+            return await _context.TaskEducations
+                .Include(x => x.Files)
+                .Include(x => x.Groups)
+                .Where(x => x.Groups.Any(g => g.Id == id))
+                .ToListAsync();
+        }
+
+
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
     public async Task<int> AddTask(TaskEducation task)
     {
         try

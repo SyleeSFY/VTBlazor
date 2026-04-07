@@ -23,9 +23,9 @@
                     <tbody>
                         @foreach (var item in _taskEducator)
                         { 
-                            <tr> 
+                            <tr style="cursor: pointer" @onclick="() => GoTaskInfo(item.Id)">
                                 <td>@item.Id</td> 
-                                <td style="text-align: left" @onclick="() => GoTaskInfo(item.Id)">@item.TaskName</td>
+                                <td style="text-align: left">@item.TaskName</td>
                                 <td>@(_diciplines.FirstOrDefault(x => x.Id == item.DiciplineId).NameDiscipline)</td> 
                                 <td>@(string.Join(", ", item.Groups.Select(x => x.Name)))</td>
                                 <td>@item.CreatedAt.ToString("dd.MM.yyyy")</td> 

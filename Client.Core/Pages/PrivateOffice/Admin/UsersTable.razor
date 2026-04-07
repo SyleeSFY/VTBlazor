@@ -28,7 +28,7 @@
                             <td>@item.Id</td>
                             <td style="text-align: left">@item.LastName @item.FirstName @item.MiddleName</td>
                             <td>@GlobalData.GetRusRole[item.Role]</td>
-                            <td>@(!string.IsNullOrEmpty(item.Student?.GroupId) ? item.Student?.GroupId : "–")</td>
+                            <td>@(!string.IsNullOrEmpty(item.Student?.GroupId.ToString()) ? item.Student?.Group.Name : "–")</td>
                             <td>@(item.IsActive ? "Активен" : "Деактивен")</td>
                             <td>
                                 <NavLink href="@($"UserEdit/{(int)item.Role}/{item.Id}")" class="nav_link auth-link Cursor" style=" text-decoration: none">

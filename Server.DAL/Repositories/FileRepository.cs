@@ -2,6 +2,7 @@
 using Server.DAL.Context.ApplicationDbContext;
 using Server.DAL.Interfaces;
 using Server.DAL.Models.Entities;
+using Server.DAL.Models.Entities.Education;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,22 @@ namespace Server.DAL.Repositories
             }
         }
 
+        public async Task<bool> AddSolutionFile(List<SolutionFile> files)
+        {
+            try
+            {
+                await _context.SolutionFiles.AddRangeAsync(files);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<TaskFile> GetTaskFile(int fileId)
         {
             try
@@ -46,11 +63,11 @@ namespace Server.DAL.Repositories
             }
         }
 
-        public async Task<TaskFile> GetSolutionFile(int fileId)
+        public async Task<SolutionFile> GetSolutionFile(int fileId)
         {
             try
             {
-                return await _context.TaskFiles.FirstOrDefaultAsync(x => x.Id == fileId);
+                return await _context.SolutionFiles.FirstOrDefaultAsync(x => x.Id == fileId);
             }
             catch (Exception)
             {

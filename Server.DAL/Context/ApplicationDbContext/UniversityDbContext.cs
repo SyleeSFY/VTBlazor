@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Server.DAL.Models.Entities;
+using Server.DAL.Models.Entities.Education;
 using Server.DAL.Models.Entities.Educators;
 using Server.DAL.Models.Entities.Users;
 
@@ -25,6 +26,13 @@ public class UniversityDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Student> Students { get; set; }
     public DbSet<Admin> Admins { get; set; }
+
+    //Таблицы для решений
+    public DbSet<StudentSolution> StudentSolutions { get; set; }
+    public DbSet<SolutionFile> SolutionFiles { get; set; }
+    public DbSet<SolutionChat> SolutionChats { get; set; }
+    public DbSet<MessageInChat> MessagesInChat { get; set; }
+    public DbSet<FileInChat> FilesInChat { get; set; }
 
     /// <summary>
     /// Связи БД через EF
@@ -175,5 +183,89 @@ public class UniversityDbContext : DbContext
             entity.Property(e => e.Profession).IsRequired();
             entity.Property(e => e.AcademicDegree).IsRequired();
         });
+
+        // Solution
+        modelBuilder.Entity<StudentSolution>(entity =>
+        {
+            entity.ToTable("StudentSolutions");
+            entity.HasKey(e => e.Id);
+
+            // Связь со студентом
+            entity.HasOne(e => e.Student)
+                .WithMany(s => s.Solutions)
+                .HasForeignKey(e => e.StudentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Связь с заданием
+            entity.HasOne(e => e.Task)
+                .WithMany(t => t.StudentSolutions)
+                .HasForeignKey(e => e.TaskId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Связь с чатом (один к одному)
+            entity.HasOne(e => e.SolutionChat)
+                .WithOne(c => c.Solution)
+                .HasForeignKey<SolutionChat>(c => c.SolutionId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // SolutionFile (файлы решения)
+        modelBuilder.Entity<SolutionFile>(entity =>
+        {
+            entity.ToTable("SolutionFiles");
+            entity.HasKey(e => e.Id);
+
+            // Связь с решением
+            entity.HasOne(e => e.Solution)
+                .WithMany(s => s.SolutionFiles)
+                .HasForeignKey(e => e.SolutionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => e.SolutionId);
+        });
+
+        // SolutionChat
+        modelBuilder.Entity<SolutionChat>(entity =>
+        {
+            entity.ToTable("SolutionChats");
+            entity.HasKey(e => e.Id);
+
+            // Связь с решением (один к одному)
+            entity.HasOne(e => e.Solution)
+                .WithOne(s => s.SolutionChat)
+                .HasForeignKey<SolutionChat>(c => c.SolutionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => e.SolutionId).IsUnique();
+        });
+
+        // MessageInChat
+        modelBuilder.Entity<MessageInChat>(entity =>
+        {
+            entity.ToTable("MessagesInChat");
+            entity.HasKey(e => e.Id);
+
+            // Связь с чатом
+            entity.HasOne(e => e.Chat)
+                .WithMany(c => c.Messages)
+                .HasForeignKey(e => e.ChatId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // FileInChat
+        modelBuilder.Entity<FileInChat>(entity =>
+        {
+            entity.ToTable("FilesInChat");
+            entity.HasKey(e => e.Id);
+
+            // Связь с сообщением
+            entity.HasOne(e => e.Message)
+                .WithMany(m => m.Files)
+                .HasForeignKey(e => e.MessageId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => e.MessageId);
+        });
+
     }    
 }
