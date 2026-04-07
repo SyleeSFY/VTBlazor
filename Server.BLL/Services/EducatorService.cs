@@ -63,6 +63,14 @@ public class EducatorService : IEducatorService
         return new StudentSolution ();
     }
 
+    public async Task<StudentSolution> GetSolutionByTaskIdAndStudentId(int taskId, int studentId)
+    {
+        var solution = await _educatorRepository.GetSolutionByTaskIdAndStudentIdAsync(taskId, studentId);
+        if (solution != null)
+            return solution;
+        return new StudentSolution ();
+    }
+
     /// <summary>
     /// Упрощенный список educators
     /// </summary>

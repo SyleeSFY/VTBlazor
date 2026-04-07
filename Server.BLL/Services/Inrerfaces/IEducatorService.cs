@@ -19,4 +19,5 @@ public interface IEducatorService
     Task<bool> AddTask(TaskEducationDTO taskDto);
     Task<List<TaskEducation>> GetEducatorTaskByGroup(int id);
     Task<StudentSolution> GetSolutionByIdAsync(int id);
+    Task<StudentSolution> GetSolutionByTaskIdAndStudentId(int taskId, int studentId);
 }

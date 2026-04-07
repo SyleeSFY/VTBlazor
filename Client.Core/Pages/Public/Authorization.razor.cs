@@ -22,8 +22,8 @@ namespace Client.Core.Pages.Public
         
         protected async Task LoginAsync()
         {
-            await Validation();
-
+            //await Validation();
+            _isState = false;
             if (!_isState)
             {
                 var authData = new AuthData()

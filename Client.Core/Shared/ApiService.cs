@@ -4,12 +4,9 @@ using Client.Core.Entities.Models.Education;
 using Client.Core.Entities.Models.User;
 using Client.Core.Entities.Models.User.Dicipline;
 using Client.Core.Entities.Models.User.EducatorModel;
-using Client.Core.Pages.PrivateOffice.Admin;
-using Client.Core.Pages.PrivateOffice.StudentOffice;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Json;
 using System.Security.Claims;
-using static System.Net.WebRequestMethods;
 
 namespace Client.Core.Shared
 {
@@ -20,69 +17,7 @@ namespace Client.Core.Shared
         public ApiService(HttpClient http)
             => _http = http;
 
-        public async Task<List<Discipline>> GetDisciplines()
-            => await _http.GetFromJsonAsync<List<Discipline>>("api/Diciplines/GetDiciplines") ?? new List<Discipline>();
-        public async Task<Discipline> GetDisciplineById(int id)
-            => await _http.GetFromJsonAsync<Discipline>($"api/Diciplines/GetDicipline/{id}") ?? new Discipline();
-
-        public async Task<List<Group>> GetGroups()
-            => await _http.GetFromJsonAsync<List<Group>>("api/educators/GetGroups") ?? new List<Group>();
-        
-        public async Task<List<TaskEducation>> GetTasksEducatorByIdSimple(int educatorId)
-            => await _http.GetFromJsonAsync<List<TaskEducation>>($"api/file/GetTasksEducatorByIdSimple/{educatorId}") ?? new List<TaskEducation>();
-        
-        public async Task<List<TaskEducation>> GetTasksEducatorByGroup(int educatorId)
-            => await _http.GetFromJsonAsync<List<TaskEducation>>($"api/file/GetEducatorTaskByGroup/{educatorId}") ?? new List<TaskEducation>();
-
-        public async Task<List<StudentSolution>> GetSolutionByTaskIdSimple(int taskId)
-            => await _http.GetFromJsonAsync<List<StudentSolution>>($"api/file/GetSolutionByTaskIdSimple/{taskId}") ?? new List<StudentSolution>();
-
-        public async Task<List<User>> GetUsersStudentByGroup(int groupId)
-            => await _http.GetFromJsonAsync<List<User>>($"api/user/GetUserStudentByGroupId/{groupId}") ?? new List<User>();
-
-        public async Task<Educator> GetEducatorByIdSimple(int id)
-            => await _http.GetFromJsonAsync<Educator>($"api/educators/GetEducatorSimple/{id}") ?? new Educator();
-
-        public async Task<User> GetUserByUserId(int id)
-            => await _http.GetFromJsonAsync<User>($"api/user/GetUserByUserId/{id}") ?? new User();
-
-        public async Task<Student> GetStudentById(int id)
-            => await _http.GetFromJsonAsync<Student>($"api/user/GetStudentById/{id}") ?? new Student();
-
-        public async Task<StudentSolution> GetSolutionById(int id)
-            => await _http.GetFromJsonAsync<StudentSolution>($"api/educators/GetSolutionById/{id}") ?? new StudentSolution();
-        
-        public async Task<TaskEducation> GetTaskEducationById(int id)
-            => await _http.GetFromJsonAsync<TaskEducation>($"api/file/GetEducatorTask/{id}") ?? new TaskEducation();
-
-        public async Task<HttpResponseMessage> PostSolutionStudent(SolutionStudentDTO solution)
-            => await _http.PostAsJsonAsync($"api/file/PostAddSolution", solution);
-
-        public async Task<Educator> GetEducatorByAuth(AuthenticationState authState)
-        {
-            var id = await GetId(authState);
-
-            if (id > 0)
-                return await GetEducatorByIdSimple(id);
-
-            return new Educator();
-        }
-
-        public async Task<Student> GetStudentByAuth(AuthenticationState authState)
-        {
-            var id = await GetId(authState);
-
-            if (id > 0)
-                return await GetStudentById(id);
-
-            return new Student();
-        }
-
-        public async Task<byte[]> GetFileByte(int fileId)
-            => await _http.GetFromJsonAsync<byte[]>($"api/file/GetTaskFile/{fileId}") ?? new byte[0];
-
-        public async Task<byte[]> GetSolutionFileByte(int fileId)
-            => await _http.GetFromJsonAsync<byte[]>($"api/file/GetSolutionFile/{fileId}") ?? new byte[0];
+        #region Auth Helpers
 
         private async Task<int> GetId(AuthenticationState authState)
         {
@@ -97,10 +32,112 @@ namespace Client.Core.Shared
             return 0;
         }
 
-        public async Task<bool> UpdateSolutionStatus(int solutionId,SolutionStudentDTO updateData)
+        #endregion
+
+        #region Discipline Endpoints
+
+        public async Task<List<Discipline>> GetDisciplines()
+            => await _http.GetFromJsonAsync<List<Discipline>>("api/Diciplines/GetDiciplines") ?? new List<Discipline>();
+
+        public async Task<Discipline> GetDisciplineById(int id)
+            => await _http.GetFromJsonAsync<Discipline>($"api/Diciplines/GetDicipline/{id}") ?? new Discipline();
+
+        #endregion
+
+        #region Educator Endpoints
+
+        public async Task<Educator> GetEducatorByIdSimple(int id)
+            => await _http.GetFromJsonAsync<Educator>($"api/educators/GetEducatorSimple/{id}") ?? new Educator();
+
+        public async Task<Educator> GetEducatorByAuth(AuthenticationState authState)
+        {
+            var id = await GetId(authState);
+
+            if (id > 0)
+                return await GetEducatorByIdSimple(id);
+
+            return new Educator();
+        }
+
+        #endregion
+
+        #region Student Endpoints
+
+        public async Task<Student> GetStudentById(int id)
+            => await _http.GetFromJsonAsync<Student>($"api/user/GetStudentById/{id}") ?? new Student();
+
+        public async Task<Student> GetStudentByAuth(AuthenticationState authState)
+        {
+            var id = await GetId(authState);
+
+            if (id > 0)
+                return await GetStudentById(id);
+
+            return new Student();
+        }
+
+        #endregion
+
+        #region User Endpoints
+
+        public async Task<User> GetUserByUserId(int id)
+            => await _http.GetFromJsonAsync<User>($"api/user/GetUserByUserId/{id}") ?? new User();
+
+        public async Task<List<User>> GetUsersStudentByGroup(int groupId)
+            => await _http.GetFromJsonAsync<List<User>>($"api/user/GetUserStudentByGroupId/{groupId}") ?? new List<User>();
+
+        #endregion
+
+        #region Group Endpoints
+
+        public async Task<List<Group>> GetGroups()
+            => await _http.GetFromJsonAsync<List<Group>>("api/educators/GetGroups") ?? new List<Group>();
+
+        #endregion
+
+        #region Task Education Endpoints
+
+        public async Task<TaskEducation> GetTaskEducationById(int id)
+            => await _http.GetFromJsonAsync<TaskEducation>($"api/file/GetEducatorTask/{id}") ?? new TaskEducation();
+
+        public async Task<List<TaskEducation>> GetTasksEducatorByIdSimple(int educatorId)
+            => await _http.GetFromJsonAsync<List<TaskEducation>>($"api/file/GetTasksEducatorByIdSimple/{educatorId}") ?? new List<TaskEducation>();
+
+        public async Task<List<TaskEducation>> GetTasksEducatorByGroup(int educatorId)
+            => await _http.GetFromJsonAsync<List<TaskEducation>>($"api/file/GetEducatorTaskByGroup/{educatorId}") ?? new List<TaskEducation>();
+
+        #endregion
+
+        #region Student Solution Endpoints
+
+        public async Task<StudentSolution> GetSolutionById(int id)
+            => await _http.GetFromJsonAsync<StudentSolution>($"api/educators/GetSolutionById/{id}") ?? new StudentSolution();
+
+        public async Task<StudentSolution> GetSolutionByTaskIdAndStudentId(int taskId, int studentId)
+            => await _http.GetFromJsonAsync<StudentSolution>($"api/educators/GetSolution/{taskId}/{studentId}") ?? new StudentSolution();
+
+        public async Task<List<StudentSolution>> GetSolutionByTaskIdSimple(int taskId)
+            => await _http.GetFromJsonAsync<List<StudentSolution>>($"api/file/GetSolutionByTaskIdSimple/{taskId}") ?? new List<StudentSolution>();
+
+        public async Task<HttpResponseMessage> PostSolutionStudent(SolutionStudentDTO solution)
+            => await _http.PostAsJsonAsync($"api/file/PostAddSolution", solution);
+
+        public async Task<bool> UpdateSolutionStatus(int solutionId, SolutionStudentDTO updateData)
         {
             var response = await _http.PostAsJsonAsync($"api/file/UpdateSolutionStatus/{solutionId}", updateData);
             return await response.Content.ReadFromJsonAsync<bool>();
         }
+
+        #endregion
+
+        #region File Endpoints
+
+        public async Task<byte[]> GetFileByte(int fileId)
+            => await _http.GetFromJsonAsync<byte[]>($"api/file/GetTaskFile/{fileId}") ?? new byte[0];
+
+        public async Task<byte[]> GetSolutionFileByte(int fileId)
+            => await _http.GetFromJsonAsync<byte[]>($"api/file/GetSolutionFile/{fileId}") ?? new byte[0];
+
+        #endregion
     }
 }

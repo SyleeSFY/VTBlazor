@@ -16,6 +16,7 @@ public interface IUserRepository
     Task<bool> UpdateSolutionStatus(StudentSolution solution);
     Task<List<StudentSolution>> GetSolutionStudentByTaskIdSimpleAsync(int taskId);
     Task<List<User>> GetUsersStudentByGroupAsync(int groupId);
+    Task<Student> GetStudentByUserIdAsync(int studentId);
     Task<Student> GetStudentByStudentIdAsync(int Id);
     Task<User> GetUserByUserIdAsync(int userId);
 }

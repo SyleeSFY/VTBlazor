@@ -1,12 +1,14 @@
 ﻿using Client.Core.Entities.Enums;
 using Client.Core.Entities.Interfaces;
 using Client.Core.Entities.Models.DTO;
+using Client.Core.Entities.Models.Education;
 using Client.Core.Entities.Models.User;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using System.Net.Http.Json;
+using static System.Net.WebRequestMethods;
 
 namespace Client.Core.Pages.PrivateOffice.StudentOffice
 {
@@ -23,11 +25,13 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
         private Student _student;
 
         private SolutionStudentDTO _taskSolution;
+        private StudentSolution _existingSolution;
 
         string _solutionText = string.Empty;
 
         public TaskSolutionStudent()
         {
+            _existingSolution = new StudentSolution();
             _task = new TaskEducation();
             _taskSolution = new SolutionStudentDTO();
             _uploadedFiles = new List<IBrowserFile>();
@@ -36,10 +40,9 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
         protected override async Task OnInitializedAsync()
         {
             _student = await _apiService.GetStudentByAuth(await AuthStateTask);
-
-
             _task = await _apiService.GetTaskEducationById(Id);
             _task.Dicipline = await _apiService.GetDisciplineById(_task.DiciplineId);
+            _existingSolution = await _apiService.GetSolutionByTaskIdAndStudentId(Id, _student.Id);
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -48,10 +51,20 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
                 _module = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/PrivateOffice/EducatorOffice/TaskInfo.razor.js");
         }
 
-        private async Task GetFile(TaskFile entitie)
+        private async Task GetFile(int fileId, string fileName, FileType fileType)
         {
-            var file = await _apiService.GetFileByte(entitie.Id);
-            await DownloadFile(file, entitie.FileName);
+            var file = Array.Empty<byte>();
+
+            switch (fileType)
+            {
+                case FileType.Task:
+                    file = await _apiService.GetFileByte(fileId);
+                    break;
+                case FileType.Solution:
+                    file = await _apiService.GetSolutionFileByte(fileId);
+                    break;
+            }
+            await DownloadFile(file, fileName);
         }
 
         private async Task DownloadFile(byte[] fileBytes, string fileName)
@@ -92,7 +105,7 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
                 
                 var response = await _apiService.PostSolutionStudent(solutionDTO);
 
-                Navigation.NavigateTo("/TaskEducator");
+                Navigation.NavigateTo($"/TaskSolutionStudent/{Id}", true);
             }
             catch (Exception ex)
             {

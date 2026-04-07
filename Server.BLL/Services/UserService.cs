@@ -80,6 +80,14 @@ public class UserService : IUserService
             return new Student();
         return user;
     }
+
+    public async Task<Student> GetStudentByUserId(int userId)
+    {
+        var user = await _userRepository.GetStudentByUserIdAsync(userId);
+        if (user is null)
+            return new Student();
+        return user;
+    }
     
     public async Task<bool> AddUserByDTOAsync(UserDTO userDTO)
     {
@@ -108,7 +116,7 @@ public class UserService : IUserService
             var solutionId = await _userRepository.AddSolutionAsync(solution);
             var task = await _educatorRepository.GetTasksEducatorByIdWithDicipline(solution.TaskId);
 
-            if (solutionId is not 0 && solutionDTO.SolutionFiles.Any() && solutionDTO.SolutionFiles != null)
+            if (solutionId is not 0 && solutionDTO.SolutionFiles?.Count != 0 && solutionDTO.SolutionFiles != null)
             {
                 foreach (var file in solutionDTO.SolutionFiles)
                 {

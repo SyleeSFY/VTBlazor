@@ -73,10 +73,15 @@ public class UserRepository : IUserRepository
     => await _context.Users
         .FirstOrDefaultAsync(x => x.Id == userId);
 
-    public async Task<Student> GetStudentByStudentIdAsync(int Id)
+    public async Task<Student> GetStudentByStudentIdAsync(int studentId)
     => await _context.Students
         .Include(x => x.Group)
-        .FirstOrDefaultAsync(x => x.Id == Id);
+        .FirstOrDefaultAsync(x => x.Id == studentId);
+
+    public async Task<Student> GetStudentByUserIdAsync(int userId)
+    => await _context.Students
+        .Include(x => x.Group)
+        .FirstOrDefaultAsync(x => x.UserId == userId);
 
     public async Task<bool> AddUserAsync(User user)
     {

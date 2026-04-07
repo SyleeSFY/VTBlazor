@@ -40,9 +40,9 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("GetStudentById/{id}")]
-    public async Task<ActionResult<Student>> GetStudentByStudentId(int id)
+    public async Task<ActionResult<Student>> GetStudentByUserId(int id)
     {
-        var user = await _userService.GetStudentByStudentId(id);
+        var user = await _userService.GetStudentByUserId(id);
         if (user.Id != 0)
             return Ok(user);
         return NotFound();

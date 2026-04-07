@@ -25,6 +25,7 @@ namespace Client.Core.Entities.Interfaces
         Task<HttpResponseMessage> PostSolutionStudent(SolutionStudentDTO solution);
         Task<List<StudentSolution>> GetSolutionByTaskIdSimple(int taskId);
         Task<List<User>> GetUsersStudentByGroup(int groupId);
+        Task<StudentSolution> GetSolutionByTaskIdAndStudentId(int taskId, int studentId);
         Task<StudentSolution> GetSolutionById(int id);
         Task<byte[]> GetSolutionFileByte(int fileId);
         Task<bool> UpdateSolutionStatus(int solutionId, SolutionStudentDTO updateData);

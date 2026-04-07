@@ -14,6 +14,7 @@ public interface IUserService
     Task<Student> GetStudentByStudentId(int userId);
     Task<bool> AddSolutionByDTOAsync(SolutionStudentDTO solutionDTO);
     Task<List<StudentSolution>> GetSolutionsStudentByTaskIdSimple(int taskId);
+    Task<Student> GetStudentByUserId(int userId);
     Task<List<User>> GetUserStudentByGroupId(int userId);
     Task<bool> UpdateSolutionStatus(int solutionId, SolutionStatus status);
 }

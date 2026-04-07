@@ -43,6 +43,19 @@ public class EducatorRepository : IEducatorRepository
             throw;
         }
     }
+
+    public async Task<StudentSolution> GetSolutionByTaskIdAndStudentIdAsync(int taskId, int studentId)
+    {
+        try
+        {
+            return await _context.StudentSolutions.Include(x => x.SolutionFiles).FirstOrDefaultAsync(x => x.TaskId == taskId && x.StudentId == studentId);
+        }
+        catch (Exception)
+        {
+            return new StudentSolution();
+            throw;
+        }
+    }
     
     public async Task<Educator> GetByIdAsync(int id)
         => await _context.Educators
