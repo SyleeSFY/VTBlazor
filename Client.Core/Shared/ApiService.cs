@@ -66,6 +66,9 @@ namespace Client.Core.Shared
         public async Task<Student> GetStudentById(int id)
             => await _http.GetFromJsonAsync<Student>($"api/user/GetStudentById/{id}") ?? new Student();
 
+        public async Task<Student> GetStudentByStudentId(int StudentId)
+            => await _http.GetFromJsonAsync<Student>($"api/user/GetStudentByStudentId/{StudentId}") ?? new Student();
+
         public async Task<Student> GetStudentByAuth(AuthenticationState authState)
         {
             var id = await GetId(authState);

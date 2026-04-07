@@ -29,6 +29,6 @@ namespace Client.Core.Entities.Interfaces
         Task<StudentSolution> GetSolutionById(int id);
         Task<byte[]> GetSolutionFileByte(int fileId);
         Task<bool> UpdateSolutionStatus(int solutionId, SolutionStudentDTO updateData);
-
+        Task<Student> GetStudentByStudentId(int StudentId);
     }
 }

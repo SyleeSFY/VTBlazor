@@ -32,7 +32,7 @@ public partial class TaskInfoDesc : ComponentBase
     protected override async Task OnInitializedAsync()
     {
         _solution = await _apiService.GetSolutionById(Id);
-        _student = await _apiService.GetStudentById(_solution.StudentId);
+        _student = await _apiService.GetStudentByStudentId(_solution.StudentId);
         _userStudent = await _apiService.GetUserByUserId(_student.UserId);
     }
 

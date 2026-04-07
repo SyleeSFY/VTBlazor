@@ -14,7 +14,7 @@ namespace Client.Core.Pages.Public
         public ILocalStorageService LocalStorageService { get; set; }
 
         private AuthorizationData _authorization;
-        private bool _isState = false;
+        private bool _isError = false;
         private string _errorMessage = string.Empty;
 
         public Authorization() 
@@ -22,9 +22,9 @@ namespace Client.Core.Pages.Public
         
         protected async Task LoginAsync()
         {
-            //await Validation();
-            _isState = false;
-            if (!_isState)
+            await Validation();
+
+            if (!_isError)
             {
                 var authData = new AuthData()
                 {
@@ -49,7 +49,7 @@ namespace Client.Core.Pages.Public
                 else
                 {
                     _errorMessage = GlobalData.ValidError[ValidErrorAuth.InvalidCredentials];
-                    _isState = true;
+                    _isError = true;
                 }
             }
             
@@ -57,41 +57,41 @@ namespace Client.Core.Pages.Public
 
         private async Task Validation() 
         {
-            _isState = false;
+            _isError = false;
             _errorMessage = string.Empty;
 
             if (string.IsNullOrWhiteSpace(_authorization.Email))
             {
                 _errorMessage = GlobalData.ValidError[ValidErrorAuth.EmailRequired];
-                _isState = true;
+                _isError = true;
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(_authorization.Password))
             {
                 _errorMessage = GlobalData.ValidError[ValidErrorAuth.PasswordRequired];
-                _isState = true;
+                _isError = true;
                 return;
             }
 
             if (_authorization.Password.Length > 50)
             {
                 _errorMessage = GlobalData.ValidError[ValidErrorAuth.PasswordTooLong];
-                _isState = true;
+                _isError = true;
                 return;
             }
 
             if (!IsValidEmail(_authorization.Email))
             {
                 _errorMessage = GlobalData.ValidError[ValidErrorAuth.InvalidEmail];
-                _isState = true;
+                _isError = true;
                 return ;
             }
 
             if (_authorization.Password.Length < 6)
             {
                 _errorMessage = GlobalData.ValidError[ValidErrorAuth.PasswordTooShort];
-                _isState = true;
+                _isError = true;
                 return ;
             }
         }
