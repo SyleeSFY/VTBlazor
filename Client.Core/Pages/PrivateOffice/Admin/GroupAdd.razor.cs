@@ -1,4 +1,5 @@
 ﻿using Client.Core.Entities.Interfaces;
+using Client.Core.Entities.Models.DTO;
 using Microsoft.AspNetCore.Components;
 
 namespace Client.Core.Pages.PrivateOffice.Admin
@@ -18,13 +19,14 @@ namespace Client.Core.Pages.PrivateOffice.Admin
             //        return;
             //    }
 
-            //    var newGroup = new GroupDTO()
-            //    {
-            //        Name = _name,
-            //    };
+            var newGroup = new GroupDTO()
+            {
+                Name = _name,
+            };
 
-            //    var response = await _apiService.PostAddGroup(newGroup);
+            var response = await _apiService.PostAddGroup(newGroup);
 
+            if (response) { }
             //    if (response)
             //        Navigation.NavigateTo($"/GroupTable", true);
             //    else

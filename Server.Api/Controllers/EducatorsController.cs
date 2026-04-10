@@ -1,3 +1,4 @@
+using Client.Core.Entities.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Server.BLL.Services.Inrerfaces;
 using Server.DAL.Models.Entities;
@@ -80,5 +81,12 @@ public class EducatorsController : ControllerBase
     {
         var users =  await _educatorService.GetGroupsAsync();
         return users;
+    }
+
+    [HttpPost("PostAddGroup")]
+    public async Task<bool> AddGroup(GroupDTO group)
+    {
+        var users = await _educatorService.AddGroup(group.Name);
+        return true;
     }
 }

@@ -17,7 +17,7 @@ namespace Client.Core.Pages.PrivateOffice.Admin
             _diciplineTrainedGroup = new TrainedGroup();
         }
 
-        private async void OnClickAddDicipline()
+        private async Task OnClickAddDicipline()
         {
             var newDiscipline = await CreateNewDiscipline();
             var response = await Http.PostAsJsonAsync($"api/Diciplines/PostAddDicipline", newDiscipline);

@@ -21,7 +21,7 @@ namespace Client.Core.Pages.PrivateOffice.Admin
             return _diciplines;
         }
 
-        private async void BtnDelete(int disciplineId)
+        private async Task BtnDelete(int disciplineId)
         {
             if (disciplineId > 0)
             {

@@ -155,6 +155,17 @@ public class EducatorService : IEducatorService
         }
     }
 
+    public async Task<bool> AddGroup(string groupName)
+    {
+        var group = new Group() 
+        {
+            Name = groupName,
+        };
+        await _educatorRepository.AddGroup(group);
+        return true;
+
+    }
+
     public async Task<bool> AddTask(TaskEducationDTO taskDto)
     {
         var compFiles = new List<TaskFile>();
