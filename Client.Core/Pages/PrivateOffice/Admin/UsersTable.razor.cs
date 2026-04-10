@@ -14,7 +14,7 @@ public partial class UsersTable : ComponentBase
         _users = _users.OrderBy(x => x.Id).ToList();
     }
 
-    private async void BtnDelete(int userId)
+    private async Task BtnDelete(int userId)
     {
 
     }
