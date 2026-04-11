@@ -17,4 +17,7 @@ public interface IUserService
     Task<Student> GetStudentByUserId(int userId);
     Task<List<User>> GetUserStudentByGroupId(int userId);
     Task<bool> UpdateSolutionStatus(int solutionId, SolutionStatus status);
+    Task<User> GetUserWithStudentInfoByUserId(int id);
+    Task<User> GetUserWithEducatorInfoByUserId(int id);
+    Task<User> GetUserWithAdminInfoByUserId(int id);
 }

@@ -31,5 +31,8 @@ namespace Client.Core.Entities.Interfaces
         Task<bool> UpdateSolutionStatus(int solutionId, SolutionStudentDTO updateData);
         Task<Student> GetStudentByStudentId(int StudentId);
         Task<bool> PostAddGroup(GroupDTO group);
+        Task<User> GetUserWithStudentInfoById(int id);
+        Task<User> GetUserWithEducatorInfoById(int id);
+        Task<User> GetUserWithAdminInfoById(int id);
     }
 }

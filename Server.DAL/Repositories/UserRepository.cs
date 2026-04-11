@@ -112,4 +112,18 @@ public class UserRepository : IUserRepository
             return 0;
         }
     }
+
+    public async Task<User> GetUserWithStudentInfoByIdAsync(int id)
+        => await _context.Users
+                .Include(x => x.Student)
+                    .ThenInclude(x => x.Group)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+    public async Task<User> GetUserWithEducatorInfoByIdAsync(int id)
+        => await _context.Users.Include(x => x.Educator).ThenInclude(x => x.EducatorAdditionalInfo).ThenInclude(x => x.EducatorDisciplines).ThenInclude(x => x.Discipline).FirstOrDefaultAsync(x => x.Id == id);
+
+    public async Task<User> GetUserWithAdminInfoByIdAsync(int id)
+        => await _context.Users.Include(x => x.Administrator).FirstOrDefaultAsync(x => x.Id == id);
+
+    
 }

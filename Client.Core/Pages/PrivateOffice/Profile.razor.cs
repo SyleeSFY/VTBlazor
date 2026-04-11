@@ -1,9 +1,5 @@
-﻿using Client.Core.Entities.Models;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Net.Http.Json;
 using System.Security.Claims;
 using Client.Core.Entities.Enums;
 using Client.Core.Entities.Interfaces;
@@ -25,30 +21,36 @@ public partial class Profile : ComponentBase
 
     public Profile()
     {
+        _userRole = Role.student;
         _user = new User();
     }
 
     protected override async Task OnInitializedAsync()
     {
         await ParseCookie();
-        _user = await _apiService.GetUserByUserId(_userId);
+        _user = await GetUser(_userId, _userRole);
     }
 
-    private async Task<User> GetUser(Role role)
+    private async Task<User> GetUser(int userId, Role role)
     {
-        
-        // switch (role)
-        // {
-        //     case Role.student:
-        //         _user = await _apiService.GetStudentByAuth(await AuthStateTask);
-        //         break;
-        //     case Role.admin:
-        //         break;
-        //     case Role.educator:
-        //         break;
-        // }
-        return new User();
+        switch (role)
+        {
+            case Role.educator:
+                return await _apiService.GetUserWithEducatorInfoById(userId);
+            case Role.student:
+                return await _apiService.GetUserWithStudentInfoById(userId);
+            case Role.admin:
+                return await _apiService.GetUserWithAdminInfoById(userId);
+            default:
+                throw new ArgumentException();
+        }
     }
+
+    private string GetGreeting() 
+        => _user == null 
+        ? "" 
+        : $"{(_user.LastName ?? "")} {(_user.FirstName ?? "")} {(_user.MiddleName ?? "")}".Trim();
+
     private async Task ParseCookie()
     {
         var authState = await AuthStateTask;

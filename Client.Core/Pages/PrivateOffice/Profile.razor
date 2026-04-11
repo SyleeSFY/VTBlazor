@@ -1,68 +1,154 @@
 ﻿@page "/profile"
 @using System.Security.Claims
+@using Client.Core.Entities.Enums
+@using Client.Core.Shared
 @layout PrivateOfficeLayout
 @attribute [Authorize]
 
 <AuthorizeView>
     <Authorized>
         <div class="container">
-            <div class="EducatorCardInfo" style=" padding-left: 2vw">
-                <div class="mb-3">
-                    Здравствуйте,
-                    <TittleUnderStick Tittle="@($"Здраствуйте, {_user.LastName} {_user.FirstName} {_user.MiddleName}!")" />
-                                      PaddinLeft="0"
-                                      JustifyContent="JustifyContentEnum.FlexStart"
-                                      FontSize="36"/>
-                </div>
-                        
-                @* <p><span style="font-weight: 500;">Название работы:</span> @_task.TaskName</p> *@
-                @* <p><span style="font-weight: 500;">Задание:</span> @_task.TaskDescription</p> *@
-                @* <p> *@
-                @*     <span style="font-weight: 500;">Файлы:</span> *@
-                @* *@
-                @*     @if (_task.Files != null && _task.Files.Any()) *@
-                @*     { *@
-                @*         <ul class="disciplines_list"> *@
-                @*             @foreach (var item in _task.Files) *@
-                @*             { *@
-                @*                 <li> *@
-                @*                     <button @onclick="() => GetFile(item.Id, item.FileName, FileType.Task)" style="color: #0a53be; border: none; background: none;"> *@
-                @*                         @item.FileName *@
-                @*                     </button> *@
-                @*                 </li> *@
-                @*             } *@
-                @*         </ul> *@
-                @*     } *@
-                @*     else *@
-                @*     { *@
-                @*         <span> Отсуствуют</span> *@
-                @*     } *@
-                @* *@
-                @* </p> *@
-                @* <p><span style="font-weight: 500;">Дата:</span> @_task.CreatedAt.ToString("dd.MM.yyyy")</p> *@
-                @* @if (_existingSolution.Id is not 0) *@
-                @* { *@
-                @*     <p><span style="font-weight: 500;">Ваше решение:</span></p> *@
-                @* } *@
+            <div class="mb-2">
+                @if (!string.IsNullOrEmpty(_user.LastName))
+                {
+                    <TittleBackground JustifyContent="@JustifyContentEnum.FlexStart" Color="006928d8" Tittle="@GetGreeting()" />
+                }
             </div>
-            @* @if (_isAuthenticated) *@
-            @* { *@
-            @*     <div style="border:1px solid green; padding:20px; background:#e8f5e8;"> *@
-            @*         <h4 style="color:green;">✅ Вы авторизованы!</h4> *@
-            @*         <p><strong>ID:</strong> @_userId</p> *@
-            @*         <p><strong>Email:</strong> @_userEmail</p> *@
-            @*         <p><strong>Роль:</strong> @_userRole</p> *@
-            @* *@
-            @*         @if (_userRole == "admin") *@
-            @*         { *@
-            @*             <p style="color:darkgreen;">✓ У вас права администратора</p> *@
-            @*         } *@
-            @*     </div> *@
-            @* } *@
-        </div>
+            <div class="profile-container">
+                <div class="profile-card">
+                    <div class="info-section">
+                        <h3 class="section-title">Личные данные</h3>
+                        <div class="info-row">
+                            <span class="info-label">Фамилия:</span>
+                            <span class="info-value">@(_user?.LastName ?? "Не указана")</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Имя:</span>
+                            <span class="info-value">@(_user?.FirstName ?? "Не указано")</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Отчество:</span>
+                            <span class="info-value">@(_user?.MiddleName ?? "Не указано")</span>
+                        </div>
+                        @if (!string.IsNullOrEmpty(_user?.Email))
+                        {
+                            <div class="info-row">
+                                <span class="info-label">Email:</span>
+                                <span class="info-value">@_user.Email</span>
+                            </div>
+                        }
+                      
+                    </div>
 
+                    <div class="info-section">
+                        <h3 class="section-title">Статус и должность</h3>
+                        <div class="info-row">
+                            <span class="info-label">Роль в системе:</span>
+                            <span class="info-value role-badge badge__border">@GlobalData.GetRusRole[_userRole]</span>
+                        </div>
+                        @switch (_userRole)
+                        {
+                            case Role.student:
+                                <div class="info-row">
+                                    <span class="info-label">Группа:</span>
+                                    <span class="info-value">@(_user?.Student?.Group?.Name ?? "Не указана")</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Номер билета:</span>
+                                    <span class="info-value">@(_user?.Student?.StudentCard ?? "—")</span>
+                                </div>
+                                break;
+
+                            case Role.educator:
+                                <div class="info-row">
+                                    <span class="info-label">Профессия:</span>
+                                    <span class="info-value">@(_user?.Educator?.Profession ?? "—")</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Ученое звание / Степень:</span>
+                                    <span class="info-value">
+                                        @_user?.Educator?.AcademicDegree
+                                        @_user?.Educator?.EducatorAdditionalInfo?.AcademicTitle
+                                    </span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Уровень образования:</span>
+                                    <span class="info-value">@_user?.Educator?.EducatorAdditionalInfo?.EducationLevel</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Квалификация:</span>
+                                    <span class="info-value">@_user?.Educator?.EducatorAdditionalInfo?.Qualification</span>
+                                </div>
+                                break;
+
+                            case Role.admin:
+                                <div class="info-row">
+                                    <span class="info-label">Должность:</span>
+                                    <span class="info-value">@(_user?.Administrator?.Position ?? "Администратор")</span>
+                                </div>
+                                break;
+                        }
+                    </div>
+
+                    @if (_userRole == Role.educator && !string.IsNullOrEmpty(_user?.Educator?.EducatorAdditionalInfo?.Image))
+                    {
+                        <div class="info-section profile-image-section">
+                            <img src="@_user.Educator.EducatorAdditionalInfo.GetIMG()"
+                                 alt="Фото преподавателя"
+                                 class="profile-photo" />
+                        </div>
+                    }
+
+                    @if (_userRole == Role.educator && _user?.Educator?.EducatorAdditionalInfo != null)
+                    {
+                        var addInfo = _user.Educator.EducatorAdditionalInfo;
+                    
+                        @if (!string.IsNullOrEmpty(addInfo.SpecialtyOrFieldOfStudy))
+                        {
+                            <div class="info-section">
+                                <h3 class="section-title">Специализация</h3>
+                                <div class="info-row">
+                                    <span class="info-label">Направление:</span>
+                                    <span class="info-value">@addInfo.SpecialtyOrFieldOfStudy</span>
+                                </div>
+                            </div>
+                        }
+
+                        @if (addInfo.EducatorDisciplines != null && addInfo.EducatorDisciplines.Any())
+                        {
+                            <div class="info-section">
+                                <h3 class="section-title">Преподаваемые дисциплины</h3>
+                                <ul class="disciplines-list">
+                                    @foreach (var item in addInfo.EducatorDisciplines)
+                                    {
+                                        <li class="discipline-item">
+                                            <span class="discipline-name">@item.Discipline?.NameDiscipline</span>
+                                            <span class="discipline-meta">
+                                                @item.Discipline?.Course курс
+                                                @(item.Discipline?.isMagistracy == true ? "(Магистратура)" : "(Бакалавриат)")
+                                            </span>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrEmpty(addInfo.AdditionalInfo))
+                        {
+                            <div class="info-section">
+                                <h3 class="section-title">Дополнительная информация</h3>
+                                <p class="additional-text">@addInfo.AdditionalInfo</p>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
     </Authorized>
     <NotAuthorized>
-        <p>Вы не авторизованы</p>
+        <div class="access-denied">
+            <h2>Доступ ограничен</h2>
+            <p>Для просмотра профиля необходимо авторизоваться в системе.</p>
+        </div>
     </NotAuthorized>
 </AuthorizeView>

@@ -89,6 +89,15 @@ namespace Client.Core.Shared
         public async Task<List<User>> GetUsersStudentByGroup(int groupId)
             => await _http.GetFromJsonAsync<List<User>>($"api/user/GetUserStudentByGroupId/{groupId}") ?? new List<User>();
 
+        public async Task<User> GetUserWithStudentInfoById(int id)
+            => await _http.GetFromJsonAsync<User>($"api/user/GetUserWithStudentInfo/{id}") ?? new User();
+
+        public async Task<User> GetUserWithEducatorInfoById(int id)
+            => await _http.GetFromJsonAsync<User>($"api/user/GetUserWithEducatorInfoById/{id}") ?? new User();
+
+        public async Task<User> GetUserWithAdminInfoById(int id)
+            => await _http.GetFromJsonAsync<User>($"api/user/GetUserWithAdminInfoById/{id}") ?? new User();
+
         #endregion
 
         #region Group Endpoints

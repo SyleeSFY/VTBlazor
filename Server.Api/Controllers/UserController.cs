@@ -74,4 +74,25 @@ public class UserController : ControllerBase
         }
         return NotFound();
     }
+    #region FullInfo
+
+    [HttpGet("GetUserWithStudentInfo/{id}")]
+    public async Task<User> GetUserWithStudentInfoById(int id)
+    {
+        return await _userService.GetUserWithStudentInfoByUserId(id);
+
+    }
+    [HttpGet("GetUserWithEducatorInfoById/{id}")]
+    public async Task<User> GetUserWithEducatorInfoById(int id)
+    {
+        return await _userService.GetUserWithEducatorInfoByUserId(id);
+
+    }
+    [HttpGet("GetUserWithAdminInfoById/{id}")]
+    public async Task<User> GetUserWithAdminInfoById(int id)
+    {
+        return await _userService.GetUserWithAdminInfoByUserId(id);
+    }
+
+    #endregion
 }

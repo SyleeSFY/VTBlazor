@@ -98,7 +98,35 @@ public class UserService : IUserService
         return true;
     }
 
-    public async Task<bool> AddSolutionByDTOAsync(SolutionStudentDTO solutionDTO)
+        #region FullInfo
+
+        public async Task<User> GetUserWithStudentInfoByUserId(int id)
+        {
+            var user = await _userRepository.GetUserWithStudentInfoByIdAsync(id);
+            if (user is null)
+                return new User();
+            return user;
+        }
+
+        public async Task<User> GetUserWithEducatorInfoByUserId(int id)
+        {
+            var user = await _userRepository.GetUserWithEducatorInfoByIdAsync(id);
+            if (user is null)
+                return new User();
+            return user;
+        }
+
+        public async Task<User> GetUserWithAdminInfoByUserId(int id)
+        {
+            var user = await _userRepository.GetUserWithAdminInfoByIdAsync(id);
+            if (user is null)
+                return new User();
+            return user;
+        }
+
+        #endregion
+
+        public async Task<bool> AddSolutionByDTOAsync(SolutionStudentDTO solutionDTO)
     {
             var compFiles = new List<SolutionFile>();
 
