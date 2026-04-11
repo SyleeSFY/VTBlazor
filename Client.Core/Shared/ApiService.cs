@@ -94,11 +94,11 @@ namespace Client.Core.Shared
         #region Group Endpoints
 
         public async Task<List<Group>> GetGroups()
-            => await _http.GetFromJsonAsync<List<Group>>("api/educators/GetGroups") ?? new List<Group>();
+            => await _http.GetFromJsonAsync<List<Group>>("api/group/GetGroups") ?? new List<Group>();
 
         public async Task<bool> PostAddGroup(GroupDTO group)
         {
-            var response = await _http.PostAsJsonAsync($"api/educators/PostAddGroup/", group);
+            var response = await _http.PostAsJsonAsync($"api/group/PostAddGroup", group);
             return await response.Content.ReadFromJsonAsync<bool>();
         }
 

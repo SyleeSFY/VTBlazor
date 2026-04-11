@@ -75,18 +75,4 @@ public class EducatorsController : ControllerBase
     {
         await _educatorService.AddEducator(id);
     }
-    
-    [HttpGet("GetGroups")]
-    public async Task<List<Group>> GetGroups()
-    {
-        var users =  await _educatorService.GetGroupsAsync();
-        return users;
-    }
-
-    [HttpPost("PostAddGroup")]
-    public async Task<bool> AddGroup(GroupDTO group)
-    {
-        var users = await _educatorService.AddGroup(group.Name);
-        return true;
-    }
 }

@@ -82,10 +82,15 @@ public class EducatorRepository : IEducatorRepository
     public async Task<List<Group>> GetGroupsAsync()
         => await _context.Groups.ToListAsync();
 
-    public async Task AddGroup(Group group)
+    public async Task<Group?> GetGroupByNameAsync(string groupName)
+        => await _context.Groups.FirstOrDefaultAsync(x=>x.Name == groupName);
+
+    public async Task<bool> AddGroup(Group group)
     {
         await _context.Groups.AddAsync(group);
-        await _context.SaveChangesAsync();
+        var responce = await _context.SaveChangesAsync();
+        return responce > 0;
+
     }
 
     public async Task<List<TaskEducation>> GetTasksEducatorByIdSimple(int EducatorId)
