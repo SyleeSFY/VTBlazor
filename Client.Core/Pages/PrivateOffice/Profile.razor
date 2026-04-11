@@ -6,20 +6,59 @@
 <AuthorizeView>
     <Authorized>
         <div class="container">
-            @if (_isAuthenticated)
-            {
-                <div style="border:1px solid green; padding:20px; background:#e8f5e8;">
-                    <h4 style="color:green;">✅ Вы авторизованы!</h4>
-                    <p><strong>ID:</strong> @_userId</p>
-                    <p><strong>Email:</strong> @_userEmail</p>
-                    <p><strong>Роль:</strong> @_userRole</p>
-
-                    @if (_userRole == "admin")
-                    {
-                        <p style="color:darkgreen;">✓ У вас права администратора</p>
-                    }
+            <div class="EducatorCardInfo" style=" padding-left: 2vw">
+                <div class="mb-3">
+                    Здравствуйте,
+                    <TittleUnderStick Tittle="@($"Здраствуйте, {_user.LastName} {_user.FirstName} {_user.MiddleName}!")" />
+                                      PaddinLeft="0"
+                                      JustifyContent="JustifyContentEnum.FlexStart"
+                                      FontSize="36"/>
                 </div>
-            }
+                        
+                @* <p><span style="font-weight: 500;">Название работы:</span> @_task.TaskName</p> *@
+                @* <p><span style="font-weight: 500;">Задание:</span> @_task.TaskDescription</p> *@
+                @* <p> *@
+                @*     <span style="font-weight: 500;">Файлы:</span> *@
+                @* *@
+                @*     @if (_task.Files != null && _task.Files.Any()) *@
+                @*     { *@
+                @*         <ul class="disciplines_list"> *@
+                @*             @foreach (var item in _task.Files) *@
+                @*             { *@
+                @*                 <li> *@
+                @*                     <button @onclick="() => GetFile(item.Id, item.FileName, FileType.Task)" style="color: #0a53be; border: none; background: none;"> *@
+                @*                         @item.FileName *@
+                @*                     </button> *@
+                @*                 </li> *@
+                @*             } *@
+                @*         </ul> *@
+                @*     } *@
+                @*     else *@
+                @*     { *@
+                @*         <span> Отсуствуют</span> *@
+                @*     } *@
+                @* *@
+                @* </p> *@
+                @* <p><span style="font-weight: 500;">Дата:</span> @_task.CreatedAt.ToString("dd.MM.yyyy")</p> *@
+                @* @if (_existingSolution.Id is not 0) *@
+                @* { *@
+                @*     <p><span style="font-weight: 500;">Ваше решение:</span></p> *@
+                @* } *@
+            </div>
+            @* @if (_isAuthenticated) *@
+            @* { *@
+            @*     <div style="border:1px solid green; padding:20px; background:#e8f5e8;"> *@
+            @*         <h4 style="color:green;">✅ Вы авторизованы!</h4> *@
+            @*         <p><strong>ID:</strong> @_userId</p> *@
+            @*         <p><strong>Email:</strong> @_userEmail</p> *@
+            @*         <p><strong>Роль:</strong> @_userRole</p> *@
+            @* *@
+            @*         @if (_userRole == "admin") *@
+            @*         { *@
+            @*             <p style="color:darkgreen;">✓ У вас права администратора</p> *@
+            @*         } *@
+            @*     </div> *@
+            @* } *@
         </div>
 
     </Authorized>
