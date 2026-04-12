@@ -23,4 +23,6 @@ public interface IEducatorRepository
     Task<StudentSolution> GetSolutionByIdAsync(int id);
     Task<bool> AddGroup(Group group);
     Task<Group?> GetGroupByNameAsync(string groupName);
+    Task<Group?> GetGroupByIdAsync(int groupId);
+    Task<bool> UpdateGroup(Group group);
 }

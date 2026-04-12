@@ -82,6 +82,9 @@ public class EducatorRepository : IEducatorRepository
     public async Task<List<Group>> GetGroupsAsync()
         => await _context.Groups.ToListAsync();
 
+    public async Task<Group?> GetGroupByIdAsync(int groupId)
+        => await _context.Groups.FirstOrDefaultAsync(x => x.Id == groupId);
+
     public async Task<Group?> GetGroupByNameAsync(string groupName)
         => await _context.Groups.FirstOrDefaultAsync(x=>x.Name == groupName);
 
@@ -90,7 +93,13 @@ public class EducatorRepository : IEducatorRepository
         await _context.Groups.AddAsync(group);
         var responce = await _context.SaveChangesAsync();
         return responce > 0;
+    }
 
+    public async Task<bool> UpdateGroup(Group group)
+    {
+        _context.Groups.Update(group);
+        var response = await _context.SaveChangesAsync();
+        return response > 0;
     }
 
     public async Task<List<TaskEducation>> GetTasksEducatorByIdSimple(int EducatorId)

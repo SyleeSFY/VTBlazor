@@ -21,4 +21,6 @@ public interface IEducatorService
     Task<StudentSolution> GetSolutionByIdAsync(int id);
     Task<StudentSolution> GetSolutionByTaskIdAndStudentId(int taskId, int studentId);
     Task<bool> AddGroup(string groupName);
+    Task<Group> GetGroupById(int groupId);
+    Task<bool> UpdateGroup(int groupId, GroupDTO group);
 }

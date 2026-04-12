@@ -18,6 +18,7 @@ namespace Client.Core.Pages.PrivateOffice.Admin
         protected override async Task OnInitializedAsync()
         {
             _groups = await _apiService.GetGroups();
+            _groups = _groups.OrderBy(x => x.Id).ToList();
         }
     }
 }

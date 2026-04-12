@@ -111,9 +111,18 @@ namespace Client.Core.Shared
         public async Task<List<Group>> GetGroups()
             => await _http.GetFromJsonAsync<List<Group>>("api/group/GetGroups") ?? new List<Group>();
 
+        public async Task<Group> GetGroupById(int groupId)
+            => await _http.GetFromJsonAsync<Group>($"api/group/GetGroup/{groupId}") ?? new Group();
+
         public async Task<bool> PostAddGroup(GroupDTO group)
         {
             var response = await _http.PostAsJsonAsync($"api/group/PostAddGroup", group);
+            return await response.Content.ReadFromJsonAsync<bool>();
+        }
+
+        public async Task<bool> UpdateGroup(int groupId, GroupDTO group)
+        {
+            var response = await _http.PostAsJsonAsync($"api/group/UpdateGroup/{groupId}", group);
             return await response.Content.ReadFromJsonAsync<bool>();
         }
 

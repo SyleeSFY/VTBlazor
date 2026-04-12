@@ -1,4 +1,6 @@
 ﻿@page "/GroupAdd"
+@page "/GroupEdit/{GroupId:int}"
+
 @using Client.Core.Entities.Enums
 @using Client.Core.Features
 @inject NavigationManager Navigation
@@ -31,7 +33,7 @@
                                     }
 
                                     <div class="form-group mt-4">
-                                        <button type="button" class="btn btn-primary me-2" style="background: #009c15" @onclick="OnClickAddGroup">
+                                        <button type="button" class="btn btn-primary me-2" style="background: #009c15" @onclick="@(_isEditMode ? OnClickEditGroup : OnClickAddGroup)">
                                             <i class="bi bi-save"></i> Сохранить
                                         </button>
                                         <button type="reset" class="btn btn-light">
