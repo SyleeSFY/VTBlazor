@@ -98,6 +98,12 @@ namespace Client.Core.Shared
         public async Task<User> GetUserWithAdminInfoById(int id)
             => await _http.GetFromJsonAsync<User>($"api/user/GetUserWithAdminInfoById/{id}") ?? new User();
 
+        public async Task<bool> PostAddUser(UserDTO user)
+        {
+            var response = await _http.PostAsJsonAsync($"api/User/PostAddUser", user);
+            return await response.Content.ReadFromJsonAsync<bool>();
+        }
+
         #endregion
 
         #region Group Endpoints

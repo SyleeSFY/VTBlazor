@@ -70,7 +70,7 @@ public class UserController : ControllerBase
         if (data != null)
         {
             var result = await _userService.AddUserByDTOAsync(data);
-            return result ? Ok(result) : NotFound(result);
+            return Ok(result);
         }
         return NotFound();
     }

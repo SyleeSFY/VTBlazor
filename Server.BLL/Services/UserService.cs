@@ -94,8 +94,7 @@ public class UserService : IUserService
         var user = await ParseUserByDTOAsync(userDTO);
         if (user is null)
             return false;
-        await _userRepository.AddUserAsync(user);
-        return true;
+        return await _userRepository.AddUserAsync(user);
     }
 
         #region FullInfo
@@ -211,7 +210,7 @@ public class UserService : IUserService
             case Role.student:
                     user.Student = new Student()
                     {
-                        GroupId = 1,
+                        GroupId = (int)userDTO.Student.GroupId,
                         StudentCard = userDTO.Student.StudentCardId
                     };
 
