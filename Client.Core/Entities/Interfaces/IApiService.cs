@@ -37,5 +37,7 @@ namespace Client.Core.Entities.Interfaces
         Task<User> GetUserWithEducatorInfoById(int id);
         Task<User> GetUserWithAdminInfoById(int id);
         Task<bool> PostAddUser(UserDTO user);
+        Task<bool> PostAddDiscipline(DisciplineDTO discipline);
+        Task<bool> PostEditDiscipline(int disciplineId, DisciplineDTO discipline);
     }
 }

@@ -9,6 +9,7 @@ namespace Server.BLL.Services.Inrerfaces
         Task<Discipline> GetDiciplineAsync(int diciplineId);
         Task<bool> DeleteDiciplineAsync(int diciplineId);
         Task<Discipline> AddDiciplineByDTOAsync(DisciplineDTO diciplineDTO);
+        Task<bool> EditDiciplineByDTOAsync(int disciplineId, DisciplineDTO diciplineDTO);
 
     }
 }

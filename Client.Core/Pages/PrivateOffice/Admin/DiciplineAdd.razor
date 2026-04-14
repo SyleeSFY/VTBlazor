@@ -1,5 +1,8 @@
 ﻿@page "/DiciplineAdd"
+@page "/DiciplineEdit/{DiciplineId:int}"
+
 @using Client.Core.Features
+@inject NavigationManager Navigation
 @inject HttpClient Http
 @layout PrivateOfficeLayout
 
@@ -60,8 +63,12 @@
                                         </label>
                                     </div>
                                 </div>
+                                @if (_isError)
+                                {
+                                    <p style="color:red">Ошибка!</p>
+                                }
                                 <div class="form-group mt-4">
-                                    <button type="button" class="btn btn-primary me-2" style="background: #009c15" @onclick="OnClickAddDicipline">
+                                    <button type="button" class="btn btn-primary me-2" style="background: #009c15" @onclick="@(_isEditMode ? OnClickEditDiscipline : OnClickAddDiscipline)">
                                         <i class="bi bi-save"></i> Сохранить
                                     </button>
                                     <button type="reset" class="btn btn-light">

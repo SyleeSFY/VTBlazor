@@ -46,6 +46,26 @@ namespace Server.BLL.Services
                 return dicipline;
             return new Discipline();
         }
+        
+        public async Task<bool> EditDiciplineByDTOAsync(int disciplineId, DisciplineDTO diciplineDTO)
+        {
+            var disciplineBD = await _diciplineRepository.GetDiciplineByIdAsync(disciplineId);
+            if (disciplineBD is not null)
+            {
+                disciplineBD.NameDiscipline = diciplineDTO.NameDiscipline;
+                disciplineBD.Course = diciplineDTO.Course;
+                disciplineBD.isMagistracy = diciplineDTO.isMagistracy;
+                disciplineBD.Group = new TrainedGroup()
+                {
+                    isAS = diciplineDTO.Group.isAS,
+                    isPO = diciplineDTO.Group.isPO,
+                    isVM = diciplineDTO.Group.isVM
+                };
+                
+                return await _diciplineRepository.EditDisciplineAsync(disciplineBD);
+            }
+            return false;
+        }
 
         private async Task<Discipline> CreateDisciplineAsync(DisciplineDTO diciplineDTO)
         {

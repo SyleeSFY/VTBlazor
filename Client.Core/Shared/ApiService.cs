@@ -42,6 +42,17 @@ namespace Client.Core.Shared
         public async Task<Discipline> GetDisciplineById(int id)
             => await _http.GetFromJsonAsync<Discipline>($"api/Diciplines/GetDicipline/{id}") ?? new Discipline();
 
+        public async Task<bool> PostAddDiscipline(DisciplineDTO discipline)
+        {
+            var response = await _http.PostAsJsonAsync($"api/Diciplines/PostAddDiscipline", discipline);
+            return await response.Content.ReadFromJsonAsync<bool>();
+        }
+        
+        public async Task<bool> PostEditDiscipline(int disciplineId, DisciplineDTO discipline)
+        {
+            var response = await _http.PostAsJsonAsync($"api/Diciplines/PostEditDiscipline/{disciplineId}", discipline);
+            return await response.Content.ReadFromJsonAsync<bool>();
+        }
         #endregion
 
         #region Educator Endpoints
@@ -58,7 +69,6 @@ namespace Client.Core.Shared
 
             return new Educator();
         }
-
         #endregion
 
         #region Student Endpoints
@@ -97,13 +107,12 @@ namespace Client.Core.Shared
 
         public async Task<User> GetUserWithAdminInfoById(int id)
             => await _http.GetFromJsonAsync<User>($"api/user/GetUserWithAdminInfoById/{id}") ?? new User();
-
+        
         public async Task<bool> PostAddUser(UserDTO user)
         {
             var response = await _http.PostAsJsonAsync($"api/User/PostAddUser", user);
             return await response.Content.ReadFromJsonAsync<bool>();
         }
-
         #endregion
 
         #region Group Endpoints
