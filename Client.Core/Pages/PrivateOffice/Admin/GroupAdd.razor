@@ -1,0 +1,54 @@
+﻿@page "/GroupAdd"
+@page "/GroupEdit/{GroupId:int}"
+
+@using Client.Core.Entities.Enums
+@using Client.Core.Features
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@layout PrivateOfficeLayout
+
+<AuthorizeView>
+    <Authorized>
+        <div class="container">
+            <div style="margin-bottom: 30px;">
+                <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Добавление новой группы" />
+            </div>
+            <div class="row justify-content-center" style="margin-top:auto;margin-bottom:auto;">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group mb-3">
+                                    <label for="disciplineName" class="form-label">Название группы</label>
+                                    <input type="text" class="form-control" id="disciplineName"
+                                           placeholder="Введите название группы" required @bind="_name">
+                                        <div class="invalid-feedback">
+                                            Пожалуйста, введите название группы
+                                        </div>
+                                    </div>
+
+                                    @if (_isError)
+                                    {
+                                        <p style="color:red">Ошибка: добавления группы!</p>
+                                    }
+
+                                    <div class="form-group mt-4">
+                                        <button type="button" class="btn btn-primary me-2" style="background: #009c15" @onclick="@(_isEditMode ? OnClickEditGroup : OnClickAddGroup)">
+                                            <i class="bi bi-save"></i> Сохранить
+                                        </button>
+                                        <button type="reset" class="btn btn-light">
+                                            <i class="bi bi-arrow-counterclockwise"></i> Очистить
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ButtonRedirect Redirect="GroupTable" Text="Назад" MT="auto" />
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <p>Вы не авторизованы</p>
+        </NotAuthorized>
+    </AuthorizeView>

@@ -1,3 +1,4 @@
+using Client.Core.Entities.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Server.BLL.Services.Inrerfaces;
 using Server.DAL.Models.Entities;
@@ -73,12 +74,5 @@ public class EducatorsController : ControllerBase
     public async Task AddEducator(Educator id)
     {
         await _educatorService.AddEducator(id);
-    }
-    
-    [HttpGet("GetGroups")]
-    public async Task<List<Group>> GetGroups()
-    {
-        var users =  await _educatorService.GetGroupsAsync();
-        return users;
     }
 }

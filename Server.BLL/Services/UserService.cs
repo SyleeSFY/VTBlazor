@@ -94,11 +94,120 @@ public class UserService : IUserService
         var user = await ParseUserByDTOAsync(userDTO);
         if (user is null)
             return false;
-        await _userRepository.AddUserAsync(user);
-        return true;
+        return await _userRepository.AddUserAsync(user);
     }
 
-    public async Task<bool> AddSolutionByDTOAsync(SolutionStudentDTO solutionDTO)
+        public async Task<bool> EditUserByDTOAsync(int userId, UserDTO userDTO)
+        {
+            var existingUser = await _userRepository.GetUserFullInfoAsync(userId);
+            if (existingUser is null)
+                return false;
+
+            existingUser.Email = userDTO.Email;
+            existingUser.FirstName = userDTO.FirstName;
+            existingUser.LastName = userDTO.LastName;
+            existingUser.MiddleName = userDTO.MiddleName;
+
+            if (!string.IsNullOrEmpty(userDTO.PasswordHash))
+            {
+                existingUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDTO.PasswordHash);
+            }
+
+            switch (existingUser.Role)
+            {
+                case Role.admin:
+                    if (existingUser.Administrator != null && userDTO.Administrator != null)
+                    {
+                        existingUser.Administrator.Position = userDTO.Administrator.Position;
+                    }
+                    break;
+
+                case Role.educator:
+                    if (existingUser.Educator != null && userDTO.Educator != null)
+                    {
+                        existingUser.Educator.Profession = userDTO.Educator.Profession;
+                        existingUser.Educator.AcademicDegree = userDTO.Educator.AcademicDegree;
+
+                        if (existingUser.Educator.EducatorAdditionalInfo != null && userDTO.Educator.EducatorAdditionalInfo != null)
+                        {
+                            var info = existingUser.Educator.EducatorAdditionalInfo;
+                            var dtoInfo = userDTO.Educator.EducatorAdditionalInfo;
+
+                            info.EducationLevel = dtoInfo.EducationLevel;
+                            info.SpecialtyOrFieldOfStudy = dtoInfo.SpecialtyOrFieldOfStudy;
+                            info.Qualification = dtoInfo.Qualification;
+                            info.AdditionalInfo = dtoInfo.AdditionalInfo;
+                            info.AcademicTitle = dtoInfo.AcademicTitle;
+
+                            if (!string.IsNullOrEmpty(dtoInfo.Image))
+                            {
+                                info.Image = Convert.FromBase64String(dtoInfo.Image);
+                            }
+
+                            if (dtoInfo.EducatorDisciplines != null)
+                            {
+                                info.EducatorDisciplines.Clear();
+                                foreach (var discipline in dtoInfo.EducatorDisciplines)
+                                {
+                                    info.EducatorDisciplines.Add(new EducatorDiscipline
+                                    {
+                                        DisciplineId = discipline.DisciplineId
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    break;
+
+                case Role.student:
+                    if (existingUser.Student != null && userDTO.Student != null)
+                    {
+                        existingUser.Student.GroupId = userDTO.Student.GroupId ?? existingUser.Student.GroupId;
+                        existingUser.Student.StudentCard = userDTO.Student.StudentCardId;
+                    }
+                    break;
+            }
+
+            return await _userRepository.UpdateUserAsync(existingUser);
+        }
+
+        #region FullInfo
+
+        public async Task<User> GetUserWithAutInfoByUserId(int id)
+        {
+            var user = await _userRepository.GetUserFullInfoAsync(id);
+            if (user is null)
+                return new User();
+            return user;
+        }
+
+        public async Task<User> GetUserWithStudentInfoByUserId(int id)
+        {
+            var user = await _userRepository.GetUserWithStudentInfoByIdAsync(id);
+            if (user is null)
+                return new User();
+            return user;
+        }
+
+        public async Task<User> GetUserWithEducatorInfoByUserId(int id)
+        {
+            var user = await _userRepository.GetUserWithEducatorInfoByIdAsync(id);
+            if (user is null)
+                return new User();
+            return user;
+        }
+
+        public async Task<User> GetUserWithAdminInfoByUserId(int id)
+        {
+            var user = await _userRepository.GetUserWithAdminInfoByIdAsync(id);
+            if (user is null)
+                return new User();
+            return user;
+        }
+
+        #endregion
+
+        public async Task<bool> AddSolutionByDTOAsync(SolutionStudentDTO solutionDTO)
     {
             var compFiles = new List<SolutionFile>();
 
@@ -183,7 +292,7 @@ public class UserService : IUserService
             case Role.student:
                     user.Student = new Student()
                     {
-                        GroupId = 1,
+                        GroupId = (int)userDTO.Student.GroupId,
                         StudentCard = userDTO.Student.StudentCardId
                     };
 

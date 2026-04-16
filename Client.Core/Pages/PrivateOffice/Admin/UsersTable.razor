@@ -31,7 +31,7 @@
                             <td>@(!string.IsNullOrEmpty(item.Student?.GroupId.ToString()) ? item.Student?.Group.Name : "–")</td>
                             <td>@(item.IsActive ? "Активен" : "Деактивен")</td>
                             <td>
-                                <NavLink href="@($"UserEdit/{(int)item.Role}/{item.Id}")" class="nav_link auth-link Cursor" style=" text-decoration: none">
+                                <NavLink href="@($"UserEdit/{item.Id}")" class="nav_link auth-link Cursor" style=" text-decoration: none">
                                     <p class="nav_item Cursor">Редакт.</p>
                                 </NavLink>
                             </td>

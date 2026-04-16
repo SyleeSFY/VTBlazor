@@ -30,5 +30,16 @@ namespace Client.Core.Entities.Interfaces
         Task<byte[]> GetSolutionFileByte(int fileId);
         Task<bool> UpdateSolutionStatus(int solutionId, SolutionStudentDTO updateData);
         Task<Student> GetStudentByStudentId(int StudentId);
+        Task<bool> PostAddGroup(GroupDTO group);
+        Task<Group> GetGroupById(int groupId);
+        Task<bool> UpdateGroup(int groupId, GroupDTO group);
+        Task<User> GetUserWithStudentInfoById(int id);
+        Task<User> GetUserWithEducatorInfoById(int id);
+        Task<User> GetUserWithAdminInfoById(int id);
+        Task<bool> PostEditUser(int userId, UserDTO user);
+        Task<bool> PostAddUser(UserDTO user);
+        Task<bool> PostAddDiscipline(DisciplineDTO discipline);
+        Task<bool> PostEditDiscipline(int disciplineId, DisciplineDTO discipline);
+        Task<User> GetUserByAutomaticallyUserId(int id);
     }
 }

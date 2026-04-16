@@ -1,6 +1,9 @@
 @page "/UserAdd"
+@page "/UserEdit/{UserId:int}"
+
 @using Client.Core.Entities.Enums
 @using Client.Core.Features
+@inject NavigationManager Navigation
 @inject HttpClient Http
 @layout PrivateOfficeLayout
 
@@ -14,160 +17,195 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
-                            <div class="change__nav">
+                            @if (!_isEditMode)
+                            {
+                                <div class="change__nav">
                                     <button @onclick="(() => SetActiveTable(Role.student))"
                                             class="button_with_under_stick">
-
                                         <TittleUnderStick Tittle="Студент"
                                                           JustifyContent="JustifyContentEnum.Center"
                                                           FontSize="20"
-                                                          State="(_activeRole == Role.student) ? true : false"
-                                                          />
+                                                          State="(_activeRole == Role.student) ? true : false" />
                                     </button>
                                     <button @onclick="(() => SetActiveTable(Role.educator))"
                                             class="button_with_under_stick">
-
                                         <TittleUnderStick Tittle="Преподаватель"
                                                           JustifyContent="JustifyContentEnum.Center"
                                                           FontSize="20"
-                                                          State="(_activeRole == Role.educator) ? true : false"
-                                                          />
+                                                          State="(_activeRole == Role.educator) ? true : false" />
                                     </button>
                                     <button @onclick="(() => SetActiveTable(Role.admin))"
                                             class="button_with_under_stick">
-
                                         <TittleUnderStick Tittle="Админ"
                                                           JustifyContent="JustifyContentEnum.Center"
                                                           FontSize="20"
-                                                          State="(_activeRole == Role.admin) ? true : false"
-                                        />
+                                                          State="(_activeRole == Role.admin) ? true : false" />
                                     </button>
-                            </div>
+                                </div>
+                            }
                             <form>
                                 <!-- Общие поля для всех пользователей -->
                                 <div class="form-group mb-3">
                                     <label for="lastName" class="form-label">Фамилия</label>
-                                    <input type="text" class="form-control" id="lastName"
-                                           placeholder="Введите фамилию" @bind="_lastName" required>
-                                    <div class="invalid-feedback">
-                                        Пожалуйста, введите фамилию
-                                    </div>
+                                    <input type="text" class="form-control @(_errors.ContainsKey("LastName") ? "is-invalid" : "")" id="lastName"
+                                           placeholder="Введите фамилию" @bind="_lastName">
+                                    @if (_errors.ContainsKey("LastName"))
+                                    {
+                                        <div class="invalid-feedback d-block">@_errors["LastName"]</div>
+                                    }
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="firstName" class="form-label">Имя</label>
-                                    <input type="text" class="form-control" id="firstName"
-                                           placeholder="Введите имя" @bind="_firstName" required>
-                                    <div class="invalid-feedback">
-                                        Пожалуйста, введите имя
-                                    </div>
+                                    <input type="text" class="form-control @(_errors.ContainsKey("FirstName") ? "is-invalid" : "")" id="firstName"
+                                           placeholder="Введите имя" @bind="_firstName">
+                                    @if (_errors.ContainsKey("FirstName"))
+                                    {
+                                        <div class="invalid-feedback d-block">@_errors["FirstName"]</div>
+                                    }
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="patronymic" class="form-label">Отчество</label>
-                                    <input type="text" class="form-control" id="patronymic"
-                                           placeholder="Введите отчество" @bind="_middleName">
-                                    <div class="invalid-feedback">
-                                        Пожалуйста, введите отчество
-                                    </div>
+                                    <input type="text" class="form-control @(_errors.ContainsKey("MiddleName") ? "is-invalid" : "")" id="patronymic"
+                                            placeholder="Введите отчество" @bind="_middleName">
+                                        @if (_errors.ContainsKey("MiddleName"))
+                                        {
+                                            <div class="invalid-feedback d-block">@_errors["MiddleName"]</div>
+                                        }
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="password" class="form-label">Пароль</label>
-                                    <input type="password" class="form-control" id="password"
-                                           placeholder="Введите пароль" @bind="_password" required>
-                                    <div class="invalid-feedback">
-                                        Пожалуйста, введите пароль
-                                    </div>
+                                    <input type="password" class="form-control @(_errors.ContainsKey("Password") ? "is-invalid" : "")" id="password"
+                                           placeholder="Введите пароль" @bind="_password">
+                                    @if (_isEditMode)
+                                    {
+                                        <p class="mt-1" style="font-size:12px; text-align: center; color: orange">При редактировании пароль вводить необязательно!</p>
+                                    }
+                                    @if (_errors.ContainsKey("Password"))
+                                    {
+                                        <div class="invalid-feedback d-block">@_errors["Password"]</div>
+                                    }
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email"
-                                           placeholder="Введите email" @bind="_email" required>
-                                    <div class="invalid-feedback">
-                                        Пожалуйста, введите корректный email
-                                    </div>
+                                    <label for="email" class="form-label">Email *</label>
+                                    <input type="email" class="form-control @(_errors.ContainsKey("Email") ? "is-invalid" : "")" id="email"
+                                           placeholder="Введите email" @bind="_email">
+                                    @if (_errors.ContainsKey("Email"))
+                                    {
+                                        <div class="invalid-feedback d-block">@_errors["Email"]</div>
+                                    }
                                 </div>
-                                
+
                                 @{
                                     switch (_activeRole)
                                     {
                                         case Role.student:
                                             <div class="form-group mb-3">
-                                                <label for="studentGroup" class="form-label">Обучаемая группа</label>
-                                                <select class="form-control" id="studentGroup" @bind="_studentGroup">
+                                                <label for="studentGroup" class="form-label">Обучаемая группа *</label>
+                                                <select class="form-control @(_errors.ContainsKey("StudentGroup") ? "is-invalid" : "")" id="studentGroup" @bind="_studentGroup">
                                                     <option value="" disabled selected>Выберите группу</option>
-                                                    <option value="АС-22">АС-22</option>
-                                                    <option value="ПО1-22">ПО1-22</option>
-                                                    <option value="ПО2-22">ПО2-22</option>
+                                                    @foreach (var group in _groups)
+                                                    {
+                                                        <option value="@group.Id">@group.Name</option>
+                                                    }
                                                 </select>
+                                                @if (_errors.ContainsKey("StudentGroup"))
+                                                {
+                                                    <div class="invalid-feedback d-block">@_errors["StudentGroup"]</div>
+                                                }
                                             </div>
                                             <div class="form-group mb-3">
-                                                <label for="profession" class="form-label">Номер студенческого билета</label>
-                                                <input type="text" class="form-control" id="profession"
-                                                        placeholder="Введите студенческий" @bind="_studentCardId" required>
+                                                <label for="studentCard" class="form-label">Номер студенческого билета *</label>
+                                                <input type="text" class="form-control @(_errors.ContainsKey("StudentCardId") ? "is-invalid" : "")" id="studentCard"
+                                                       placeholder="Введите студенческий" @bind="_studentCardId">
+                                                @if (_errors.ContainsKey("StudentCardId"))
+                                                {
+                                                    <div class="invalid-feedback d-block">@_errors["StudentCardId"]</div>
+                                                }
                                             </div>
                                             break;
-                                            
+
                                         case Role.educator:
                                             <h5 class="mt-4 mb-3">Основная информация о преподавателе</h5>
-                                            
+
                                             <div class="form-group mb-3">
-                                                <label for="profession" class="form-label">Должность</label>
-                                                <input type="text" class="form-control" id="profession"
-                                                       placeholder="Введите должность" @bind="_profession" required>
+                                                <label for="profession" class="form-label">Должность *</label>
+                                                <input type="text" class="form-control @(_errors.ContainsKey("Profession") ? "is-invalid" : "")" id="profession"
+                                                       placeholder="Введите должность" @bind="_profession">
+                                                @if (_errors.ContainsKey("Profession"))
+                                                {
+                                                    <div class="invalid-feedback d-block">@_errors["Profession"]</div>
+                                                }
                                             </div>
-                                            
+
                                             <div class="form-group mb-3">
-                                                <label for="academicDegree" class="form-label">Ученая степень</label>
-                                                <select class="form-control" id="academicDegree" @bind="_academicDegree">
-                                                    <option value="">Выберите ученую степень</option>
+                                                <label for="academicDegree" class="form-label">Ученая степень *</label>
+                                                <select class="form-control @(_errors.ContainsKey("AcademicDegree") ? "is-invalid" : "")" id="academicDegree" @bind="_academicDegree">
+                                                    <option value="" disabled selected>Выберите ученую степень</option>
                                                     <option value="Кандидат наук">Кандидат наук</option>
                                                     <option value="Доктор наук">Доктор наук</option>
                                                     <option value="Доцент">Доцент</option>
                                                     <option value="Профессор">Профессор</option>
                                                     <option value="Без степени">Без степени</option>
                                                 </select>
+                                                @if (_errors.ContainsKey("AcademicDegree"))
+                                                {
+                                                    <div class="invalid-feedback d-block">@_errors["AcademicDegree"]</div>
+                                                }
                                             </div>
-                                            
+
                                             <h5 class="mt-4 mb-3">Дополнительная информация</h5>
-                                            
+
                                             <div class="form-group mb-3">
-                                                <label for="educationLevel" class="form-label">Уровень образования</label>
-                                                <select class="form-control" id="educationLevel" @bind="_educationLevel">
-                                                    <option value="">Выберите уровень образования</option>
+                                                <label for="educationLevel" class="form-label">Уровень образования *</label>
+                                                <select class="form-control @(_errors.ContainsKey("EducationLevel") ? "is-invalid" : "")" id="educationLevel" @bind="_educationLevel">
+                                                    <option value="" disabled selected>Выберите уровень образования</option>
                                                     <option value="Высшее образование - бакалавриат">Высшее образование - бакалавриат</option>
                                                     <option value="Высшее образование - магистратура">Высшее образование - магистратура</option>
                                                     <option value="Высшее образование - специалитет">Высшее образование - специалитет</option>
                                                     <option value="Высшее образование - подготовка кадров высшей квалификации">Высшее образование - подготовка кадров высшей квалификации</option>
                                                     <option value="Среднее профессиональное образование">Среднее профессиональное образование</option>
                                                 </select>
+                                                @if (_errors.ContainsKey("EducationLevel"))
+                                                {
+                                                    <div class="invalid-feedback d-block">@_errors["EducationLevel"]</div>
+                                                }
                                             </div>
-                                            
+
+                                            <div class="form-group mb-3">
+                                                <label for="specialty" class="form-label">Специальность или направление подготовки *</label>
+                                                <input type="text" class="form-control @(_errors.ContainsKey("Specialty") ? "is-invalid" : "")" id="specialty"
+                                                       placeholder="Введите специальность" @bind="_specialty">
+                                                @if (_errors.ContainsKey("Specialty"))
+                                                {
+                                                    <div class="invalid-feedback d-block">@_errors["Specialty"]</div>
+                                                }
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label for="qualification" class="form-label">Квалификация *</label>
+                                                <input type="text" class="form-control @(_errors.ContainsKey("Qualification") ? "is-invalid" : "")" id="qualification"
+                                                       placeholder="Введите квалификацию" @bind="_qualification">
+                                                @if (_errors.ContainsKey("Qualification"))
+                                                {
+                                                    <div class="invalid-feedback d-block">@_errors["Qualification"]</div>
+                                                }
+                                            </div>
+
                                             <div class="form-group mb-3">
                                                 <label for="academicTitle" class="form-label">Ученое звание</label>
                                                 <input type="text" class="form-control" id="academicTitle"
                                                        placeholder="Введите ученое звание" @bind="_academicTitle">
                                             </div>
-                                            
-                                            <div class="form-group mb-3">
-                                                <label for="specialty" class="form-label">Специальность или направление подготовки</label>
-                                                <input type="text" class="form-control" id="specialty"
-                                                       placeholder="Введите специальность" @bind="_specialty" required>
-                                            </div>
-                                            
-                                            <div class="form-group mb-3">
-                                                <label for="qualification" class="form-label">Квалификация</label>
-                                                <input type="text" class="form-control" id="qualification"
-                                                       placeholder="Введите квалификацию" @bind="_qualification" required>
-                                            </div>
-                                            
+
                                             <div class="form-group mb-3">
                                                 <label for="additionalInfo" class="form-label">Дополнительная информация</label>
                                                 <textarea class="form-control" id="additionalInfo" rows="3"
                                                           placeholder="Введите дополнительную информацию" @bind="_additionalInfo"></textarea>
                                             </div>
-                                            
+
                                             <div class="form-group mb-3">
-                                                <label for="educatorImage" class="form-label">Фотография (Base64)</label>
-                                                <input type="file" class="form-control" id="educatorImage" 
+                                                <label for="educatorImage" class="form-label">Фотография</label>
+                                                <input type="file" class="form-control" id="educatorImage"
                                                        @onchange="OnImageSelected" accept="image/*">
                                                 @if (!string.IsNullOrEmpty(_imagePreview))
                                                 {
@@ -176,44 +214,66 @@
                                                     </div>
                                                 }
                                             </div>
-                                            
-                                            <h5 class="mt-4 mb-3">Преподаваемые дисциплины</h5>
-                                            
+
+                                            <h5 class="mt-4 mb-3">Преподаваемые дисциплины *</h5>
+                                            <p class="text-muted">Выберите хотя бы одну дисциплину</p>
+
                                             <div class="form-group mb-3">
-                                                <label class="form-label">Выберите дисциплины</label>
                                                 @foreach (var discipline in _diciplines)
                                                 {
-                                                     <div class="form-check">
-                                                         <input class="form-check-input" type="checkbox"
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox"
                                                                 id="@($"discipline_{discipline.Id}")"
+                                                                checked="@_selectedDisciplineIds.Contains(discipline.Id)"
                                                                 @onchange="@(e => ToggleDiscipline(discipline.Id, e.Value))">
-                                                         <label class="form-check-label" for="@($"discipline_{discipline.Id}")">
-                                                             @discipline.NameDiscipline
-                                                         </label>
-                                                     </div>
+                                                        <label class="form-check-label" for="@($"discipline_{discipline.Id}")">
+                                                            @discipline.NameDiscipline
+                                                        </label>
+                                                    </div>
+                                                }
+                                                @if (_errors.ContainsKey("Disciplines"))
+                                                {
+                                                    <div class="invalid-feedback d-block">@_errors["Disciplines"]</div>
                                                 }
                                             </div>
                                             break;
-                                            
+
                                         case Role.admin:
                                             <div class="form-group mb-3">
-                                                <label for="adminPosition" class="form-label">Должность</label>
-                                                <input type="text" class="form-control" id="adminPosition"
-                                                       placeholder="Введите должность" @bind="_adminPosition" required>
+                                                <label for="adminPosition" class="form-label">Должность *</label>
+                                                <input type="text" class="form-control @(_errors.ContainsKey("AdminPosition") ? "is-invalid" : "")" id="adminPosition"
+                                                       placeholder="Введите должность" @bind="_adminPosition">
+                                                @if (_errors.ContainsKey("AdminPosition"))
+                                                {
+                                                    <div class="invalid-feedback d-block">@_errors["AdminPosition"]</div>
+                                                }
                                             </div>
-                                            // <div class="form-group mb-3">
-                                            //     <label for="adminDepartment" class="form-label">Отдел</label>
-                                            //     <input type="text" class="form-control" id="adminDepartment"
-                                            //            placeholder="Введите отдел" @bind="adminDepartment">
-                                            // </div>
                                             break;
                                     }
+                                }
+                                @if (_isError)
+                                {
+                                    <div class="alert alert-danger mt-3">
+                                        <i class="bi bi-exclamation-triangle"></i> Ошибка при добавлении пользователя!
+                                    </div>
+                                }
+                                @if (_validationErrors.Count > 0)
+                                {
+                                    <div class="alert alert-warning mt-3">
+                                        <strong>Пожалуйста, заполните обязательные поля:</strong>
+                                        <ul class="mb-0">
+                                            @foreach (var error in _validationErrors)
+                                            {
+                                                <li>@error</li>
+                                            }
+                                        </ul>
+                                    </div>
                                 }
                                 <div class="form-group mt-4">
                                     <button type="button" class="btn btn-primary me-2" style="background: #009c15" @onclick="SaveUser">
                                         <i class="bi bi-save"></i> Сохранить
                                     </button>
-                                    <button type="reset" class="btn btn-light" @onclick="ResetForm">
+                                    <button type="button" class="btn btn-light" @onclick="ResetForm">
                                         <i class="bi bi-arrow-counterclockwise"></i> Очистить
                                     </button>
                                 </div>

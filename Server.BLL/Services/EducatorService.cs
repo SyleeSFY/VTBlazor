@@ -155,6 +155,54 @@ public class EducatorService : IEducatorService
         }
     }
 
+    public async Task<Group> GetGroupById(int groupId)
+    {
+        try
+        {
+            var group = await _educatorRepository.GetGroupByIdAsync(groupId);
+            if (group == null)
+                return new Group();
+            return group;
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+    public async Task<bool> UpdateGroup(int groupId, GroupDTO group)
+    {
+        var groupInBd = await _educatorRepository.GetGroupByNameAsync(group.Name.Trim().ToUpper());
+
+        if (groupInBd is null && groupInBd?.Name != group.Name)
+        {
+            var groupUpdate = await _educatorRepository.GetGroupByIdAsync(groupId);
+
+            groupUpdate.Name = group.Name;
+
+            return await _educatorRepository.UpdateGroup(groupUpdate);
+        }
+       
+        return false;
+    }
+
+    public async Task<bool> AddGroup(string groupName)
+    {
+        var groupInBd = await _educatorRepository.GetGroupByNameAsync(groupName.Trim().ToUpper());
+
+        if (groupInBd is null)
+        {
+            var group = new Group()
+            {
+                Name = groupName,
+            };
+
+            return await _educatorRepository.AddGroup(group);
+        }
+
+        return false;
+    }
+
     public async Task<bool> AddTask(TaskEducationDTO taskDto)
     {
         var compFiles = new List<TaskFile>();

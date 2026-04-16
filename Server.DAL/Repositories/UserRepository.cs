@@ -58,6 +58,22 @@ public class UserRepository : IUserRepository
 
     }
 
+    public async Task<bool> UpdateUserAsync(User user)
+    {
+        try
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+
+    }
+
     public async Task<User> GetUserSimpleAsync(int userId)
         => await _context.Users
             .FirstOrDefaultAsync(x => x.Id == userId);
@@ -66,6 +82,17 @@ public class UserRepository : IUserRepository
         => await _context.Users
             .Include(x => x.Educator)
             .Include(x => x.Student)
+            .Include(x => x.Administrator)
+            .FirstOrDefaultAsync(x => x.Id == userId);
+
+    public async Task<User?> GetUserFullInfoAsync(int userId)
+        => await _context.Users
+            .Include(x => x.Educator)
+                .ThenInclude(x => x.EducatorAdditionalInfo)
+                    .ThenInclude(x => x.EducatorDisciplines)
+                        .ThenInclude(x => x.Discipline)
+            .Include(x => x.Student)
+                    .ThenInclude(x => x.Group)
             .Include(x => x.Administrator)
             .FirstOrDefaultAsync(x => x.Id == userId);
 
@@ -112,4 +139,18 @@ public class UserRepository : IUserRepository
             return 0;
         }
     }
+
+    public async Task<User> GetUserWithStudentInfoByIdAsync(int id)
+        => await _context.Users
+                .Include(x => x.Student)
+                    .ThenInclude(x => x.Group)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+    public async Task<User> GetUserWithEducatorInfoByIdAsync(int id)
+        => await _context.Users.Include(x => x.Educator).ThenInclude(x => x.EducatorAdditionalInfo).ThenInclude(x => x.EducatorDisciplines).ThenInclude(x => x.Discipline).FirstOrDefaultAsync(x => x.Id == id);
+
+    public async Task<User> GetUserWithAdminInfoByIdAsync(int id)
+        => await _context.Users.Include(x => x.Administrator).FirstOrDefaultAsync(x => x.Id == id);
+
+    
 }

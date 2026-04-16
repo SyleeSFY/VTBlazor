@@ -6,8 +6,9 @@ namespace Server.DAL.Interfaces
     public interface IDiciplineRepository
     {
         Task<List<Discipline>> GetDiciplinesAsync();
-        Task<Discipline> GetDiciplineByIdAsync(int diciplineId);
+        Task<Discipline?> GetDiciplineByIdAsync(int diciplineId);
         Task<bool> DeleteDiciplineAsync(Discipline dicipline);
         Task<bool> AddDiciplineAsync(Discipline dicipline);
+        Task<bool> EditDisciplineAsync(Discipline dicipline);
     }
 }

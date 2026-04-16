@@ -42,6 +42,17 @@ namespace Client.Core.Shared
         public async Task<Discipline> GetDisciplineById(int id)
             => await _http.GetFromJsonAsync<Discipline>($"api/Diciplines/GetDicipline/{id}") ?? new Discipline();
 
+        public async Task<bool> PostAddDiscipline(DisciplineDTO discipline)
+        {
+            var response = await _http.PostAsJsonAsync($"api/Diciplines/PostAddDiscipline", discipline);
+            return await response.Content.ReadFromJsonAsync<bool>();
+        }
+        
+        public async Task<bool> PostEditDiscipline(int disciplineId, DisciplineDTO discipline)
+        {
+            var response = await _http.PostAsJsonAsync($"api/Diciplines/PostEditDiscipline/{disciplineId}", discipline);
+            return await response.Content.ReadFromJsonAsync<bool>();
+        }
         #endregion
 
         #region Educator Endpoints
@@ -58,7 +69,6 @@ namespace Client.Core.Shared
 
             return new Educator();
         }
-
         #endregion
 
         #region Student Endpoints
@@ -86,15 +96,61 @@ namespace Client.Core.Shared
         public async Task<User> GetUserByUserId(int id)
             => await _http.GetFromJsonAsync<User>($"api/user/GetUserByUserId/{id}") ?? new User();
 
+        public async Task<User> GetUserByAutomaticallyUserId(int id)
+            => await _http.GetFromJsonAsync<User>($"api/user/GetUserByAutomaticallyUserId/{id}") ?? new User();
+
         public async Task<List<User>> GetUsersStudentByGroup(int groupId)
             => await _http.GetFromJsonAsync<List<User>>($"api/user/GetUserStudentByGroupId/{groupId}") ?? new List<User>();
 
+        public async Task<User> GetUserWithStudentInfoById(int id)
+            => await _http.GetFromJsonAsync<User>($"api/user/GetUserWithStudentInfo/{id}") ?? new User();
+
+        public async Task<User> GetUserWithEducatorInfoById(int id)
+            => await _http.GetFromJsonAsync<User>($"api/user/GetUserWithEducatorInfoById/{id}") ?? new User();
+
+        public async Task<User> GetUserWithAdminInfoById(int id)
+            => await _http.GetFromJsonAsync<User>($"api/user/GetUserWithAdminInfoById/{id}") ?? new User();
+        
+        public async Task<bool> PostAddUser(UserDTO user)
+        {
+            var response = await _http.PostAsJsonAsync($"api/User/PostAddUser", user);
+            return await response.Content.ReadFromJsonAsync<bool>();
+        }
+        public async Task<bool> PostEditUser(int userId, UserDTO user)
+        {
+            try
+            {
+                var response = await _http.PostAsJsonAsync($"api/User/PostEditUser/{userId}", user);
+                return await response.Content.ReadFromJsonAsync<bool>();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
         #endregion
 
         #region Group Endpoints
 
         public async Task<List<Group>> GetGroups()
-            => await _http.GetFromJsonAsync<List<Group>>("api/educators/GetGroups") ?? new List<Group>();
+            => await _http.GetFromJsonAsync<List<Group>>("api/group/GetGroups") ?? new List<Group>();
+
+        public async Task<Group> GetGroupById(int groupId)
+            => await _http.GetFromJsonAsync<Group>($"api/group/GetGroup/{groupId}") ?? new Group();
+
+        public async Task<bool> PostAddGroup(GroupDTO group)
+        {
+            var response = await _http.PostAsJsonAsync($"api/group/PostAddGroup", group);
+            return await response.Content.ReadFromJsonAsync<bool>();
+        }
+
+        public async Task<bool> UpdateGroup(int groupId, GroupDTO group)
+        {
+            var response = await _http.PostAsJsonAsync($"api/group/UpdateGroup/{groupId}", group);
+            return await response.Content.ReadFromJsonAsync<bool>();
+        }
 
         #endregion
 

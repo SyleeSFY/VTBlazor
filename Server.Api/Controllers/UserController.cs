@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.BLL.Services.Inrerfaces;
 using Server.DAL.Models.DTO;
 using Server.DAL.Models.Entities.Users;
+using static System.Net.WebRequestMethods;
 
 namespace Server.Api.Controllers;
 
@@ -64,14 +65,54 @@ public class UserController : ControllerBase
        
     }
 
+    [HttpPost("PostEditUser/{userId}")]
+    public async Task<ActionResult<bool>> PostEditUser(int userId, UserDTO data)
+    {
+        if (data != null)
+        {
+            var result = await _userService.EditUserByDTOAsync(userId, data);
+            return Ok(result);
+        }
+        return NotFound();
+    }
+
     [HttpPost("PostAddUser")]
     public async Task<ActionResult<bool>> PostAddUser(UserDTO data)
     {
         if (data != null)
         {
             var result = await _userService.AddUserByDTOAsync(data);
-            return result ? Ok(result) : NotFound(result);
+            return Ok(result);
         }
         return NotFound();
     }
+    #region FullInfo
+
+    [HttpGet("GetUserByAutomaticallyUserId/{id}")]
+    public async Task<User> GetUserByAutomaticallyUserId(int id)
+    {
+        return await _userService.GetUserWithAutInfoByUserId(id);
+
+    }
+
+    [HttpGet("GetUserWithStudentInfo/{id}")]
+    public async Task<User> GetUserWithStudentInfoById(int id)
+    {
+        return await _userService.GetUserWithStudentInfoByUserId(id);
+
+    }
+
+    [HttpGet("GetUserWithEducatorInfoById/{id}")]
+    public async Task<User> GetUserWithEducatorInfoById(int id)
+    {
+        return await _userService.GetUserWithEducatorInfoByUserId(id);
+
+    }
+    [HttpGet("GetUserWithAdminInfoById/{id}")]
+    public async Task<User> GetUserWithAdminInfoById(int id)
+    {
+        return await _userService.GetUserWithAdminInfoByUserId(id);
+    }
+
+    #endregion
 }

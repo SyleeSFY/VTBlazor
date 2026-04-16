@@ -10,6 +10,12 @@
                 <li class="nav_item Cursor">КАФЕДРА</li>
             </NavLink>
 
+            @if (isAuth)
+            {
+                <NavLink href="Profile" class="nav_link auth-link Cursor" style="text-decoration: none">
+                    <li class="nav_item Cursor">ПРОФИЛЬ</li>
+                </NavLink>
+            }
             @if (isAuth && role == (int)Role.student)
             {
                 <NavLink href="TaskStudentTable" class="nav_link auth-link Cursor" style="text-decoration: none">
