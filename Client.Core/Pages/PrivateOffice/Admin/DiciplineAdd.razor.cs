@@ -32,6 +32,7 @@ namespace Client.Core.Pages.PrivateOffice.Admin
         {
             _discipline = DiciplineId is not null ? await _apiService.GetDisciplineById((int)DiciplineId) : null;
             _isEditMode =  _discipline.Id is not 0 ? true : false;
+
             if (_isEditMode)
                 await FillFieldInEditMode(_discipline);
         }

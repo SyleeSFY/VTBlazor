@@ -22,4 +22,6 @@ public interface IUserRepository
     Task<User> GetUserWithStudentInfoByIdAsync(int id);
     Task<User> GetUserWithEducatorInfoByIdAsync(int id);
     Task<User> GetUserWithAdminInfoByIdAsync(int id);
+    Task<User?> GetUserFullInfoAsync(int userId);
+    Task<bool> UpdateUserAsync(User user);
 }

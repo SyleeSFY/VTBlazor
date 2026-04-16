@@ -3,6 +3,7 @@ using Client.Core.Entities.Interfaces;
 using Client.Core.Entities.Models.DTO;
 using Client.Core.Entities.Models.User;
 using Client.Core.Entities.Models.User.Dicipline;
+using Client.Core.Pages.Public;
 using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
 
@@ -11,6 +12,7 @@ namespace Client.Core.Pages.PrivateOffice.Admin
     public partial class UserAdd : ComponentBase
     {
         [Inject] private IApiService _apiService { get; set; }
+        [Parameter] public int? UserId { get; set; }
 
         private Role _activeRole = Role.student;
 
@@ -35,15 +37,33 @@ namespace Client.Core.Pages.PrivateOffice.Admin
 
         private int? _studentGroup = null;
 
+        private User? _user;
+
         private List<Discipline> _diciplines = new List<Discipline>();
         private List<Group> _groups = new List<Group>();
         private List<int> _selectedDisciplineIds = new List<int>();
 
         private string _adminPosition = string.Empty;
         private bool _isError = false;
+        private bool _isEditMode = false;
 
         private Dictionary<string, string> _errors = new Dictionary<string, string>();
         private List<string> _validationErrors = new List<string>();
+
+        public UserAdd()
+        {
+            _user = new User();
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+            _diciplines = await _apiService.GetDisciplines();
+            _groups = await _apiService.GetGroups();
+            _user = UserId != null ? await _apiService.GetUserByAutomaticallyUserId((int)UserId) : null;
+            _isEditMode = _user?.Id != 0;
+            if (_isEditMode)
+                await FillField(_user);
+        }
 
         private async Task OnImageSelected(ChangeEventArgs e)
         {
@@ -55,12 +75,6 @@ namespace Client.Core.Pages.PrivateOffice.Admin
                 _imageBase64 = Convert.ToBase64String(buffer);
                 _imagePreview = $"data:{file.ContentType};base64,{_imageBase64}";
             }
-        }
-
-        protected override async Task OnInitializedAsync()
-        {
-            _diciplines = await _apiService.GetDisciplines();
-            _groups = await _apiService.GetGroups();
         }
 
         private void ToggleDiscipline(int disciplineId, object value)
@@ -83,6 +97,24 @@ namespace Client.Core.Pages.PrivateOffice.Admin
                 return;
             }
 
+            var user = await CreateUserWithInfo();
+
+            var response = _isEditMode ? await _apiService.PostEditUser(_user.Id,user) : await _apiService.PostAddUser(user);
+
+            if (response)
+            {
+                Navigation.NavigateTo("/UserTable");
+            }
+            else
+            {
+                _isError = true;
+                _validationErrors.Clear();
+                _validationErrors.Add("Ошибка при отправке данных на сервер");
+            }
+        }
+
+        private async Task<UserDTO> CreateUserWithInfo()
+        {
             var user = await CreateUser();
 
             switch (_activeRole)
@@ -99,19 +131,7 @@ namespace Client.Core.Pages.PrivateOffice.Admin
                 default:
                     break;
             }
-
-            var response = await _apiService.PostAddUser(user);
-
-            if (response)
-            {
-                Navigation.NavigateTo("/UserTable");
-            }
-            else
-            {
-                _isError = true;
-                _validationErrors.Clear();
-                _validationErrors.Add("Ошибка при отправке данных на сервер");
-            }
+            return user;
         }
 
         private async Task<UserDTO> CreateUser()
@@ -183,15 +203,26 @@ namespace Client.Core.Pages.PrivateOffice.Admin
                 _validationErrors.Add("Отчество не заполнено");
             }
 
-            if (string.IsNullOrWhiteSpace(_password))
+            if (_isEditMode)
             {
-                _errors["Password"] = "Пароль обязателен";
-                _validationErrors.Add("Пароль не заполнен");
+                if (!string.IsNullOrEmpty(_password) && _password.Length < 6)
+                {
+                    _errors["Password"] = "Пароль должен быть не менее 6 символов";
+                    _validationErrors.Add("Пароль слишком короткий (минимум 6 символов)");
+                }
             }
-            else if (_password.Length < 6)
+            else
             {
-                _errors["Password"] = "Пароль должен быть не менее 6 символов";
-                _validationErrors.Add("Пароль слишком короткий (минимум 6 символов)");
+                if (string.IsNullOrWhiteSpace(_password))
+                {
+                    _errors["Password"] = "Пароль обязателен";
+                    _validationErrors.Add("Пароль не заполнен");
+                }
+                else if (_password.Length < 6)
+                {
+                    _errors["Password"] = "Пароль должен быть не менее 6 символов";
+                    _validationErrors.Add("Пароль слишком короткий (минимум 6 символов)");
+                }
             }
 
             if (string.IsNullOrWhiteSpace(_email))
@@ -270,6 +301,69 @@ namespace Client.Core.Pages.PrivateOffice.Admin
             }
 
             return _validationErrors.Count == 0;
+        }
+
+        private async Task FillField(User user)
+        {
+            _activeRole = user.Role;
+            _lastName = user.LastName;
+            _firstName = user.FirstName;
+            _middleName = user.MiddleName ?? string.Empty;
+            _email = user.Email;
+            _password = string.Empty;
+
+            switch (user.Role)
+            {
+                case Role.student:
+                    if (user.Student != null)
+                    {
+                        _studentGroup = user.Student.GroupId;
+                        _studentCardId = user.Student.StudentCard;
+                    }
+                    break;
+
+                case Role.educator:
+                    if (user.Educator != null)
+                    {
+                        _profession = user.Educator.Profession;
+                        _academicDegree = user.Educator.AcademicDegree ?? string.Empty;
+
+                        if (user.Educator.EducatorAdditionalInfo != null)
+                        {
+                            var info = user.Educator.EducatorAdditionalInfo;
+                            _educationLevel = info.EducationLevel;
+                            _academicTitle = info.AcademicTitle;
+                            _specialty = info.SpecialtyOrFieldOfStudy;
+                            _qualification = info.Qualification;
+                            _additionalInfo = info.AdditionalInfo;
+
+                            if (!string.IsNullOrEmpty(info.Image))
+                            {
+                                _imageBase64 = info.Image;
+                                _imagePreview = info.GetIMG();
+                            }
+
+                            _selectedDisciplineIds.Clear();
+                            if (info.EducatorDisciplines != null)
+                            {
+                                _selectedDisciplineIds = info.EducatorDisciplines
+                                    .Select(d => d.DisciplineId)
+                                    .ToList();
+                            }
+                        }
+                    }
+                    break;
+
+                case Role.admin:
+                    if (user.Administrator != null)
+                    {
+                        _adminPosition = user.Administrator.Position;
+                    }
+                    break;
+            }
+
+            // Принудительное обновление UI (если требуется)
+            await InvokeAsync(StateHasChanged);
         }
 
         private void SetActiveTable(Role level)

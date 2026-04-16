@@ -12,8 +12,7 @@ namespace Client.Core.Entities.Models.DTO
         [MaxLength(256)]
         public string Email { get; set; }
 
-        [Required]
-        public string PasswordHash { get; set; }
+        public string? PasswordHash { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(100)]

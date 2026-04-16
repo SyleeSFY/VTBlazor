@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.BLL.Services.Inrerfaces;
 using Server.DAL.Models.DTO;
 using Server.DAL.Models.Entities.Users;
+using static System.Net.WebRequestMethods;
 
 namespace Server.Api.Controllers;
 
@@ -64,6 +65,17 @@ public class UserController : ControllerBase
        
     }
 
+    [HttpPost("PostEditUser/{userId}")]
+    public async Task<ActionResult<bool>> PostEditUser(int userId, UserDTO data)
+    {
+        if (data != null)
+        {
+            var result = await _userService.EditUserByDTOAsync(userId, data);
+            return Ok(result);
+        }
+        return NotFound();
+    }
+
     [HttpPost("PostAddUser")]
     public async Task<ActionResult<bool>> PostAddUser(UserDTO data)
     {
@@ -76,12 +88,20 @@ public class UserController : ControllerBase
     }
     #region FullInfo
 
+    [HttpGet("GetUserByAutomaticallyUserId/{id}")]
+    public async Task<User> GetUserByAutomaticallyUserId(int id)
+    {
+        return await _userService.GetUserWithAutInfoByUserId(id);
+
+    }
+
     [HttpGet("GetUserWithStudentInfo/{id}")]
     public async Task<User> GetUserWithStudentInfoById(int id)
     {
         return await _userService.GetUserWithStudentInfoByUserId(id);
 
     }
+
     [HttpGet("GetUserWithEducatorInfoById/{id}")]
     public async Task<User> GetUserWithEducatorInfoById(int id)
     {

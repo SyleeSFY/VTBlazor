@@ -96,6 +96,9 @@ namespace Client.Core.Shared
         public async Task<User> GetUserByUserId(int id)
             => await _http.GetFromJsonAsync<User>($"api/user/GetUserByUserId/{id}") ?? new User();
 
+        public async Task<User> GetUserByAutomaticallyUserId(int id)
+            => await _http.GetFromJsonAsync<User>($"api/user/GetUserByAutomaticallyUserId/{id}") ?? new User();
+
         public async Task<List<User>> GetUsersStudentByGroup(int groupId)
             => await _http.GetFromJsonAsync<List<User>>($"api/user/GetUserStudentByGroupId/{groupId}") ?? new List<User>();
 
@@ -112,6 +115,20 @@ namespace Client.Core.Shared
         {
             var response = await _http.PostAsJsonAsync($"api/User/PostAddUser", user);
             return await response.Content.ReadFromJsonAsync<bool>();
+        }
+        public async Task<bool> PostEditUser(int userId, UserDTO user)
+        {
+            try
+            {
+                var response = await _http.PostAsJsonAsync($"api/User/PostEditUser/{userId}", user);
+                return await response.Content.ReadFromJsonAsync<bool>();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
         }
         #endregion
 
