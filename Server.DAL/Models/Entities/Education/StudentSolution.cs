@@ -13,7 +13,6 @@ namespace Server.DAL.Models.Entities.Education
         public int Id { get; set; }
         public int TaskId { get; set; }
         public int StudentId { get; set; }
-        public int? SolutionChatId { get; set; }
         public string SolutionText { get; set; } = string.Empty;
         public List<SolutionFile>? SolutionFiles { get; set; }
         public SolutionStatus Status { get; set; } = SolutionStatus.InReview;

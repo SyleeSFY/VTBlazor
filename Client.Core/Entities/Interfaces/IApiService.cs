@@ -41,5 +41,7 @@ namespace Client.Core.Entities.Interfaces
         Task<bool> PostAddDiscipline(DisciplineDTO discipline);
         Task<bool> PostEditDiscipline(int disciplineId, DisciplineDTO discipline);
         Task<User> GetUserByAutomaticallyUserId(int id);
+        Task<HttpResponseMessage> PostMessage(MessageInChatDTO message);
+        Task<User> GetUserByAuth(AuthenticationState authState);
     }
 }

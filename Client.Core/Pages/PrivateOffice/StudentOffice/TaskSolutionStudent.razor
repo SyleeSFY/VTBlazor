@@ -2,6 +2,7 @@
 @using Client.Core.Entities.Enums
 @using Client.Core.Features
 @using Client.Core.Shared
+@using Client.Core.Widgets
 @inject HttpClient Http
 @layout PrivateOfficeLayout
 @inject NavigationManager Navigation
@@ -86,7 +87,7 @@
                     }                               
                 </div>
             } 
-            <div class="row justify-content-center" style="margin-top: auto; margin-bottom: auto">
+            <div class="row justify-content-center" style="margin-top: auto; margin-bottom: auto; display:@(_existingSolution.Id is not 0 ? "none" : "")">
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
@@ -132,7 +133,7 @@
                                 </div>
 
                                 <div class="form-group mt-4">
-                                    <button type="button" class="btn btn-primary me-2" style="background: #009c15"  disabled="@(_existingSolution.Id is not 0)">>
+                                    <button type="submit" class="btn btn-primary me-2" style="background: #009c15"  disabled="@(_existingSolution.Id is not 0)">>
                                         Отправить
                                     </button>
                                     <button type="button" class="btn btn-light">
@@ -144,6 +145,8 @@
                     </div>
                 </div>
             </div>
+            <SolutionChat Messages="_existingSolution?.SolutionChat?.Messages" User="_user" Solution="_existingSolution"></SolutionChat>
+
             <ButtonRedirect Redirect="TaskStudentTable" Text="Назад" MT="auto" />
         </div>
     </Authorized>

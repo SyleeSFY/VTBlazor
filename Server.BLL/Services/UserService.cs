@@ -207,22 +207,41 @@ public class UserService : IUserService
 
         #endregion
 
+        #region Message
+        public async Task<bool> AddMessageByDTOAsync(MessageInChatDTO messageDTO) 
+        {
+            var message = new MessageInChat()
+            {
+                ChatId = messageDTO.ChatId,
+                SenderId = messageDTO.SenderId,
+                SenderRole = messageDTO.SenderRole,
+                MessageText = messageDTO.MessageText,
+                SentAt = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc),
+            };
+            var user = await _userRepository.AddMessageAsync(message);
+            return true;
+        }
+        #endregion
         public async Task<bool> AddSolutionByDTOAsync(SolutionStudentDTO solutionDTO)
-    {
+        {
             var compFiles = new List<SolutionFile>();
 
             var solution = new StudentSolution
             {
                 TaskId = solutionDTO.TaskId,
                 StudentId = solutionDTO.StudentId,
-                SolutionChatId = solutionDTO.SolutionChatId,
                 SolutionText = solutionDTO.SolutionText,
                 Status = solutionDTO.Status,
                 CreatedAt = DateTime.SpecifyKind(solutionDTO.CreatedAt, DateTimeKind.Utc),
                 UpdatedAt = DateTime.SpecifyKind(solutionDTO.UpdatedAt, DateTimeKind.Utc),
+                SolutionChat = new SolutionChat()
+                {
+                    CreatedAt = DateTime.SpecifyKind(solutionDTO.CreatedAt, DateTimeKind.Utc),
+                }
             };
 
             var solutionId = await _userRepository.AddSolutionAsync(solution);
+
             var task = await _educatorRepository.GetTasksEducatorByIdWithDicipline(solution.TaskId);
 
             if (solutionId is not 0 && solutionDTO.SolutionFiles?.Count != 0 && solutionDTO.SolutionFiles != null)

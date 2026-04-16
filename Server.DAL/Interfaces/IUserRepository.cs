@@ -24,4 +24,5 @@ public interface IUserRepository
     Task<User> GetUserWithAdminInfoByIdAsync(int id);
     Task<User?> GetUserFullInfoAsync(int userId);
     Task<bool> UpdateUserAsync(User user);
+    Task<MessageInChat?> AddMessageAsync(MessageInChat userMessage);
 }

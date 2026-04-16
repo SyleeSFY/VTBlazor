@@ -1,5 +1,6 @@
 @page "/TaskInfoDesc/{Id:int}"
 @using Client.Core.Features
+@using Client.Core.Widgets
 @inject HttpClient Http
 @layout PrivateOfficeLayout
 @inject NavigationManager Navigation
@@ -54,6 +55,7 @@
                         Отказать
                     </button>
                 </div>
+                <SolutionChat Messages="_solution?.SolutionChat?.Messages" User="_user" Solution="_solution"></SolutionChat>
             </div>
             <ButtonRedirect Redirect="@($"TaskInfo/{_solution.TaskId}")" Text="Назад" MT="0" />
 

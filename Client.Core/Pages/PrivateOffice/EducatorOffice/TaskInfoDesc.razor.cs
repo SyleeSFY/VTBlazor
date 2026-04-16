@@ -5,19 +5,20 @@ using Client.Core.Entities.Models.Education;
 using Client.Core.Entities.Models.User;
 using Client.Core.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
-using System.Collections;
-using System.Reflection;
 
 namespace Client.Core.Pages.PrivateOffice.EducatorOffice;
 
 public partial class TaskInfoDesc : ComponentBase
 {
+    [CascadingParameter] private Task<AuthenticationState> AuthStateTask { get; set; }
     [Inject] private IApiService _apiService { get; set; }
     [Parameter] public required int Id { get; set; }
 
     private IJSObjectReference? _module;
 
+    private User _user;
     private StudentSolution _solution;
     private Student _student;
     private User _userStudent;
@@ -25,12 +26,14 @@ public partial class TaskInfoDesc : ComponentBase
     public TaskInfoDesc()
     {
         _solution = new StudentSolution();
+        _user = new User();
         _userStudent = new User();
         _student = new Student();
     }
 
     protected override async Task OnInitializedAsync()
     {
+        _user = await _apiService.GetUserByAuth(await AuthStateTask);
         _solution = await _apiService.GetSolutionById(Id);
         _student = await _apiService.GetStudentByStudentId(_solution.StudentId);
         _userStudent = await _apiService.GetUserByUserId(_student.UserId);

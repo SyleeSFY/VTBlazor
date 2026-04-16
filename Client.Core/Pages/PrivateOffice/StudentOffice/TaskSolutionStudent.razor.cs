@@ -22,7 +22,9 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
 
         private IJSObjectReference? _module;
         private TaskEducation _task;
+
         private Student _student;
+        private User _user;
 
         private SolutionStudentDTO _taskSolution;
         private StudentSolution _existingSolution;
@@ -31,6 +33,7 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
 
         public TaskSolutionStudent()
         {
+            _user = new User();
             _existingSolution = new StudentSolution();
             _task = new TaskEducation();
             _taskSolution = new SolutionStudentDTO();
@@ -39,6 +42,7 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
 
         protected override async Task OnInitializedAsync()
         {
+            _user = await _apiService.GetUserByAuth(await AuthStateTask);
             _student = await _apiService.GetStudentByAuth(await AuthStateTask);
             _task = await _apiService.GetTaskEducationById(Id);
             _task.Dicipline = await _apiService.GetDisciplineById(_task.DiciplineId);

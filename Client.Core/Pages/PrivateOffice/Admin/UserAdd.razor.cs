@@ -60,7 +60,7 @@ namespace Client.Core.Pages.PrivateOffice.Admin
             _diciplines = await _apiService.GetDisciplines();
             _groups = await _apiService.GetGroups();
             _user = UserId != null ? await _apiService.GetUserByAutomaticallyUserId((int)UserId) : null;
-            _isEditMode = _user?.Id != 0;
+            _isEditMode = _user != null && _user?.Id != 0;
             if (_isEditMode)
                 await FillField(_user);
         }

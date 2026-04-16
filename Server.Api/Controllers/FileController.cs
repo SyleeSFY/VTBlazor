@@ -99,5 +99,19 @@ namespace Server.Api.Controllers
             }
             return Array.Empty<byte>();
         }
+        #region Message
+
+        [HttpPost("PostAddMessage")]
+        public async Task<ActionResult<bool>> PostAddMessage(MessageInChatDTO data)
+        {
+            if (data != null)
+            {
+                var result = await _userService.AddMessageByDTOAsync(data);
+                //return result ? Ok(result) : NotFound(result);
+            }
+            return NotFound();
+        }
+        
+        #endregion
     }
 }

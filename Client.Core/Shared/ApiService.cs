@@ -92,7 +92,15 @@ namespace Client.Core.Shared
         #endregion
 
         #region User Endpoints
+        public async Task<User> GetUserByAuth(AuthenticationState authState)
+        {
+            var id = await GetId(authState);
 
+            if (id > 0)
+                return await GetUserByUserId(id);
+
+            return new User();
+        }
         public async Task<User> GetUserByUserId(int id)
             => await _http.GetFromJsonAsync<User>($"api/user/GetUserByUserId/{id}") ?? new User();
 
@@ -186,6 +194,13 @@ namespace Client.Core.Shared
             var response = await _http.PostAsJsonAsync($"api/file/UpdateSolutionStatus/{solutionId}", updateData);
             return await response.Content.ReadFromJsonAsync<bool>();
         }
+
+        #endregion
+
+        public async Task<HttpResponseMessage> PostMessage(MessageInChatDTO message)
+            => await _http.PostAsJsonAsync($"api/file/PostAddMessage", message);
+
+        #region Message
 
         #endregion
 
