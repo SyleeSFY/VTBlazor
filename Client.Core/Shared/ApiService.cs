@@ -211,6 +211,9 @@ namespace Client.Core.Shared
 
         public async Task<byte[]> GetSolutionFileByte(int fileId)
             => await _http.GetFromJsonAsync<byte[]>($"api/file/GetSolutionFile/{fileId}") ?? new byte[0];
+        
+        public async Task<byte[]> GetMessageFileByte(int fileId)
+            => await _http.GetFromJsonAsync<byte[]>($"api/file/GetMessageFile/{fileId}") ?? new byte[0];
 
         #endregion
     }

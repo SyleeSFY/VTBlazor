@@ -207,18 +207,45 @@ public class UserService : IUserService
 
         #endregion
 
+        // Files = messageDTO.Files.Select(x => new FileInChat()
+        // {
+        //     FileName = x.FileName,
+        //             
+        // }).ToList()
         #region Message
         public async Task<bool> AddMessageByDTOAsync(MessageInChatDTO messageDTO) 
         {
-            var message = new MessageInChat()
+            var messageChat = new MessageInChat()
             {
                 ChatId = messageDTO.ChatId,
                 SenderId = messageDTO.SenderId,
                 SenderRole = messageDTO.SenderRole,
                 MessageText = messageDTO.MessageText,
                 SentAt = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc),
+
             };
-            var user = await _userRepository.AddMessageAsync(message);
+            var message = await _userRepository.AddMessageAsync(messageChat);
+
+            if (message?.Id is not 0 && messageDTO.Files?.Count != 0 && messageDTO.Files != null)
+            {
+                var compFiles = new List<FileInChat>();
+                foreach (var file in messageDTO.Files)
+                {
+                    var bytes = Convert.FromBase64String(file.ContentBase64);
+                    var physicalPath =
+                        await _fileService.SaveFileToDisk(bytes, file.FileName, "FileInChat", FileType.Message);
+                    compFiles.Add(new FileInChat()
+                    {
+                        MessageId = message.Id,
+                        FileName = file.FileName,
+                        PhysicalPath = physicalPath,
+                        FileSize = file.FileSize,
+                        FileType = file.FileType
+                    });
+                }
+                if (compFiles.Any())
+                    await _fileRepository.AddMessageFile(compFiles); 
+            }
             return true;
         }
         #endregion

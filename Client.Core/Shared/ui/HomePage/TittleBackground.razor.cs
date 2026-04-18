@@ -13,5 +13,9 @@ namespace Client.Core.Shared.ui.HomePage
         [Parameter] 
         [Required] 
         public string Color { get; set; } = "006928d8";
+        [Parameter]
+        public int PaddingRight { get; set; } = 40;
+        [Parameter]
+        public int PaddingLeft { get; set; } = 40;
     }
 }

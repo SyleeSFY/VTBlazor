@@ -17,10 +17,15 @@ namespace Client.Core.Widgets
         [Parameter] public StudentSolution Solution { get; set; }
 
         private string _newMessage = "";
-        private List<IBrowserFile> _selectedFiles = new();
         private ElementReference _fileInput;
         private IJSObjectReference? _module;
+        private List<IBrowserFile> _uploadedFiles;
 
+        public SolutionChat()
+        {
+            _uploadedFiles = new List<IBrowserFile>();
+        }
+       
         protected override async Task OnInitializedAsync()
         {
             await LoadMessages();
@@ -30,8 +35,19 @@ namespace Client.Core.Widgets
         {
             if (firstRender)
             {
-                _module = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/PrivateOffice/EducatorOffice/TaskInfo.razor.js");
+                _module = await JS.InvokeAsync<IJSObjectReference>("import", "./Widgets/SolutionChat.razor.js");
             }
+        }
+        private async Task GetFile(FileInChat fileId)
+        {
+            var file = await _apiService.GetMessageFileByte(fileId.Id);
+            await DownloadFile(file, fileId.FileName);
+        }
+
+        private async Task DownloadFile(byte[] fileBytes, string fileName)
+        {
+            var base64 = Convert.ToBase64String(fileBytes);
+            await _module.InvokeVoidAsync("downloadFile", base64, fileName);
         }
 
         private async Task LoadMessages()
@@ -55,14 +71,9 @@ namespace Client.Core.Widgets
             }
         }
 
-        private async Task HandleFileSelected(InputFileChangeEventArgs e)
-        {
-            _selectedFiles = e.GetMultipleFiles().ToList();
-        }
-
         private async Task SendMessage()
         {
-            if (string.IsNullOrWhiteSpace(_newMessage) && !_selectedFiles.Any())
+            if (string.IsNullOrWhiteSpace(_newMessage) && !_uploadedFiles.Any())
                 return;
 
             try
@@ -75,6 +86,9 @@ namespace Client.Core.Widgets
                     SenderRole = User.Role,
                     MessageText = _newMessage,
                 };
+                
+                if (_uploadedFiles.Any())
+                    messageDto.Files = await AddFiles(_uploadedFiles);
 
                 var newMessage = await _apiService.PostMessage(messageDto);
 
@@ -93,11 +107,58 @@ namespace Client.Core.Widgets
             }
         }
 
-        private async Task DownloadFileAsync(FileInChat file)
+
+        
+        #region FileWork
+        private async Task<List<FileInChatDTO>> AddFiles(List<IBrowserFile> uploadedFiles)
         {
-            // var fileBytes = await ApiService.GetChatFileBytes(file.Id);
-            // var base64 = Convert.ToBase64String(fileBytes);
-            // await _module.InvokeVoidAsync("downloadFile", base64, file.FileName);
+            var files = new List<FileInChatDTO>();
+            
+            foreach (var file in uploadedFiles)
+            {
+                using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+                using var memoryStream = new MemoryStream();
+                await stream.CopyToAsync(memoryStream);
+        
+                var bytes = memoryStream.ToArray();
+                var base64 = Convert.ToBase64String(bytes);
+        
+                var fileDTO = new FileInChatDTO
+                {
+                    FileName = file.Name,
+                    FileSize = file.Size,
+                    ContentBase64 = base64,
+                    FileType = Path.GetExtension(file.Name)
+                };
+        
+                files.Add(fileDTO);
+            }
+    
+            return files;
         }
+        
+        private async Task OnFileUpload(InputFileChangeEventArgs e)
+        {
+            var files = e.GetMultipleFiles();
+            _uploadedFiles.Clear();
+            _uploadedFiles.AddRange(files);
+        }
+        
+        private string FormatFileSize(long bytes)
+        {
+            if (bytes < 1024)
+                return $"{bytes} B";
+            if (bytes < 1024 * 1024)
+                return $"{bytes / 1024} KB";
+            return $"{bytes / (1024 * 1024):F1} MB";
+        }
+
+        private void ClearFiles()
+            => _uploadedFiles.Clear();
+
+        private void RemoveFile(IBrowserFile fileToRemove)
+            => _uploadedFiles.Remove(fileToRemove);
+
+        #endregion
     }
 }

@@ -4,5 +4,6 @@
     {
         Task = 0,
         Solution = 1,
+        Message = 2
     }
 }

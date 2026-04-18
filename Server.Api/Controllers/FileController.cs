@@ -100,7 +100,18 @@ namespace Server.Api.Controllers
             return Array.Empty<byte>();
         }
         #region Message
-
+        [HttpGet("GetMessageFile/{fileId}")]
+        public async Task<byte[]> GetMessageFile(int fileId)
+        {
+            if (fileId > 0)
+            {
+                var result = await _fileService.GetFile(fileId, FileType.Message);
+                return result;
+            }
+            return Array.Empty<byte>();
+        }
+        
+        
         [HttpPost("PostAddMessage")]
         public async Task<ActionResult<bool>> PostAddMessage(MessageInChatDTO data)
         {

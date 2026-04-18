@@ -49,6 +49,22 @@ namespace Server.DAL.Repositories
                 throw;
             }
         }
+        
+        public async Task<bool> AddMessageFile(List<FileInChat> files)
+        {
+            try
+            {
+                await _context.FilesInChat.AddRangeAsync(files);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
         public async Task<TaskFile> GetTaskFile(int fileId)
         {
@@ -68,6 +84,19 @@ namespace Server.DAL.Repositories
             try
             {
                 return await _context.SolutionFiles.FirstOrDefaultAsync(x => x.Id == fileId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        
+        public async Task<FileInChat> GetMessageFile(int fileId)
+        {
+            try
+            {
+                return await _context.FilesInChat.FirstOrDefaultAsync(x => x.Id == fileId);
             }
             catch (Exception)
             {

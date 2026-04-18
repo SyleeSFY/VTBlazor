@@ -11,98 +11,119 @@
 <AuthorizeView Context="AuthContext">
     <Authorized>
         <div class="container">
-            <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Решение" />
-
-             <div style="display: flex; gap: 20px;">
-                <div style="">
-                    <div class="EducatorCardInfo" style=" padding-left: 2vw">
-                        <div class="mb-3">
-                            <TittleUnderStick Tittle="@_task.Dicipline?.NameDiscipline"
-                                      PaddinLeft="0"
-                                      JustifyContent="JustifyContentEnum.FlexStart"
-                                      FontSize="36"/>
-                        </div>
-                        
+        @if (_existingSolution.Id is 0)
+        {
+            <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Решение студента"/>
+        }
+        <div class="mt-2" style="display: flex">
+            <div style="">
+                <div class="EducatorCardInfo" style=" padding-left: 2vw">
+                    <div class="mb-3 m-lg-0">
+                        <TittleBackground 
+                            PaddingLeft="0" 
+                            PaddingRight="0" 
+                            JustifyContent="@JustifyContentEnum.FlexStart" 
+                            Color="235f26" 
+                            Tittle="@_task.Dicipline?.NameDiscipline"/>
+                    </div>
+                    <div class="p-3">
                         <p><span style="font-weight: 500;">Название работы:</span> @_task.TaskName</p>
                         <p><span style="font-weight: 500;">Задание:</span> @_task.TaskDescription</p>
                         <p>
-                        <span style="font-weight: 500;">Файлы:</span>
+                            <span style="font-weight: 500;">Файлы:</span>
 
-                        @if (_task.Files != null && _task.Files.Any())
-                        {
-                            <ul class="disciplines_list">
-                            @foreach (var item in _task.Files)
+                            @if (_task.Files != null && _task.Files.Any())
                             {
-                                    <li>
-                                        <button @onclick="() => GetFile(item.Id, item.FileName, FileType.Task)" style="color: #0a53be; border: none; background: none;">
-                                            @item.FileName
-                                        </button>
-                                    </li>
+                                <ul class="disciplines_list">
+                                    @foreach (var item in _task.Files)
+                                    {
+                                        <li>
+                                            <button @onclick="() => GetFile(item.Id, item.FileName, FileType.Task)" style="color: #0a53be; border: none; background: none;">
+                                                @item.FileName
+                                            </button>
+                                        </li>
+                                    }
+                                </ul>
                             }
-                            </ul>
-                        }
-                        else
-                        {
-                            <span> Отсуствуют</span>
-                        }
+                            else
+                            {
+                                <span> Отсуствуют</span>
+                            }
 
                         </p>
                         <p><span style="font-weight: 500;">Дата:</span> @_task.CreatedAt.ToString("dd.MM.yyyy")</p>
-                        @if (_existingSolution.Id is not 0)
-                        {
-                            <p><span style="font-weight: 500;">Ваше решение:</span></p>
-                        }
                     </div>
                 </div>
-             </div>
-             
-            @if (_existingSolution.Id is not 0)
-            {
-                <div class="existing-solution mt-2 mb-4 p-3 EducatorCardInfo" style="border-radius: 8px; border: 2px solid lightgray; width: 60%; margin-left: auto; margin-right: auto;">
-                    <p><strong>Статус:</strong>
-                        <span style=" padding-left: 1vw">
-                            @GlobalData.GetSolutionStatus[_existingSolution.Status]
-                        </span>
-                    </p>
-                    @if (!string.IsNullOrEmpty(_existingSolution.SolutionText))
-                    {
-                        <p style="margin-bottom: 0px"><strong>Текст решения:</strong></p>
-                        <div class="" style="background: white; border-radius: 4px; padding-left: 1vw">
-                            @_existingSolution.SolutionText
+                @if (_existingSolution.Id is not 0)
+                {
+                    <div class="EducatorCardInfo" style="margin-left: 2vw;">
+                        <div class="mb-3 m-lg-0">
+                            <TittleBackground 
+                                PaddingLeft="0" 
+                                PaddingRight="0" 
+                                JustifyContent="@JustifyContentEnum.FlexStart" 
+                                Color="235f26" 
+                                Tittle="Ваше решение"/>
                         </div>
-                    }
-                    @if (_existingSolution.SolutionFiles != null && _existingSolution.SolutionFiles.Any())
-                    {
-                        <p class="mt-2"><strong>Прикрепленные файлы:</strong></p>
-                        <ul class="disciplines_list" style="padding-left: 0px;">
-                            @foreach (var file in _existingSolution.SolutionFiles)
+                        <div class="existing-solution mb-4 p-3 EducatorCardInfo">
+                            <p><span style="font-weight: 500;">Статус:</span><strong>@($" {GlobalData.GetSolutionStatus[_existingSolution.Status]}") </strong></p>
+                            @if (!string.IsNullOrEmpty(_existingSolution.SolutionText))
                             {
-                                <li>
-                                    <button style="color: #0a53be; border: none; background: none;" @onclick="() => GetFile(file.Id, file.FileName, FileType.Solution)">
-                                        @file.FileName
-                                    </button>
-                                </li>
+                            <p><span style="font-weight: 500;">Текст решения:</span>  @_existingSolution.SolutionText</p>
                             }
-                        </ul>
-                    }                               
+                            @* <p><strong>Статус:</strong> *@
+                            @*     <span style=" padding-left: 1vw"> *@
+                            @*         @GlobalData.GetSolutionStatus[_existingSolution.Status] *@
+                            @*     </span> *@
+                            @* </p> *@
+                            @* @if (!string.IsNullOrEmpty(_existingSolution.SolutionText)) *@
+                            @* { *@
+                            @*     <p style="margin-bottom: 0px"><strong>Текст решения:</strong></p> *@
+                            @*     <div class="" style="background: white; border-radius: 4px; padding-left: 1vw"> *@
+                            @*         *@
+                            @*     </div> *@
+                            @* } *@
+                            @if (_existingSolution.SolutionFiles != null && _existingSolution.SolutionFiles.Any())
+                            {
+                                <p class="mt-2"><strong>Прикрепленные файлы:</strong></p>
+                                <ul class="disciplines_list" style="padding-left: 0px;">
+                                    @foreach (var file in _existingSolution.SolutionFiles)
+                                    {
+                                        <li>
+                                            <button style="color: #0a53be; border: none; background: none;" @onclick="() => GetFile(file.Id, file.FileName, FileType.Solution)">
+                                                @file.FileName
+                                            </button>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </div>
+
+                    </div>
+                }
+            </div>
+                <div style="width: 50%; margin-left: auto; margin-right: auto;">
+                    <SolutionChat Messages="_existingSolution?.SolutionChat?.Messages" User="_user" Solution="_existingSolution"></SolutionChat>
                 </div>
-            } 
+            </div>
+
+
             <div class="row justify-content-center" style="margin-top: auto; margin-bottom: auto; display:@(_existingSolution.Id is not 0 ? "none" : "")">
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
                             <EditForm Model="@_taskSolution" OnValidSubmit="@HandleValidSubmit">
-                               @*  <DataAnnotationsValidator />
+                                @*  <DataAnnotationsValidator />
                                 <ValidationSummary class="text-danger" /> *@
                                 <div class="form-group mb-3">
-@*                                     <label for="taskDescription" class="form-label">Решение</label>
- *@                                    <textarea class="form-control" id="taskDescription" rows="5" placeholder="Введите описание решения" @bind="_solutionText"></textarea>
-@*                                     <ValidationMessage For="@(() => _newTaskDTO.TaskDescription)" />
- *@                                </div>
+                                    @*                                     <label for="taskDescription" class="form-label">Решение</label>
+ *@ <textarea class="form-control" id="taskDescription" rows="5" placeholder="Введите описание решения" @bind="_solutionText"></textarea>
+                                    @*                                     <ValidationMessage For="@(() => _newTaskDTO.TaskDescription)" />
+ *@ </div>
                                 <div class="form-group mb-3">
                                     <label for="files" class="form-label">Файлы</label>
                                     <div class="input-group">
-                                        <InputFile id="files" multiple OnChange="@OnFileUpload" class="form-control" style="padding: 0.375rem 0.75rem;" />
+                                        <InputFile id="files" multiple OnChange="@OnFileUpload" class="form-control" style="padding: 0.375rem 0.75rem;"/>
                                         @if (_uploadedFiles.Any())
                                         {
                                             <button type="button" class="btn btn-outline-danger" @onclick="ClearFiles">
@@ -133,7 +154,7 @@
                                 </div>
 
                                 <div class="form-group mt-4">
-                                    <button type="submit" class="btn btn-primary me-2" style="background: #009c15"  disabled="@(_existingSolution.Id is not 0)">>
+                                    <button type="submit" class="btn btn-primary me-2" style="background: #009c15" disabled="@(_existingSolution.Id is not 0)">>
                                         Отправить
                                     </button>
                                     <button type="button" class="btn btn-light">
@@ -145,9 +166,8 @@
                     </div>
                 </div>
             </div>
-            <SolutionChat Messages="_existingSolution?.SolutionChat?.Messages" User="_user" Solution="_existingSolution"></SolutionChat>
 
-            <ButtonRedirect Redirect="TaskStudentTable" Text="Назад" MT="auto" />
+            <ButtonRedirect Redirect="TaskStudentTable" Text="Назад" MT="auto"/>
         </div>
     </Authorized>
     <NotAuthorized>
