@@ -110,6 +110,17 @@ namespace Server.Api.Controllers
             }
             return Array.Empty<byte>();
         }
+
+        [HttpGet("GetChatById/{chatId}")]
+        public async Task<SolutionChat> GetChatById(int chatId)
+        {
+            if (chatId > 0)
+            {
+                var result = await _userService.GetSolutionChatById(chatId);
+                return result;
+            }
+            return new SolutionChat();
+        }
         
         
         [HttpPost("PostAddMessage")]

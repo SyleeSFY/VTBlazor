@@ -44,5 +44,6 @@ namespace Client.Core.Entities.Interfaces
         Task<HttpResponseMessage> PostMessage(MessageInChatDTO message);
         Task<User> GetUserByAuth(AuthenticationState authState);
         Task<byte[]> GetMessageFileByte(int fileId);
+        Task<SolutionChat> GetChatById(int chatId);
     }
 }

@@ -47,7 +47,7 @@
                     <p><span style="font-weight: 500;">Дата обновления:</span> @_solution.UpdatedAt.ToString("dd.MM.yyyy HH:mm").</p>
                     <p><span style="font-weight: 500;">Статус работы:</span><span style="@($"color: {GetSolutionColor(_solution.Status)};")">&nbsp; @GetSolutionStatus(_solution.Status).</span></p>
                 </div>
-                <div style="display:flex; gap: 2vw">
+                <div style="display:flex; gap: 2vw" class="mb-3">
                     <button class="double-border-button nav_item Cursor Nav__btn Cursor" style="width: 80px; height: 40px;" @onclick="() => UpdateStatus(Entities.Enums.SolutionStatus.Approved)">
                         Подтвердить
                     </button>

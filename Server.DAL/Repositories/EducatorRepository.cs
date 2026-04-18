@@ -39,6 +39,7 @@ public class EducatorRepository : IEducatorRepository
                 .Include(x => x.SolutionFiles)
                 .Include(x => x.SolutionChat)
                     .ThenInclude(x => x.Messages)
+                        .ThenInclude(x => x.Files)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
         catch (Exception)

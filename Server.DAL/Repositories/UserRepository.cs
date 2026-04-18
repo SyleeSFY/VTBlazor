@@ -153,6 +153,9 @@ public class UserRepository : IUserRepository
     public async Task<User> GetUserWithAdminInfoByIdAsync(int id)
         => await _context.Users.Include(x => x.Administrator).FirstOrDefaultAsync(x => x.Id == id);
 
+    public async Task<SolutionChat?> GetSolutionChatById(int id)
+        => await _context.SolutionChats.Include(x => x.Messages).ThenInclude(x => x.Files).FirstOrDefaultAsync(x => x.Id == id);
+
     #region Message
 
     public async Task<MessageInChat?> AddMessageAsync(MessageInChat userMessage)

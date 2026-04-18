@@ -201,7 +201,8 @@ namespace Client.Core.Shared
             => await _http.PostAsJsonAsync($"api/file/PostAddMessage", message);
 
         #region Message
-
+        public async Task<SolutionChat> GetChatById(int chatId)
+            => await _http.GetFromJsonAsync<SolutionChat>($"api/file/GetChatById/{chatId}") ?? new SolutionChat();
         #endregion
 
         #region File Endpoints

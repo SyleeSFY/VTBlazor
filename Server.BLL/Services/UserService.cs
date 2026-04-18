@@ -205,6 +205,14 @@ public class UserService : IUserService
             return user;
         }
 
+        public async Task<SolutionChat> GetSolutionChatById(int id)
+        {
+            var chat = await _userRepository.GetSolutionChatById(id);
+            if (chat is null)
+                return new SolutionChat();
+            return chat;
+        }
+
         #endregion
 
         // Files = messageDTO.Files.Select(x => new FileInChat()
