@@ -205,14 +205,12 @@
 
                                             <div class="form-group mb-3">
                                                 <label for="educatorImage" class="form-label">Фотография</label>
-                                                <input type="file" class="form-control" id="educatorImage"
-                                                       @onchange="OnImageSelected" accept="image/*">
+                                                <InputFile OnChange="@OnImageSelected" accept="image/*" />
                                                 @if (!string.IsNullOrEmpty(_imagePreview))
                                                 {
-                                                    <div class="mt-2">
-                                                        <img src="@_imagePreview" alt="Preview" style="max-width: 200px; max-height: 200px;" />
-                                                    </div>
+                                                    <img src="@_imagePreview" style="max-width: 200px; max-height: 200px;" />
                                                 }
+
                                             </div>
 
                                             <h5 class="mt-4 mb-3">Преподаваемые дисциплины *</h5>

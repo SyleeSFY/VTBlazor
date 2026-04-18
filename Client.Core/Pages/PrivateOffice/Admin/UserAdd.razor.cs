@@ -5,6 +5,7 @@ using Client.Core.Entities.Models.User;
 using Client.Core.Entities.Models.User.Dicipline;
 using Client.Core.Pages.Public;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using System.Net.Http.Json;
 
 namespace Client.Core.Pages.PrivateOffice.Admin
@@ -65,15 +66,38 @@ namespace Client.Core.Pages.PrivateOffice.Admin
                 await FillField(_user);
         }
 
-        private async Task OnImageSelected(ChangeEventArgs e)
+        private async Task OnImageSelected(InputFileChangeEventArgs e)
         {
-            var file = e.Value as Microsoft.AspNetCore.Components.Forms.IBrowserFile;
+            var file = e.File;
             if (file != null)
             {
-                var buffer = new byte[file.Size];
-                await file.OpenReadStream().ReadAsync(buffer);
-                _imageBase64 = Convert.ToBase64String(buffer);
-                _imagePreview = $"data:{file.ContentType};base64,{_imageBase64}";
+                try
+                {
+                    if (file.Size > 5 * 1024 * 1024)
+                    {
+                        _validationErrors.Add("Файл слишком большой. Максимальный размер 5MB");
+                        return;
+                    }
+
+                    var allowedTypes = new[] { "image/jpeg", "image/png", "image/jpg", "image/gif" };
+                    if (!allowedTypes.Contains(file.ContentType))
+                    {
+                        _validationErrors.Add("Неподдерживаемый формат изображения. Используйте JPEG, PNG или GIF");
+                        return;
+                    }
+
+                    using var memoryStream = new MemoryStream();
+                    await file.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024).CopyToAsync(memoryStream);
+                    var buffer = memoryStream.ToArray();
+                    _imageBase64 = Convert.ToBase64String(buffer);
+                    _imagePreview = $"data:{file.ContentType};base64,{_imageBase64}";
+
+                    StateHasChanged();
+                }
+                catch (Exception ex)
+                {
+                    _validationErrors.Add($"Ошибка загрузки изображения: {ex.Message}");
+                }
             }
         }
 

@@ -236,6 +236,9 @@ namespace Server.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("FullName")
+                        .HasColumnType("text");
+
                     b.Property<string>("Profession")
                         .IsRequired()
                         .HasColumnType("text");

@@ -125,6 +125,7 @@ public class UserService : IUserService
                 case Role.educator:
                     if (existingUser.Educator != null && userDTO.Educator != null)
                     {
+                        existingUser.Educator.FullName = $"{userDTO.LastName} {userDTO.FirstName} {userDTO.MiddleName}";
                         existingUser.Educator.Profession = userDTO.Educator.Profession;
                         existingUser.Educator.AcademicDegree = userDTO.Educator.AcademicDegree;
 
@@ -329,6 +330,7 @@ public class UserService : IUserService
                     {
                         Profession = userDTO.Educator.Profession,
                         AcademicDegree = userDTO.Educator.AcademicDegree,
+                        FullName = $"{userDTO.LastName} {userDTO.FirstName} {userDTO.MiddleName}",
                         EducatorAdditionalInfo = new EducatorAdditionalInfo
                         {
                             EducationLevel = userDTO.Educator.EducatorAdditionalInfo.EducationLevel,

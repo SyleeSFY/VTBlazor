@@ -8,9 +8,7 @@ public class Educator
     public int Id { get; set; }
     public int UserId { get; set; }
     public string Profession { get; set; }
-    public string FullName => User != null
-          ? $"{User.LastName} {User.FirstName} {User.MiddleName}".Trim()
-          : string.Empty;
+    public string? FullName {  get; set; } = null;
     public string AcademicDegree { get; set; }
   
     public EducatorAdditionalInfo EducatorAdditionalInfo { get; set; }

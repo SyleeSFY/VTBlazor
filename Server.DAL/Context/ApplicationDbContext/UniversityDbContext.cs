@@ -179,7 +179,6 @@ public class UniversityDbContext : DbContext
                 .HasForeignKey<Educator>(e => e.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            entity.Ignore(e => e.FullName);
             entity.Property(e => e.Profession).IsRequired();
             entity.Property(e => e.AcademicDegree).IsRequired();
         });
