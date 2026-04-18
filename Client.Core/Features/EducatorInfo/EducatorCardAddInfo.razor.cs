@@ -16,9 +16,10 @@ public partial class EducatorCardAddInfo : ComponentBase
     
     protected override async Task OnInitializedAsync()
     {
-        await LoadEducator();
+        educator = await Http.GetFromJsonAsync<Educator>($"api/educators/{Id}");
+        //await LoadEducator();
     }
-    
+
     private async Task LoadEducator()
     {
         isLoading = true;
