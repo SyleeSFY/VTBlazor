@@ -125,6 +125,7 @@ public class UserService : IUserService
                 case Role.educator:
                     if (existingUser.Educator != null && userDTO.Educator != null)
                     {
+                        existingUser.Educator.FullName = $"{userDTO.LastName} {userDTO.FirstName} {userDTO.MiddleName}";
                         existingUser.Educator.Profession = userDTO.Educator.Profession;
                         existingUser.Educator.AcademicDegree = userDTO.Educator.AcademicDegree;
 
@@ -205,24 +206,78 @@ public class UserService : IUserService
             return user;
         }
 
+        public async Task<SolutionChat> GetSolutionChatById(int id)
+        {
+            var chat = await _userRepository.GetSolutionChatById(id);
+            if (chat is null)
+                return new SolutionChat();
+            return chat;
+        }
+
         #endregion
 
+        // Files = messageDTO.Files.Select(x => new FileInChat()
+        // {
+        //     FileName = x.FileName,
+        //             
+        // }).ToList()
+        #region Message
+        public async Task<bool> AddMessageByDTOAsync(MessageInChatDTO messageDTO) 
+        {
+            var messageChat = new MessageInChat()
+            {
+                ChatId = messageDTO.ChatId,
+                SenderId = messageDTO.SenderId,
+                SenderRole = messageDTO.SenderRole,
+                MessageText = messageDTO.MessageText,
+                SentAt = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc),
+
+            };
+            var message = await _userRepository.AddMessageAsync(messageChat);
+
+            if (message?.Id is not 0 && messageDTO.Files?.Count != 0 && messageDTO.Files != null)
+            {
+                var compFiles = new List<FileInChat>();
+                foreach (var file in messageDTO.Files)
+                {
+                    var bytes = Convert.FromBase64String(file.ContentBase64);
+                    var physicalPath =
+                        await _fileService.SaveFileToDisk(bytes, file.FileName, "FileInChat", FileType.Message);
+                    compFiles.Add(new FileInChat()
+                    {
+                        MessageId = message.Id,
+                        FileName = file.FileName,
+                        PhysicalPath = physicalPath,
+                        FileSize = file.FileSize,
+                        FileType = file.FileType
+                    });
+                }
+                if (compFiles.Any())
+                    await _fileRepository.AddMessageFile(compFiles); 
+            }
+            return true;
+        }
+        #endregion
         public async Task<bool> AddSolutionByDTOAsync(SolutionStudentDTO solutionDTO)
-    {
+        {
             var compFiles = new List<SolutionFile>();
 
             var solution = new StudentSolution
             {
                 TaskId = solutionDTO.TaskId,
                 StudentId = solutionDTO.StudentId,
-                SolutionChatId = solutionDTO.SolutionChatId,
                 SolutionText = solutionDTO.SolutionText,
                 Status = solutionDTO.Status,
                 CreatedAt = DateTime.SpecifyKind(solutionDTO.CreatedAt, DateTimeKind.Utc),
                 UpdatedAt = DateTime.SpecifyKind(solutionDTO.UpdatedAt, DateTimeKind.Utc),
+                SolutionChat = new SolutionChat()
+                {
+                    CreatedAt = DateTime.SpecifyKind(solutionDTO.CreatedAt, DateTimeKind.Utc),
+                }
             };
 
             var solutionId = await _userRepository.AddSolutionAsync(solution);
+
             var task = await _educatorRepository.GetTasksEducatorByIdWithDicipline(solution.TaskId);
 
             if (solutionId is not 0 && solutionDTO.SolutionFiles?.Count != 0 && solutionDTO.SolutionFiles != null)
@@ -275,6 +330,7 @@ public class UserService : IUserService
                     {
                         Profession = userDTO.Educator.Profession,
                         AcademicDegree = userDTO.Educator.AcademicDegree,
+                        FullName = $"{userDTO.LastName} {userDTO.FirstName} {userDTO.MiddleName}",
                         EducatorAdditionalInfo = new EducatorAdditionalInfo
                         {
                             EducationLevel = userDTO.Educator.EducatorAdditionalInfo.EducationLevel,

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Server.DAL.Context.ApplicationDbContext;
 using Server.DAL.Interfaces;
+using Server.DAL.Models.DTO;
 using Server.DAL.Models.Entities;
 using Server.DAL.Models.Entities.Education;
 using Server.DAL.Models.Entities.Users;
@@ -152,5 +153,24 @@ public class UserRepository : IUserRepository
     public async Task<User> GetUserWithAdminInfoByIdAsync(int id)
         => await _context.Users.Include(x => x.Administrator).FirstOrDefaultAsync(x => x.Id == id);
 
-    
+    public async Task<SolutionChat?> GetSolutionChatById(int id)
+        => await _context.SolutionChats.Include(x => x.Messages).ThenInclude(x => x.Files).FirstOrDefaultAsync(x => x.Id == id);
+
+    #region Message
+
+    public async Task<MessageInChat?> AddMessageAsync(MessageInChat userMessage)
+    {
+        try
+        {
+            await _context.MessagesInChat.AddAsync(userMessage);
+            await _context.SaveChangesAsync();
+            return userMessage;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+    }
+
+    #endregion
 }

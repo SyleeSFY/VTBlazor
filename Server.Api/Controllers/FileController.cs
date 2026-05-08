@@ -99,5 +99,41 @@ namespace Server.Api.Controllers
             }
             return Array.Empty<byte>();
         }
+        #region Message
+        [HttpGet("GetMessageFile/{fileId}")]
+        public async Task<byte[]> GetMessageFile(int fileId)
+        {
+            if (fileId > 0)
+            {
+                var result = await _fileService.GetFile(fileId, FileType.Message);
+                return result;
+            }
+            return Array.Empty<byte>();
+        }
+
+        [HttpGet("GetChatById/{chatId}")]
+        public async Task<SolutionChat> GetChatById(int chatId)
+        {
+            if (chatId > 0)
+            {
+                var result = await _userService.GetSolutionChatById(chatId);
+                return result;
+            }
+            return new SolutionChat();
+        }
+        
+        
+        [HttpPost("PostAddMessage")]
+        public async Task<ActionResult<bool>> PostAddMessage(MessageInChatDTO data)
+        {
+            if (data != null)
+            {
+                var result = await _userService.AddMessageByDTOAsync(data);
+                //return result ? Ok(result) : NotFound(result);
+            }
+            return NotFound();
+        }
+        
+        #endregion
     }
 }

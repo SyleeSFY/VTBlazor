@@ -22,4 +22,6 @@ public interface IUserService
     Task<User> GetUserWithAdminInfoByUserId(int id);
     Task<User> GetUserWithAutInfoByUserId(int id);
     Task<bool> EditUserByDTOAsync(int userId, UserDTO userDTO);
+    Task<bool> AddMessageByDTOAsync(MessageInChatDTO message);
+    Task<SolutionChat> GetSolutionChatById(int id);
 }

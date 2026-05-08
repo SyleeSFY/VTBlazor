@@ -35,7 +35,12 @@ public class EducatorRepository : IEducatorRepository
     {
         try
         {
-            return await _context.StudentSolutions.Include(x => x.SolutionFiles).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.StudentSolutions
+                .Include(x => x.SolutionFiles)
+                .Include(x => x.SolutionChat)
+                    .ThenInclude(x => x.Messages)
+                        .ThenInclude(x => x.Files)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
         catch (Exception)
         {
@@ -48,7 +53,12 @@ public class EducatorRepository : IEducatorRepository
     {
         try
         {
-            return await _context.StudentSolutions.Include(x => x.SolutionFiles).FirstOrDefaultAsync(x => x.TaskId == taskId && x.StudentId == studentId);
+            return await _context.StudentSolutions
+                        .Include(x => x.SolutionFiles)
+                        .Include(x => x.SolutionChat)
+                            .ThenInclude(x => x.Messages)
+                                .ThenInclude(x => x.Files)
+                        .FirstOrDefaultAsync(x => x.TaskId == taskId && x.StudentId == studentId);
         }
         catch (Exception)
         {

@@ -11,6 +11,8 @@ namespace Server.BLL.Services
         private readonly IFileRepository _fileRepository;
         private string _taskDirectoryPath;
         private string _solutionDirectoryPath;
+        private string _messageDirectoryPath;
+
 
         public FileService(IFileRepository fileRepository)
         {
@@ -29,16 +31,21 @@ namespace Server.BLL.Services
 
             _taskDirectoryPath = Path.Combine(projectPath, "File", "Tasks");
             _solutionDirectoryPath = Path.Combine(projectPath, "File", "Solutions");
-
+            _messageDirectoryPath = Path.Combine(projectPath, "File", "Messages");
+            
             Directory.CreateDirectory(_taskDirectoryPath);
             Directory.CreateDirectory(_solutionDirectoryPath);
+            Directory.CreateDirectory(_messageDirectoryPath);
+
         }
 
         public async Task<byte[]> GetFile(int fileId, FileType fileType)
         {
             dynamic fileBD = fileType == FileType.Task
                 ? await GetTaskFileFromBD(fileId)
-                : await GetSolutionFileFromBD(fileId);
+                : (fileType == FileType.Solution)
+                    ? await GetSolutionFileFromBD(fileId)
+                    : await GetMessageFileFromBD(fileId);
 
             if (fileBD == null || string.IsNullOrEmpty(fileBD.PhysicalPath))
                 return Array.Empty<byte>();
@@ -53,8 +60,10 @@ namespace Server.BLL.Services
             var safeDisciplineName = string.Join("_", disciplineName.Split(Path.GetInvalidFileNameChars()));
             var taskFolder = fileType == FileType.Task
                 ? Path.Combine(_taskDirectoryPath, safeDisciplineName)
-                : Path.Combine(_solutionDirectoryPath, safeDisciplineName);
-
+                : (fileType == FileType.Solution) 
+                ? Path.Combine(_solutionDirectoryPath, safeDisciplineName)
+                : Path.Combine(_messageDirectoryPath, safeDisciplineName);
+            
             Directory.CreateDirectory(taskFolder);
 
             var uniqueFileName = $"{Guid.NewGuid()}_{fileName}";
@@ -64,7 +73,9 @@ namespace Server.BLL.Services
 
             var relativePath = fileType == FileType.Task
                 ? Path.Combine("File", "Tasks", safeDisciplineName, uniqueFileName)
-                : Path.Combine("File", "Solutions", safeDisciplineName, uniqueFileName);
+                : (fileType == FileType.Solution) 
+                ? Path.Combine("File", "Solutions", safeDisciplineName, uniqueFileName)
+                : Path.Combine("File", "Messages", safeDisciplineName, uniqueFileName);
 
             return relativePath.Replace("\\", "/");
         }
@@ -83,9 +94,11 @@ namespace Server.BLL.Services
         {
             var relativePath = fileType == FileType.Task
                 ? physicalPath.Replace("File\\Tasks\\", "").Replace("File/Tasks/", "")
-                : physicalPath.Replace("File\\Solutions\\", "").Replace("File/Solutions/", "");
+                : (fileType == FileType.Solution)
+                ? physicalPath.Replace("File\\Solutions\\", "").Replace("File/Solutions/", "")
+                : physicalPath.Replace("File\\Messages\\", "").Replace("File/Messages/", "");
 
-            var basePath = fileType == FileType.Task ? _taskDirectoryPath : _solutionDirectoryPath;
+            var basePath = fileType == FileType.Task ? _taskDirectoryPath : (fileType == FileType.Solution) ? _solutionDirectoryPath : _messageDirectoryPath;
             return Path.Combine(basePath, relativePath);
         }
 
@@ -108,6 +121,10 @@ namespace Server.BLL.Services
         public async Task<SolutionFile> GetSolutionFileFromBD(int fileId)
         {
             return await _fileRepository.GetSolutionFile(fileId) ?? new SolutionFile();
+        }
+        public async Task<FileInChat> GetMessageFileFromBD(int fileId)
+        {
+            return await _fileRepository.GetMessageFile(fileId) ?? new FileInChat();
         }
     }
 }

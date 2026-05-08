@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Server.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateBD : Migration
+    public partial class Update : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -109,6 +109,7 @@ namespace Server.DAL.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     Profession = table.Column<string>(type: "text", nullable: false),
+                    FullName = table.Column<string>(type: "text", nullable: true),
                     AcademicDegree = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -183,7 +184,8 @@ namespace Server.DAL.Migrations
                     DiciplineId = table.Column<int>(type: "integer", nullable: false),
                     EducatorId = table.Column<int>(type: "integer", nullable: false),
                     TaskName = table.Column<string>(type: "text", nullable: false),
-                    TaskDescription = table.Column<string>(type: "text", nullable: false)
+                    TaskDescription = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -229,27 +231,33 @@ namespace Server.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GroupTaskEducation",
+                name: "StudentSolutions",
                 columns: table => new
                 {
-                    GroupsId = table.Column<int>(type: "integer", nullable: false),
-                    TaskEducationsId = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TaskId = table.Column<int>(type: "integer", nullable: false),
+                    StudentId = table.Column<int>(type: "integer", nullable: false),
+                    SolutionText = table.Column<string>(type: "text", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GroupTaskEducation", x => new { x.GroupsId, x.TaskEducationsId });
+                    table.PrimaryKey("PK_StudentSolutions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GroupTaskEducation_Groups_GroupsId",
-                        column: x => x.GroupsId,
-                        principalTable: "Groups",
+                        name: "FK_StudentSolutions_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_GroupTaskEducation_TaskEducation_TaskEducationsId",
-                        column: x => x.TaskEducationsId,
+                        name: "FK_StudentSolutions_TaskEducation_TaskId",
+                        column: x => x.TaskId,
                         principalTable: "TaskEducation",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -262,7 +270,8 @@ namespace Server.DAL.Migrations
                     FileName = table.Column<string>(type: "text", nullable: false),
                     PhysicalPath = table.Column<string>(type: "text", nullable: false),
                     FileSize = table.Column<long>(type: "bigint", nullable: false),
-                    UploadedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UploadedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    FileType = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -271,6 +280,121 @@ namespace Server.DAL.Migrations
                         name: "FK_TaskFile_TaskEducation_TaskId",
                         column: x => x.TaskId,
                         principalTable: "TaskEducation",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TaskGroups",
+                columns: table => new
+                {
+                    GroupsId = table.Column<int>(type: "integer", nullable: false),
+                    TaskEducationsId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskGroups", x => new { x.GroupsId, x.TaskEducationsId });
+                    table.ForeignKey(
+                        name: "FK_TaskGroups_Groups_GroupsId",
+                        column: x => x.GroupsId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TaskGroups_TaskEducation_TaskEducationsId",
+                        column: x => x.TaskEducationsId,
+                        principalTable: "TaskEducation",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SolutionChats",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SolutionId = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SolutionChats", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SolutionChats_StudentSolutions_SolutionId",
+                        column: x => x.SolutionId,
+                        principalTable: "StudentSolutions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SolutionFiles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SolutionId = table.Column<int>(type: "integer", nullable: false),
+                    FileName = table.Column<string>(type: "text", nullable: false),
+                    OriginalFileName = table.Column<string>(type: "text", nullable: false),
+                    PhysicalPath = table.Column<string>(type: "text", nullable: false),
+                    FileSize = table.Column<long>(type: "bigint", nullable: false),
+                    FileType = table.Column<string>(type: "text", nullable: false),
+                    UploadedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SolutionFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SolutionFiles_StudentSolutions_SolutionId",
+                        column: x => x.SolutionId,
+                        principalTable: "StudentSolutions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MessagesInChat",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ChatId = table.Column<int>(type: "integer", nullable: false),
+                    SenderId = table.Column<int>(type: "integer", nullable: false),
+                    SenderRole = table.Column<byte>(type: "smallint", nullable: false),
+                    MessageText = table.Column<string>(type: "text", nullable: false),
+                    SentAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MessagesInChat", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MessagesInChat_SolutionChats_ChatId",
+                        column: x => x.ChatId,
+                        principalTable: "SolutionChats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FilesInChat",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MessageId = table.Column<int>(type: "integer", nullable: false),
+                    FileName = table.Column<string>(type: "text", nullable: false),
+                    PhysicalPath = table.Column<string>(type: "text", nullable: false),
+                    FileSize = table.Column<long>(type: "bigint", nullable: false),
+                    FileType = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FilesInChat", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FilesInChat_MessagesInChat_MessageId",
+                        column: x => x.MessageId,
+                        principalTable: "MessagesInChat",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -309,9 +433,25 @@ namespace Server.DAL.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_GroupTaskEducation_TaskEducationsId",
-                table: "GroupTaskEducation",
-                column: "TaskEducationsId");
+                name: "IX_FilesInChat_MessageId",
+                table: "FilesInChat",
+                column: "MessageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MessagesInChat_ChatId",
+                table: "MessagesInChat",
+                column: "ChatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SolutionChats_SolutionId",
+                table: "SolutionChats",
+                column: "SolutionId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SolutionFiles_SolutionId",
+                table: "SolutionFiles",
+                column: "SolutionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_GroupId",
@@ -331,6 +471,16 @@ namespace Server.DAL.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_StudentSolutions_StudentId",
+                table: "StudentSolutions",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentSolutions_TaskId",
+                table: "StudentSolutions",
+                column: "TaskId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TaskEducation_DiciplineId",
                 table: "TaskEducation",
                 column: "DiciplineId");
@@ -344,6 +494,11 @@ namespace Server.DAL.Migrations
                 name: "IX_TaskFile_TaskId",
                 table: "TaskFile",
                 column: "TaskId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskGroups_TaskEducationsId",
+                table: "TaskGroups",
+                column: "TaskEducationsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TrainedGroups_DisciplineId",
@@ -368,13 +523,16 @@ namespace Server.DAL.Migrations
                 name: "EducatorDisciplines");
 
             migrationBuilder.DropTable(
-                name: "GroupTaskEducation");
+                name: "FilesInChat");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "SolutionFiles");
 
             migrationBuilder.DropTable(
                 name: "TaskFile");
+
+            migrationBuilder.DropTable(
+                name: "TaskGroups");
 
             migrationBuilder.DropTable(
                 name: "TrainedGroups");
@@ -383,10 +541,22 @@ namespace Server.DAL.Migrations
                 name: "EducatorAdditionalInfos");
 
             migrationBuilder.DropTable(
-                name: "Groups");
+                name: "MessagesInChat");
+
+            migrationBuilder.DropTable(
+                name: "SolutionChats");
+
+            migrationBuilder.DropTable(
+                name: "StudentSolutions");
+
+            migrationBuilder.DropTable(
+                name: "Students");
 
             migrationBuilder.DropTable(
                 name: "TaskEducation");
+
+            migrationBuilder.DropTable(
+                name: "Groups");
 
             migrationBuilder.DropTable(
                 name: "Disciplines");

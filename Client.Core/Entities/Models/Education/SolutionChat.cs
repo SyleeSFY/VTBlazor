@@ -12,4 +12,4 @@ namespace Client.Core.Entities.Models.Education
         [JsonIgnore]
         public StudentSolution Solution { get; set; }
     }
-}
+}       
