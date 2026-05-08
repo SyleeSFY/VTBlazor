@@ -45,18 +45,16 @@
     </div>
 </div>
 
-@if (isLoading)
+@* @if (isLoading)
 {
     <p>Загрузка...</p>
-}
-else if (educator != null)
-{
+} *@
+
     <div style="margin-top: 20px; padding-left: 2vw;">
         <a href="/educators" class="btn btn-secondary" style="background-color: #2e7d32">Назад</a>
     </div>
-}
-else if (errorMessage != null)
+@* else if (errorMessage != null)
 {
     <p style="color: red;">Ошибка: @errorMessage</p>
     <a href="/educators" class="btn btn-secondary">Назад</a>
-}
+} *@

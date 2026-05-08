@@ -92,7 +92,15 @@ namespace Client.Core.Shared
         #endregion
 
         #region User Endpoints
+        public async Task<User> GetUserByAuth(AuthenticationState authState)
+        {
+            var id = await GetId(authState);
 
+            if (id > 0)
+                return await GetUserByUserId(id);
+
+            return new User();
+        }
         public async Task<User> GetUserByUserId(int id)
             => await _http.GetFromJsonAsync<User>($"api/user/GetUserByUserId/{id}") ?? new User();
 
@@ -189,6 +197,14 @@ namespace Client.Core.Shared
 
         #endregion
 
+        public async Task<HttpResponseMessage> PostMessage(MessageInChatDTO message)
+            => await _http.PostAsJsonAsync($"api/file/PostAddMessage", message);
+
+        #region Message
+        public async Task<SolutionChat> GetChatById(int chatId)
+            => await _http.GetFromJsonAsync<SolutionChat>($"api/file/GetChatById/{chatId}") ?? new SolutionChat();
+        #endregion
+
         #region File Endpoints
 
         public async Task<byte[]> GetFileByte(int fileId)
@@ -196,6 +212,9 @@ namespace Client.Core.Shared
 
         public async Task<byte[]> GetSolutionFileByte(int fileId)
             => await _http.GetFromJsonAsync<byte[]>($"api/file/GetSolutionFile/{fileId}") ?? new byte[0];
+        
+        public async Task<byte[]> GetMessageFileByte(int fileId)
+            => await _http.GetFromJsonAsync<byte[]>($"api/file/GetMessageFile/{fileId}") ?? new byte[0];
 
         #endregion
     }

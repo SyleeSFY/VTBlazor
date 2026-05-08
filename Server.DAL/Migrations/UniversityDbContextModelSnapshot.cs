@@ -174,9 +174,6 @@ namespace Server.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("SolutionChatId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("SolutionText")
                         .IsRequired()
                         .HasColumnType("text");
@@ -237,6 +234,9 @@ namespace Server.DAL.Migrations
 
                     b.Property<string>("AcademicDegree")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FullName")
                         .HasColumnType("text");
 
                     b.Property<string>("Profession")
