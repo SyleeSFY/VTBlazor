@@ -3,6 +3,7 @@
 @using Client.Core.Shared
 @inject HttpClient Http
 @layout PrivateOfficeLayout
+@attribute [Authorize(Policy = "Admin")]
 
 <AuthorizeView>
     <Authorized>

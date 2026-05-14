@@ -115,6 +115,9 @@ public class UserRepository : IUserRepository
     {
         try
         {
+            var isUserAvaible = _context.Users.FirstOrDefault(x => x.Email == user.Email);
+            if (isUserAvaible is not null)
+                return false;
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return true;

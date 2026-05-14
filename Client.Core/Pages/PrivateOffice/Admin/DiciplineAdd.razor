@@ -5,6 +5,8 @@
 @inject NavigationManager Navigation
 @inject HttpClient Http
 @layout PrivateOfficeLayout
+@attribute [Authorize(Policy = "Admin")]
+
 
 <AuthorizeView>
     <Authorized>

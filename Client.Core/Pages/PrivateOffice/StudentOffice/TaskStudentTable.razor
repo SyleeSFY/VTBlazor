@@ -3,6 +3,7 @@
 @inject HttpClient Http
 @layout PrivateOfficeLayout
 @inject NavigationManager Navigation
+@attribute [Authorize(Policy = "Student")]
 
 <AuthorizeView>
     <Authorized>

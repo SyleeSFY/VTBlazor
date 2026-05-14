@@ -1,8 +1,23 @@
 ﻿<CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
-            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
-            <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    @if (context.User.Identity?.IsAuthenticated ?? false)
+                    {
+                        <div class="alert alert-warning" style="text-align: center; margin-top: 50px;">
+                            <h3>У вас недостаточно прав для доступа к этой странице</h3>
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="text-align: center; margin-top: 50px;">
+                            <p>Перенаправление на страницу входа...</p>
+                        </div>
+                    }
+                </NotAuthorized>
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
         <NotFound>
             <PageTitle>Not found</PageTitle>
@@ -12,3 +27,22 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+@* <CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    @if (context.User.Identity?.IsAuthenticated ?? false)
+                    {
+                        var role = context.User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+                        <div>
+                            <p>Роль: @role</p>
+                            <p>IsEducator: @context.User.IsInRole("Educator")</p>
+                            <p>IsAdmin: @context.User.IsInRole("Admin")</p>
+                        </div>
+                    }
+                </NotAuthorized>
+            </AuthorizeRouteView>
+        </Found>
+    </Router>
+</CascadingAuthenticationState> *@

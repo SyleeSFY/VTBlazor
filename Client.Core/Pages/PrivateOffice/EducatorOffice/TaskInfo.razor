@@ -4,6 +4,7 @@
 @layout PrivateOfficeLayout
 @inject NavigationManager Navigation
 @inject IJSRuntime JS
+@attribute [Authorize(Policy = "Educator")]
 
 <AuthorizeView>
     <Authorized>
