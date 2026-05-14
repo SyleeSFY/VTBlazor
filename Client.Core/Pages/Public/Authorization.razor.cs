@@ -5,6 +5,7 @@ using Client.Core.Shared;
 using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
 using System.Net.Mail;
+using System.Text.RegularExpressions;
 
 namespace Client.Core.Pages.Public
 {
@@ -94,6 +95,28 @@ namespace Client.Core.Pages.Public
                 _isError = true;
                 return ;
             }
+            if (ContainsDangerousCharacters(_authorization.Email))
+            {
+                _errorMessage = GlobalData.ValidError[ValidErrorAuth.InvalidCharacters];
+                _isError = true;
+                return;
+            }
+
+            if (ContainsDangerousCharacters(_authorization.Password))
+            {
+                _errorMessage = GlobalData.ValidError[ValidErrorAuth.InvalidCharacters];
+                _isError = true;
+                return;
+            }
+        }
+
+        private bool ContainsDangerousCharacters(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return false;
+
+            var dangerousPattern = @"[<>;'""\\]|(--)|(\/\*)";
+            return Regex.IsMatch(input, dangerousPattern);
         }
 
         private bool IsValidEmail(string email)

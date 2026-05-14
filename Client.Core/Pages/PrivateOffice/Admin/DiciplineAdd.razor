@@ -9,7 +9,9 @@
 <AuthorizeView>
     <Authorized>
         <div class="container">
-            <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Добавление новой дисциплины" />
+            <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd"
+                              Color="006928d8"
+                              Tittle="@(_isEditMode ? "Редактирование дисциплины" : "Добавление новой дисциплины")" />
 
             <div class="row justify-content-center" style="margin-top:auto;margin-bottom:auto">
                 <div class="col-md-8">

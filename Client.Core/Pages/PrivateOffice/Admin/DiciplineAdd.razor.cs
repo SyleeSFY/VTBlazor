@@ -30,8 +30,11 @@ namespace Client.Core.Pages.PrivateOffice.Admin
 
         protected override async Task OnInitializedAsync()
         {
-            _discipline = DiciplineId is not null ? await _apiService.GetDisciplineById((int)DiciplineId) : null;
-            _isEditMode =  _discipline?.Id is not 0 ? true : false;
+            _discipline = DiciplineId is not null
+                ? await _apiService.GetDisciplineById((int)DiciplineId)
+                : null;
+
+            _isEditMode = _discipline is not null;
 
             if (_isEditMode)
                 await FillFieldInEditMode(_discipline);
@@ -39,6 +42,11 @@ namespace Client.Core.Pages.PrivateOffice.Admin
 
         private async Task OnClickAddDiscipline()
         {
+            if (string.IsNullOrEmpty(_diciplineName))
+            {
+                _isError = true;
+                return;
+            }
             var newDiscipline = await CreateNewDiscipline();
             var response = await _apiService.PostAddDiscipline(newDiscipline);
             if (response)
@@ -53,6 +61,11 @@ namespace Client.Core.Pages.PrivateOffice.Admin
         
         private async Task OnClickEditDiscipline()
         {
+            if (string.IsNullOrEmpty(_diciplineName))
+            {
+                _isError = true;
+                return;
+            }
             if (!_isEditMode)
             {
                 await OnClickAddDiscipline();
