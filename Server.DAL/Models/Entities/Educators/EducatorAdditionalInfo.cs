@@ -31,5 +31,3 @@ public class EducatorAdditionalInfo
 
     public byte[] Image { get; set; }
 }
-
-

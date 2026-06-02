@@ -1,25 +1,20 @@
-﻿using Client.Core.Entities.Models.User.Dicipline;
-using Client.Core.Pages.Public;
+﻿using Client.Core.Entities.Interfaces;
+using Client.Core.Entities.Models.User.Dicipline;
 using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Net.Http.Json;
 
 namespace Client.Core.Pages.PrivateOffice.Admin
 {
     public partial class DiciplineTable : ComponentBase
     {
+        [Inject] private IApiService _apiService { get; set; }
+
         private List<Discipline> _diciplines = new List<Discipline>();
 
         protected override async Task OnInitializedAsync()
         {
-            _diciplines = await GetEducators();
-        }
-
-        private async Task<List<Discipline>> GetEducators()
-        {
-            _diciplines = await Http.GetFromJsonAsync<List<Discipline>>("api/Diciplines/GetDiciplines");
-            return _diciplines;
-        }
+            _diciplines = await _apiService.GetDisciplines();
+            _diciplines = _diciplines.OrderBy(x => x.Course).ThenBy(x => x.Id).ToList();
+        } 
 
         private async Task BtnDelete(int disciplineId)
         {

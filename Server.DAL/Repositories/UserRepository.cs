@@ -15,10 +15,6 @@ public class UserRepository : IUserRepository
     public UserRepository(UniversityDbContext context)
         => _context = context;
     
-    /// <summary>
-    /// Получение всего списка user's
-    /// </summary>
-    /// <returns></returns>
     public async Task<List<User>> GetUsersAsync()
         => await _context.Users
             .Include(x => x.Educator)
@@ -31,7 +27,6 @@ public class UserRepository : IUserRepository
         => await _context.Users
             .Include(x => x.Student)
                 .ThenInclude(x => x.Group).Where(x => x.Student.GroupId == groupId)
-       
             .ToListAsync();
 
     public async Task<List<StudentSolution>> GetSolutionStudentByTaskIdSimpleAsync(int taskId)
