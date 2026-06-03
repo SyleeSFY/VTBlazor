@@ -14,6 +14,7 @@ builder.Services.AddAuthorizationCore(Policies.Configure);
 builder.Services.AddScoped<AuthenticationStateProvider, TokenAuthService>();
 builder.Services.AddScoped<ILocalStorageService, LocalStorageService>();
 builder.Services.AddScoped<IApiService, ApiService>();
+builder.Services.AddScoped<EducatorStateService>();
 builder.Services.AddScoped(sp =>
     new HttpClient
     {

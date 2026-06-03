@@ -1,63 +1,57 @@
 @page "/EducatorCardAddInfo"
-
+@using Client.Core.App.Services
+@inject EducatorStateService EducatorStateService
 @inject IJSRuntime JSRuntime
 @inject NavigationManager Navigation
 @inject HttpClient Http
-<TittleUnderStick Tittle="@educator?.FullName"
+
+@if (isLoading)
+{
+    <Loading/>
+}
+else {
+<TittleUnderStick Tittle="@_educator?.FullName"
                   JustifyContent="JustifyContentEnum.FlexStart"
                   FontSize="38"
-                  PaddinLeft="2"/>
+                  PaddinLeft="2" />
 <div style="display: flex; margin-top:50px">
     <div style="width: 30%">
-        <img src="@GetIMG()" alt="Фото Преподавателя" class="EducatorCardIMG"/>
+        <img src="@GetIMG()" alt="Фото Преподавателя" class="EducatorCardIMG" />
     </div>
     <div style="width: 70%;">
 
 
         <div class="EducatorCardInfo">
-            <p><span style="font-weight: 500;">Должность на кафедре:</span> @educator?.Profession</p>
-            @if (!string.IsNullOrEmpty(educator?.AcademicDegree))
-            {
-                <p><span style="font-weight: 500;">Ученая степень:</span> @educator?.AcademicDegree</p>
+            <p><span style="font-weight: 500;">Должность на кафедре:</span> @_educator?.Profession</p>
+            @if (!string.IsNullOrEmpty(_educator?.AcademicDegree)) {
+                <p><span style="font-weight: 500;">Ученая степень:</span> @_educator?.AcademicDegree</p>
             }
-            <p><span style="font-weight: 500;">Уровень образования:</span> @educator?.EducatorAdditionalInfo.EducationLevel</p>
-            <p><span style="font-weight: 500;">Ученое звание:</span> @educator?.EducatorAdditionalInfo.AcademicTitle</p>
-            <p><span style="font-weight: 500;">Специальность или направление подготовки:</span> @educator?.EducatorAdditionalInfo.SpecialtyOrFieldOfStudy </p>
-            <p><span style="font-weight: 500;">Квалификация:</span> @educator?.EducatorAdditionalInfo.Qualification</p>
+            <p><span style="font-weight: 500;">Уровень образования:</span> @_educator?.EducatorAdditionalInfo.EducationLevel</p>
+            <p><span style="font-weight: 500;">Ученое звание:</span> @_educator?.EducatorAdditionalInfo.AcademicTitle</p>
+            <p><span style="font-weight: 500;">Специальность или направление подготовки:</span> @_educator?.EducatorAdditionalInfo.SpecialtyOrFieldOfStudy </p>
+            <p><span style="font-weight: 500;">Квалификация:</span> @_educator?.EducatorAdditionalInfo.Qualification</p>
             <p>
-            <span style="font-weight: 500;">Преподаваемые дисциплины:</span>
+                <span style="font-weight: 500;">Преподаваемые дисциплины:</span>
 
-            @if (educator?.EducatorAdditionalInfo?.EducatorDisciplines != null && educator.EducatorAdditionalInfo.EducatorDisciplines.Any())
-            {
-                <ul class="disciplines_list">
-                    @foreach (var discipline in educator.EducatorAdditionalInfo.EducatorDisciplines)
-                    {
-                        <li>@discipline.Discipline.NameDiscipline</li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <span>Дисциплины не указаны</span>
-            }
+                @if (_educator?.EducatorAdditionalInfo?.EducatorDisciplines != null && _educator.EducatorAdditionalInfo.EducatorDisciplines.Any()) {
+                    <ul class="disciplines_list">
+                        @foreach (var discipline in _educator.EducatorAdditionalInfo.EducatorDisciplines) {
+                            <li>@discipline.Discipline.NameDiscipline</li>
+                        }
+                    </ul>
+                }
+                else {
+                    <span>Дисциплины не указаны</span>
+                }
 
             </p>
-            <p>@((MarkupString)@GetIndentedText(educator?.EducatorAdditionalInfo.AdditionalInfo))</p>
+            <p>@((MarkupString)@GetIndentedText(_educator?.EducatorAdditionalInfo.AdditionalInfo))</p>
 
-       </div>
+        </div>
     </div>
 </div>
 
-@* @if (isLoading)
-{
-    <p>Загрузка...</p>
-} *@
-
-    <div style="margin-top: 20px; padding-left: 2vw;">
-        <a href="/educators" class="btn btn-secondary" style="background-color: #2e7d32">Назад</a>
-    </div>
-@* else if (errorMessage != null)
-{
-    <p style="color: red;">Ошибка: @errorMessage</p>
-    <a href="/educators" class="btn btn-secondary">Назад</a>
-} *@
+<div style="margin-top: 20px; padding-left: 2vw;">
+<a href="/educators" class="btn btn-secondary" style="background-color: #2e7d32">Назад</a>
+</div>
+}

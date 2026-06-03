@@ -7,9 +7,21 @@ namespace Client.Core.Pages.Public;
 public partial class Educators : ComponentBase
 {
     private List<Educator> _educators = new List<Educator>();
-    
-    protected override async Task OnInitializedAsync()
-        => _educators = await GetEducators();
+    private bool _isLoading = true;
+
+    protected override async Task OnInitializedAsync() {
+
+        try {
+            _educators = await GetEducators();
+        }
+        catch (Exception) {
+            _educators = new List<Educator>();
+        }
+        finally {
+            _isLoading = false;
+        }
+
+    }
     
     public async Task<List<Educator>> GetEducators()
     {
