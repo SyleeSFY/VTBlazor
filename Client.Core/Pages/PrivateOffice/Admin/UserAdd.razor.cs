@@ -161,7 +161,7 @@ namespace Client.Core.Pages.PrivateOffice.Admin
         private async Task<UserDTO> CreateUser()
             => new UserDTO
             {
-                Email = _email,
+                Email = _email.ToLower(),
                 PasswordHash = _password,
                 FirstName = _firstName,
                 LastName = _lastName,
@@ -264,6 +264,7 @@ namespace Client.Core.Pages.PrivateOffice.Admin
             switch (_activeRole)
             {
                 case Role.student:
+
                     if (!_studentGroup.HasValue)
                     {
                         _errors["StudentGroup"] = "Выберите группу";
@@ -278,16 +279,11 @@ namespace Client.Core.Pages.PrivateOffice.Admin
                     break;
 
                 case Role.educator:
+
                     if (string.IsNullOrWhiteSpace(_profession))
                     {
                         _errors["Profession"] = "Должность обязательна";
                         _validationErrors.Add("Должность не заполнена");
-                    }
-
-                    if (string.IsNullOrWhiteSpace(_academicDegree))
-                    {
-                        _errors["AcademicDegree"] = "Ученая степень обязательна";
-                        _validationErrors.Add("Ученая степень не выбрана");
                     }
 
                     if (string.IsNullOrWhiteSpace(_educationLevel))
@@ -316,6 +312,7 @@ namespace Client.Core.Pages.PrivateOffice.Admin
                     break;
 
                 case Role.admin:
+
                     if (string.IsNullOrWhiteSpace(_adminPosition))
                     {
                         _errors["AdminPosition"] = "Должность обязательна";

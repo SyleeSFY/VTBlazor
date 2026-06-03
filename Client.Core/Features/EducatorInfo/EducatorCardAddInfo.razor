@@ -16,7 +16,10 @@
 
         <div class="EducatorCardInfo">
             <p><span style="font-weight: 500;">Должность на кафедре:</span> @educator?.Profession</p>
-            <p><span style="font-weight: 500;">Ученая степень:</span> @educator?.AcademicDegree</p>
+            @if (!string.IsNullOrEmpty(educator?.AcademicDegree))
+            {
+                <p><span style="font-weight: 500;">Ученая степень:</span> @educator?.AcademicDegree</p>
+            }
             <p><span style="font-weight: 500;">Уровень образования:</span> @educator?.EducatorAdditionalInfo.EducationLevel</p>
             <p><span style="font-weight: 500;">Ученое звание:</span> @educator?.EducatorAdditionalInfo.AcademicTitle</p>
             <p><span style="font-weight: 500;">Специальность или направление подготовки:</span> @educator?.EducatorAdditionalInfo.SpecialtyOrFieldOfStudy </p>

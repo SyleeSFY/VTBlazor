@@ -139,13 +139,9 @@
                                             </div>
 
                                             <div class="form-group mb-3">
-                                                <label for="academicDegree" class="form-label">Ученая степень *</label>
-                                                <input type="text" class="form-control @(_errors.ContainsKey("AcademicDegree") ? "is-invalid" : "")" id="academicDegree"
+                                                <label for="academicDegree" class="form-label">Ученая степень</label>
+                                                <input type="text" class="form-control" id="academicDegree"
                                                        placeholder="Введите ученую степень" @bind="_academicDegree">
-                                                @if (_errors.ContainsKey("AcademicDegree"))
-                                                {
-                                                    <div class="invalid-feedback d-block">@_errors["AcademicDegree"]</div>
-                                                }
                                             </div>
 
                                             <h5 class="mt-4 mb-3">Дополнительная информация</h5>

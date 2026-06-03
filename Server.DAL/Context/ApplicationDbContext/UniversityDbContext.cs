@@ -40,13 +40,24 @@ public class UniversityDbContext : DbContext
     /// <param name="modelBuilder"></param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Educator - EducatorAdditionalInfo
         modelBuilder.Entity<Educator>(entity =>
         {
             entity.HasKey(e => e.Id);
+
+            // Связь с EducatorAdditionalInfo
             entity.HasOne(e => e.EducatorAdditionalInfo)
                 .WithOne()
                 .HasForeignKey<EducatorAdditionalInfo>(eai => eai.EducatorId);
+
+            // Связь с User
+            entity.HasOne(e => e.User)
+                .WithOne(u => u.Educator)
+                .HasForeignKey<Educator>(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Настройки свойств
+            entity.Property(e => e.Profession).IsRequired();
+            entity.Property(e => e.AcademicDegree).IsRequired(false);
         });
 
         // EducatorAdditionalInfo - EducatorDiscipline
@@ -172,16 +183,7 @@ public class UniversityDbContext : DbContext
             entity.Property(e => e.Position).HasMaxLength(100);
         });
 
-        modelBuilder.Entity<Educator>(entity =>
-        {
-            entity.HasOne(e => e.User)
-                .WithOne(u => u.Educator)
-                .HasForeignKey<Educator>(e => e.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
 
-            entity.Property(e => e.Profession).IsRequired();
-            entity.Property(e => e.AcademicDegree).IsRequired();
-        });
 
         // Solution
         modelBuilder.Entity<StudentSolution>(entity =>
