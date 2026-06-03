@@ -1,0 +1,59 @@
+﻿<div class="table-container">
+    <table class="disciplines-table">
+        <thead>
+            <tr class='table_tr'>
+                <th rowSpan="2">№<br />п/п</th>
+                <th rowSpan="2">Наименование дисциплины</th>
+                <th rowSpan="2">Курс</th>
+                <th colSpan="3" class="profile-header">Профиль подготовки</th>
+            </tr>
+            <tr class='table_tr'>
+                <th>АС</th>
+                <th>ВМ</th>
+                <th>ПО</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < 30; i++) {
+                <tr>
+                    <td><div class="skeleton-line" style="width: 30px; margin: 0 auto;"></div></td>
+                    <td><div class="skeleton-line" style="width: 80%;"></div></td>
+                    <td><div class="skeleton-line" style="width: 30px; margin: 0 auto;"></div></td>
+                    <td><div class="skeleton-icon"></div></td>
+                    <td><div class="skeleton-icon"></div></td>
+                    <td><div class="skeleton-icon"></div></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+    <style>
+    .skeleton-line {
+        height: 16px;
+        background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        border-radius: 4px;
+    }
+    
+    .skeleton-icon {
+        width: 20px;
+        height: 20px;
+        background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        border-radius: 50%;
+        margin: 0 auto;
+    }
+    
+    @@keyframes shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+
+        100% {
+            background-position: 200% 0;
+    }
+    }
+</style>
