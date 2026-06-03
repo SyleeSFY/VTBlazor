@@ -304,11 +304,11 @@ namespace Client.Core.Pages.PrivateOffice.Admin
                         _validationErrors.Add("Квалификация не заполнена");
                     }
 
-                    if (_selectedDisciplineIds.Count == 0)
-                    {
-                        _errors["Disciplines"] = "Выберите хотя бы одну дисциплину";
-                        _validationErrors.Add("Не выбраны преподаваемые дисциплины");
-                    }
+                    //if (_selectedDisciplineIds.Count == 0)
+                    //{
+                    //    _errors["Disciplines"] = "Выберите хотя бы одну дисциплину";
+                    //    _validationErrors.Add("Не выбраны преподаваемые дисциплины");
+                    //}
                     break;
 
                 case Role.admin:

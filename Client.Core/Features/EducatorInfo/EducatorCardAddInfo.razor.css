@@ -43,3 +43,8 @@
     margin-bottom: 0.25rem;
     line-height: 1.4;
 }
+
+.Desc__Text {
+    text-align: justify;
+    margin-right: 40px;
+}

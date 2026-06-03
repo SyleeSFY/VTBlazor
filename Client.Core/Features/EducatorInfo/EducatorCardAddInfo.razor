@@ -19,15 +19,15 @@ else {
         <img src="@GetIMG()" alt="Фото Преподавателя" class="EducatorCardIMG" />
     </div>
     <div style="width: 70%;">
-
-
         <div class="EducatorCardInfo">
             <p><span style="font-weight: 500;">Должность на кафедре:</span> @_educator?.Profession</p>
             @if (!string.IsNullOrEmpty(_educator?.AcademicDegree)) {
                 <p><span style="font-weight: 500;">Ученая степень:</span> @_educator?.AcademicDegree</p>
             }
             <p><span style="font-weight: 500;">Уровень образования:</span> @_educator?.EducatorAdditionalInfo.EducationLevel</p>
+            @if (!string.IsNullOrEmpty(_educator?.EducatorAdditionalInfo.AcademicTitle)) {
             <p><span style="font-weight: 500;">Ученое звание:</span> @_educator?.EducatorAdditionalInfo.AcademicTitle</p>
+            }
             <p><span style="font-weight: 500;">Специальность или направление подготовки:</span> @_educator?.EducatorAdditionalInfo.SpecialtyOrFieldOfStudy </p>
             <p><span style="font-weight: 500;">Квалификация:</span> @_educator?.EducatorAdditionalInfo.Qualification</p>
             <p>
@@ -45,8 +45,7 @@ else {
                 }
 
             </p>
-            <p>@((MarkupString)@GetIndentedText(_educator?.EducatorAdditionalInfo.AdditionalInfo))</p>
-
+                <p class="Desc__Text">@((MarkupString)@GetIndentedText(_educator?.EducatorAdditionalInfo.AdditionalInfo))</p>
         </div>
     </div>
 </div>
