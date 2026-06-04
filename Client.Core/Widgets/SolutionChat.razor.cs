@@ -33,7 +33,7 @@ namespace Client.Core.Widgets
         {
             await LoadMessages();
 
-            _timer = new System.Timers.Timer(30000); // 30 секунд
+            _timer = new System.Timers.Timer(10000); // 10 секунд
             _timer.Elapsed += OnTimerElapsed;
             _timer.AutoReset = true;
             _timer.Start();
@@ -91,6 +91,10 @@ namespace Client.Core.Widgets
                     if (chat?.Messages != null && chat.Messages.Count != Messages?.Count)
                     {
                         Messages = chat.Messages;
+
+                        var participant = chat.Participants?.FirstOrDefault(x => x.SenderId != User.Id);
+                        if (participant is not null)
+                            await _apiService.DeleteParticipant(participant.Id);
                     }
                 }
             }
