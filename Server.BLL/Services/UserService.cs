@@ -213,6 +213,10 @@ public class UserService : IUserService
                 return new SolutionChat();
             return chat;
         }
+        public async Task DeleteParticipant(int id) 
+        {
+            await _userRepository.DeleteParticipantAsync(id);
+        }
 
         #endregion
 
@@ -255,8 +259,30 @@ public class UserService : IUserService
                 if (compFiles.Any())
                     await _fileRepository.AddMessageFile(compFiles); 
             }
+
+            await ParticipantWork(message);
+
             return true;
         }
+
+        private async Task ParticipantWork(MessageInChat message) {
+            var chat = await _userRepository.GetSolutionChatById(message.ChatId);
+            var participant = chat.Participants.FirstOrDefault(x => x.SenderId != message.SenderId);
+            if (participant is not null)
+                await DeleteParticipant(participant.Id);
+            await AnotherUserRead(message);
+        }
+
+        private async Task AnotherUserRead(MessageInChat message) 
+            {
+            var participant = new ChatParticipant() {
+                SolutionChatId = message.ChatId,
+                SenderId = message.SenderId,
+                HasUnreadMessages = true
+            };
+            await _userRepository.AddParticipantAsync(participant);
+        }
+
         #endregion
         public async Task<bool> AddSolutionByDTOAsync(SolutionStudentDTO solutionDTO)
         {

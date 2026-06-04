@@ -32,6 +32,8 @@ public class UserRepository : IUserRepository
     public async Task<List<StudentSolution>> GetSolutionStudentByTaskIdSimpleAsync(int taskId)
         => await _context.StudentSolutions
             .Where(x => x.TaskId == taskId)
+            .Include(x => x.SolutionChat)
+                .ThenInclude(x => x.Participants)
             .ToListAsync();
 
     public async Task<StudentSolution> GetSolutionByIdAsync(int solutionId)
@@ -152,7 +154,7 @@ public class UserRepository : IUserRepository
         => await _context.Users.Include(x => x.Administrator).FirstOrDefaultAsync(x => x.Id == id);
 
     public async Task<SolutionChat?> GetSolutionChatById(int id)
-        => await _context.SolutionChats.Include(x => x.Messages).ThenInclude(x => x.Files).FirstOrDefaultAsync(x => x.Id == id);
+        => await _context.SolutionChats.Include(x => x.Participants).Include(x => x.Messages).ThenInclude(x => x.Files).FirstOrDefaultAsync(x => x.Id == id);
 
     #region Message
 
@@ -167,6 +169,26 @@ public class UserRepository : IUserRepository
         catch (Exception ex)
         {
             return null;
+        }
+    }
+    public async Task<bool?> AddParticipantAsync(ChatParticipant participant) 
+    {
+        var participantDB = _context.ChatParticipant.FirstOrDefault(x => x.SenderId == participant.SenderId && x.SolutionChatId == participant.SolutionChatId);
+        if (participantDB is null) {
+            await _context.ChatParticipant.AddAsync(participant);
+            await _context.SaveChangesAsync();
+        }
+        return true;
+    }
+
+    public async Task DeleteParticipantAsync(int id) 
+    {
+        var participantDB = await _context.ChatParticipant
+               .FirstOrDefaultAsync(x => x.Id == id);
+
+        if (participantDB != null) {
+            _context.ChatParticipant.Remove(participantDB);
+            await _context.SaveChangesAsync();
         }
     }
 

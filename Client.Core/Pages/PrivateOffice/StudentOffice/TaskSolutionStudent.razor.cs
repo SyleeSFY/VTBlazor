@@ -47,6 +47,7 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
             _task = await _apiService.GetTaskEducationById(Id);
             _task.Dicipline = await _apiService.GetDisciplineById(_task.DiciplineId);
             _existingSolution = await _apiService.GetSolutionByTaskIdAndStudentId(Id, _student.Id);
+            await DeleteParticipant();
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -159,6 +160,11 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
             }
 
             return files;
+        }
+        private async Task DeleteParticipant() {
+            var participant = _existingSolution.SolutionChat?.Participants?.FirstOrDefault(p => p.SenderId != _user.Id);
+            if (participant is not null)
+                await _apiService.DeleteParticipant(participant.Id);
         }
     }
 }

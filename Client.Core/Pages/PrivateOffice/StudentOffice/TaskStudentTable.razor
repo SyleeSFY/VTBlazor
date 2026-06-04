@@ -22,7 +22,7 @@
                     <tbody>
                         @foreach (var item in _taskEducator)
                         {
-                            <tr>
+                            <tr style="cursor: pointer; @(HasUnreadMessages(item) ? "background: #dffaff;" : "")">
                                 <td>@item.Id</td>
                                 <td style="text-align: left; cursor: pointer;" @onclick="() => GoTaskInfo(item.Id)">@item.TaskName</td>
                                 <td>@(_diciplines.FirstOrDefault(x => x.Id == item.DiciplineId).NameDiscipline)</td>

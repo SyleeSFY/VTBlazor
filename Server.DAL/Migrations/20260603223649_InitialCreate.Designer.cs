@@ -12,8 +12,8 @@ using Server.DAL.Context.ApplicationDbContext;
 namespace Server.DAL.Migrations
 {
     [DbContext(typeof(UniversityDbContext))]
-    [Migration("20260418230010_Update")]
-    partial class Update
+    [Migration("20260603223649_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -236,7 +236,6 @@ namespace Server.DAL.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AcademicDegree")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("FullName")

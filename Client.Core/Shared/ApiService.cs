@@ -19,7 +19,7 @@ namespace Client.Core.Shared
 
         #region Auth Helpers
 
-        private async Task<int> GetId(AuthenticationState authState)
+        public async Task<int> GetId(AuthenticationState authState)
         {
             var user = authState.User;
 
@@ -183,6 +183,9 @@ namespace Client.Core.Shared
         public async Task<StudentSolution> GetSolutionByTaskIdAndStudentId(int taskId, int studentId)
             => await _http.GetFromJsonAsync<StudentSolution>($"api/educators/GetSolution/{taskId}/{studentId}") ?? new StudentSolution();
 
+        public async Task<List<StudentSolution>> GetSolutionsByStudentId(int studentId)
+            => await _http.GetFromJsonAsync<List<StudentSolution>>($"api/educators/GetSolutions/{studentId}") ?? new List<StudentSolution>();
+
         public async Task<List<StudentSolution>> GetSolutionByTaskIdSimple(int taskId)
             => await _http.GetFromJsonAsync<List<StudentSolution>>($"api/file/GetSolutionByTaskIdSimple/{taskId}") ?? new List<StudentSolution>();
 
@@ -203,6 +206,9 @@ namespace Client.Core.Shared
         #region Message
         public async Task<SolutionChat> GetChatById(int chatId)
             => await _http.GetFromJsonAsync<SolutionChat>($"api/file/GetChatById/{chatId}") ?? new SolutionChat();
+        public async Task DeleteParticipant(int participantId) {
+            await _http.DeleteAsync($"api/file/DeleteParticipant/{participantId}");
+        }
         #endregion
 
         #region File Endpoints

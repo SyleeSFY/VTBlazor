@@ -4,6 +4,7 @@ using Server.DAL.Models.DTO;
 using Server.DAL.Models.Entities;
 using Server.DAL.Models.Entities.Education;
 using Server.DAL.Models.Enums;
+using static System.Net.WebRequestMethods;
 
 namespace Server.Api.Controllers
 {
@@ -121,8 +122,14 @@ namespace Server.Api.Controllers
             }
             return new SolutionChat();
         }
-        
-        
+
+        [HttpDelete("DeleteParticipant/{participantId}")]
+        public async Task DeleteParticipant(int participantId)
+        {
+            await _userService.DeleteParticipant(participantId);
+        }
+
+
         [HttpPost("PostAddMessage")]
         public async Task<ActionResult<bool>> PostAddMessage(MessageInChatDTO data)
         {

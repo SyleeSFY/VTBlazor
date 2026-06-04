@@ -19,6 +19,7 @@ public interface IEducatorRepository
     Task<int> AddTask(TaskEducation task);
     Task<List<TaskEducation>> GetTasksEducatorByGroup(int id);
     Task<StudentSolution> GetSolutionByTaskIdAndStudentIdAsync(int taskId, int studentId);
+    Task<List<StudentSolution>> GetSolutionsStudentIdAsync(int studentId);
     Task<TaskEducation> GetTasksEducatorByIdWithDicipline(int id);
     Task<StudentSolution> GetSolutionByIdAsync(int id);
     Task<bool> AddGroup(Group group);

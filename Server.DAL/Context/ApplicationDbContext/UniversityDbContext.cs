@@ -33,6 +33,7 @@ public class UniversityDbContext : DbContext
     public DbSet<SolutionChat> SolutionChats { get; set; }
     public DbSet<MessageInChat> MessagesInChat { get; set; }
     public DbSet<FileInChat> FilesInChat { get; set; }
+    public DbSet<ChatParticipant> ChatParticipant { get; set; }
 
     /// <summary>
     /// Связи БД через EF
@@ -266,6 +267,22 @@ public class UniversityDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasIndex(e => e.MessageId);
+        });
+
+        modelBuilder.Entity<ChatParticipant>(entity =>
+        {
+            entity.ToTable("ChatParticipants");
+            entity.HasKey(e => e.Id);
+
+            entity.HasOne(e => e.SolutionChat)
+                .WithMany(c => c.Participants)
+                .HasForeignKey(e => e.SolutionChatId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => e.SolutionChatId);
+            entity.HasIndex(e => e.SenderId);
+
+            entity.HasIndex(e => new { e.SolutionChatId, e.SenderId }).IsUnique();
         });
 
     }    
