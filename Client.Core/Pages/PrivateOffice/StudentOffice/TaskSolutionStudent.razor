@@ -72,18 +72,6 @@
                             {
                             <p><span style="font-weight: 500;">Текст решения:</span>  @_existingSolution.SolutionText</p>
                             }
-                            @* <p><strong>Статус:</strong> *@
-                            @*     <span style=" padding-left: 1vw"> *@
-                            @*         @GlobalData.GetSolutionStatus[_existingSolution.Status] *@
-                            @*     </span> *@
-                            @* </p> *@
-                            @* @if (!string.IsNullOrEmpty(_existingSolution.SolutionText)) *@
-                            @* { *@
-                            @*     <p style="margin-bottom: 0px"><strong>Текст решения:</strong></p> *@
-                            @*     <div class="" style="background: white; border-radius: 4px; padding-left: 1vw"> *@
-                            @*         *@
-                            @*     </div> *@
-                            @* } *@
                             @if (_existingSolution.SolutionFiles != null && _existingSolution.SolutionFiles.Any())
                             {
                                 <p class="mt-2"><strong>Прикрепленные файлы:</strong></p>
