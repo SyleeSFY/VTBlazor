@@ -71,12 +71,13 @@ table, th, td {
 
     .disciplines-table th:nth-child(2),
     .disciplines-table td:nth-child(2) {
-        width: 50%;
+        width: 45%; /* Наименование дисциплины - уменьшено с 50% */
         padding-left: 15px;
         text-align: left;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        cursor: pointer; /* Добавлено */
         position: relative;
         transition: all 0.2s ease;
     }
@@ -87,23 +88,24 @@ table, th, td {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        cursor: pointer; /* Добавлено */
         position: relative;
         transition: all 0.2s ease;
     }
 
     .disciplines-table th:nth-child(4),
     .disciplines-table td:nth-child(4) {
-        width: 11.67%; /* АС */
+        width: 13.33%; /* АС - увеличено */
     }
 
     .disciplines-table th:nth-child(5),
     .disciplines-table td:nth-child(5) {
-        width: 11.67%; /* ВМ */
+        width: 13.33%; /* ВМ - увеличено */
     }
 
     .disciplines-table th:nth-child(6),
     .disciplines-table td:nth-child(6) {
-        width: 11.67%; /* ПО */
+        width: 13.33%; /* ПО - увеличено */
     }
 
     .disciplines-table th {
