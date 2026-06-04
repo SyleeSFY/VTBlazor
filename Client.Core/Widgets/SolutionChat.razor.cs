@@ -17,6 +17,9 @@ namespace Client.Core.Widgets
         [Parameter] public User User { get; set; }
         [Parameter] public StudentSolution Solution { get; set; }
 
+        private readonly string[] _allowedFileTypes = { ".pdf", ".docx", ".doc", ".xlsx", ".xls", ".pptx", ".ppt", ".txt", ".jpg", ".jpeg", ".png" };
+        private const long MaxFileSize = 10 * 1024 * 1024; // 10 МБ
+
         private string _newMessage = "";
         private ElementReference _messagesContainer;
         private IJSObjectReference? _module;
@@ -25,6 +28,8 @@ namespace Client.Core.Widgets
         private bool _isLoading = false;
         private bool _isDisposed = false;
         private bool _shouldScrollToBottom = false;
+
+        private string _errorMessage = string.Empty;
 
         public SolutionChat() 
         {
@@ -195,12 +200,11 @@ namespace Client.Core.Widgets
         }
 
         #region FileWork
-        private async Task<List<FileInChatDTO>> AddFiles(List<IBrowserFile> uploadedFiles) 
-        {
+        private async Task<List<FileInChatDTO>> AddFiles(List<IBrowserFile> uploadedFiles) {
             var files = new List<FileInChatDTO>();
 
             foreach (var file in uploadedFiles) {
-                using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+                using var stream = file.OpenReadStream(maxAllowedSize: MaxFileSize);
                 using var memoryStream = new MemoryStream();
                 await stream.CopyToAsync(memoryStream);
 
@@ -220,10 +224,28 @@ namespace Client.Core.Widgets
             return files;
         }
 
-        private async Task OnFileUpload(InputFileChangeEventArgs e) 
-        {
+        private async Task OnFileUpload(InputFileChangeEventArgs e) {
             var files = e.GetMultipleFiles();
+
+            _errorMessage = string.Empty;
             _uploadedFiles.Clear();
+
+            foreach (var file in files) {
+                if (file.Size > MaxFileSize) {
+                    _errorMessage = $"Файл превышает максимальный размер {MaxFileSize / 1024 / 1024} МБ";
+                    StateHasChanged();
+                    return;
+                }
+
+                var fileExtension = Path.GetExtension(file.Name).ToLower();
+                if (!_allowedFileTypes.Contains(fileExtension)) {
+                    var allowedTypes = string.Join(", ", _allowedFileTypes);
+                    _errorMessage = $"Файл имеет неподдерживаемый тип. Разрешены: {allowedTypes}";
+                    StateHasChanged();
+                    return;
+                }
+            }
+
             _uploadedFiles.AddRange(files);
         }
 

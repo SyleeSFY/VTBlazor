@@ -132,6 +132,10 @@
                                             </div>
                                         </div>
                                     }
+                                    <small class="form-text text-muted">
+                                        Максимальный размер файла: 10 МБ.
+                                        Разрешенные форматы: @string.Join(", ", _allowedFileTypes)
+                                    </small>
                                 </div>
                                 @if (!string.IsNullOrEmpty(_errorMessage)) {
                                     <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
