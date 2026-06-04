@@ -86,10 +86,16 @@ public partial class TaskInfoDesc : ComponentBase
 
         var success = await _apiService.UpdateSolutionStatus(_solution.Id,taskSolution);
 
-        if (success)
-        {
-            _solution.Status = taskSolution.Status;
+        if (success) {
+            _solution.Status = status;
             _solution.UpdatedAt = DateTime.Now;
+
+            var updatedSolution = await _apiService.GetSolutionById(_solution.Id);
+            if (updatedSolution != null) {
+                _solution = updatedSolution;
+            }
+
+            StateHasChanged();
         }
     }
     
