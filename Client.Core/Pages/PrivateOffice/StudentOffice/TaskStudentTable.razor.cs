@@ -50,7 +50,7 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
                 return false;
 
             return solution.SolutionChat.Participants
-                .Any(p => p.SenderId != _student?.Id && p.HasUnreadMessages);
+                .Any(p => p.SenderId != _student?.UserId && p.HasUnreadMessages);
         }
     }
 }
