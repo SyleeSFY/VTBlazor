@@ -1,50 +1,131 @@
 .EducatorCardIMG {
     margin: auto;
-/*    margin-top: 90px;*/
     height: 400px;
     width: 275px;
     border-radius: 8px;
     border: 2px solid #2e7d32;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block; /* Изменено с flex на block */
+    object-fit: cover; /* Добавлено: сохраняет пропорции */
+    object-position: center top; /* Добавлено: фокус на верхнюю часть */
+    background-color: #f0f0f0; /* Добавлено: фон если изображение не загрузится */
 }
 
 .EducatorCardInfo {
     font-family: "Roboto", sans-serif;
-    /*    margin-top: 50px;*/
     font-size: 20px;
     line-height: 1.5;
+    max-width: 100%; /* Добавлено */
+    overflow-wrap: break-word; /* Добавлено */
+    word-wrap: break-word; /* Добавлено */
 }
 
-.EducatorCardInfo p{
-    margin-top: 10px;
-    margin-bottom: 10px;
-    white-space: pre-line;
-}
-.EducatorCardInfo br {
-    display: block;
-    margin-bottom: 1em;
-    content: "";
-}
+    .EducatorCardInfo p {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        white-space: pre-line;
+        overflow-wrap: break-word; /* Добавлено */
+        word-break: break-word; /* Добавлено */
+    }
 
-.EducatorCardInfo p:first-child{
-    margin-top: -8px;
-}
+    .EducatorCardInfo br {
+        display: block;
+        margin-bottom: 1em;
+        content: "";
+    }
+
+    .EducatorCardInfo p:first-child {
+        margin-top: -8px;
+    }
 
 .disciplines_list {
     margin: 0.5rem 0;
     padding-left: 1.5rem;
     list-style-type: disc;
+    max-width: 100%; /* Добавлено */
 }
 
-.disciplines_list li {
-    margin-left: 50px;
-    margin-bottom: 0.25rem;
-    line-height: 1.4;
-}
+    .disciplines_list li {
+        margin-left: 50px;
+        margin-bottom: 0.25rem;
+        line-height: 1.4;
+        overflow-wrap: break-word; /* Добавлено */
+        word-break: break-word; /* Добавлено */
+    }
 
 .Desc__Text {
     text-align: justify;
     margin-right: 40px;
+    word-break: break-word; /* Добавлено */
+    overflow-wrap: break-word; /* Добавлено */
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .EducatorCardIMG {
+        height: 350px;
+        width: 240px;
+    }
+
+    .EducatorCardInfo {
+        font-size: 18px;
+    }
+
+    .Desc__Text {
+        margin-right: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    div[style*="display: flex; margin-top:50px"] {
+        flex-direction: column !important;
+        align-items: center;
+    }
+
+    div[style*="width: 30%"] {
+        width: 100% !important;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    div[style*="width: 70%"] {
+        width: 100% !important;
+    }
+
+    .EducatorCardIMG {
+        height: 300px;
+        width: 220px;
+        margin: 0 auto;
+    }
+
+    .EducatorCardInfo {
+        font-size: 16px;
+        padding: 0 15px;
+    }
+
+    .disciplines_list li {
+        margin-left: 20px;
+    }
+
+    .Desc__Text {
+        margin-right: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .EducatorCardIMG {
+        height: 250px;
+        width: 180px;
+    }
+
+    .EducatorCardInfo {
+        font-size: 14px;
+    }
+
+    .Desc__Text {
+        margin-right: 10px;
+    }
+
+    .disciplines_list li {
+        margin-left: 15px;
+    }
 }
