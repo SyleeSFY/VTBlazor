@@ -77,7 +77,6 @@ table, th, td {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        cursor: pointer; /* Добавлено */
         position: relative;
         transition: all 0.2s ease;
     }
@@ -88,7 +87,6 @@ table, th, td {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        cursor: pointer; /* Добавлено */
         position: relative;
         transition: all 0.2s ease;
     }
@@ -125,7 +123,6 @@ table, th, td {
         overflow: visible;
         white-space: normal;
         word-break: break-word;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         border-radius: 4px;
         position: relative;
         z-index: 100;
@@ -137,7 +134,6 @@ table, th, td {
         overflow: visible;
         white-space: normal;
         word-break: break-word;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         border-radius: 4px;
         position: relative;
         z-index: 100;
