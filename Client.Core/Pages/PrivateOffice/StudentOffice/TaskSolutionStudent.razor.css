@@ -1,6 +1,5 @@
 ﻿.EducatorCardIMG {
     margin: auto;
-    /*    margin-top: 90px;*/
     height: 400px;
     width: 275px;
     border-radius: 8px;
@@ -12,15 +11,20 @@
 
 .EducatorCardInfo {
     font-family: "Roboto", sans-serif;
-    /*    margin-top: 50px;*/
     font-size: 20px;
     line-height: 1.5;
+    max-width: 100%; /* Добавлено: ограничение ширины */
+    overflow-wrap: break-word; /* Добавлено: перенос длинных слов */
+    word-wrap: break-word; /* Добавлено: для совместимости */
 }
 
     .EducatorCardInfo p {
         margin-top: 10px;
         margin-bottom: 10px;
         white-space: pre-line;
+        overflow-wrap: break-word; /* Добавлено */
+        word-break: break-word; /* Добавлено: перенос слов */
+        max-width: 100%; /* Добавлено */
     }
 
     .EducatorCardInfo br {
@@ -37,13 +41,50 @@
     margin: 0.5rem 0;
     padding-left: 1.5rem;
     list-style-type: disc;
+    max-width: 100%; /* Добавлено */
 }
 
     .disciplines_list li {
         margin-left: 50px;
         margin-bottom: 0.25rem;
         line-height: 1.4;
+        overflow-wrap: break-word; /* Добавлено */
+        word-break: break-word; /* Добавлено */
     }
+
 .line {
     border-bottom: 2px solid #2e7d32;
+}
+
+
+.existing-solution {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+/* Адаптивность для разных экранов */
+@media (max-width: 992px) {
+    .EducatorCardInfo {
+        font-size: 18px;
+    }
+
+        .EducatorCardInfo p {
+            word-break: break-word;
+        }
+}
+
+@media (max-width: 768px) {
+    .EducatorCardInfo {
+        font-size: 16px;
+        padding-left: 1vw !important;
+    }
+
+    .disciplines_list li {
+        margin-left: 20px;
+    }
+
+    .existing-solution {
+        margin-left: 1vw !important;
+    }
 }

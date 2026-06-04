@@ -1,9 +1,11 @@
-﻿using Client.Core.Entities.Interfaces;
+﻿using Client.Core.Entities.Enums;
+using Client.Core.Entities.Interfaces;
 using Client.Core.Entities.Models.Education;
 using Client.Core.Entities.Models.User;
 using Client.Core.Entities.Models.User.Dicipline;
 using Client.Core.Entities.Models.User.EducatorModel;
 using Client.Core.Pages.PrivateOffice.EducatorOffice;
+using Client.Core.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -51,6 +53,13 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
 
             return solution.SolutionChat.Participants
                 .Any(p => p.SenderId != _student?.UserId && p.HasUnreadMessages);
+        }
+
+        private string GetStatus(SolutionStatus? status) 
+        {
+            if (status is null)
+                return "Новый";
+            return GlobalData.GetSolutionStatus[(SolutionStatus)status];
         }
     }
 }

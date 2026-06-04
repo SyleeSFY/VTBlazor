@@ -16,21 +16,23 @@
                             <th rowSpan="2">ИД</th>
                             <th rowSpan="2">Наименование задания</th>
                             <th rowSpan="2">Предмет</th>
+                            <th rowSpan="1">Статус</th>
                             <th rowSpan="1" class="profile-header">Дата добавления</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in _taskEducator)
                         {
-                            <tr style="cursor: pointer; @(HasUnreadMessages(item) ? "background: #edff00;" : "")">
+                            <tr style="cursor: pointer; @(HasUnreadMessages(item) ? "background: #f1f1f1;" : "")">
                                 <td>@item.Id</td>
                                 <td style="text-align: left; cursor: pointer;" @onclick="() => GoTaskInfo(item.Id)">@item.TaskName 
                                     @if (HasUnreadMessages(item))
                                     {
-                                        <span style="color: #ff9800; font-size: 16px; margin-left: 5px;">🔔</span>
+                                        <span style="color: #f1f1f1; font-size: 16px; margin-left: 5px;">🔔</span>
                                     }
                                 </td>
                                 <td>@(_diciplines.FirstOrDefault(x => x.Id == item.DiciplineId).NameDiscipline)</td>
+                                <td>@GetStatus(_solutions?.FirstOrDefault(x => x.TaskId == item.Id)?.Status)</td>
                                 <td>@item.CreatedAt.ToString("dd.MM.yyyy")</td>
                             </tr>
                         }
