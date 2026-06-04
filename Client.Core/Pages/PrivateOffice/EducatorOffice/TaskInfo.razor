@@ -67,9 +67,13 @@
                         {
                             @foreach (var item in _solutions)
                             {
-                                <tr style="cursor: pointer; @(HasUnreadMessages(item) ? "background: #dffaff;" : "")" @onclick="() => GoTaskInfoDesc(item.Id)">
+                                <tr style="cursor: pointer; @(HasUnreadMessages(item) ? "background: #edff00;" : "")" @onclick="() => GoTaskInfoDesc(item.Id)">
                                     <td>@item.Id</td>
-                                    <td style="text-align: left">@GetStudentFullName(item.StudentId)</td>
+                                    <td style="text-align: left">@GetStudentFullName(item.StudentId)
+                                        @if (HasUnreadMessages(item)) {
+                                            <span style="color: #ff9800; font-size: 16px; margin-left: 5px;">🔔</span>
+                                        }
+                                    </td>
                                     <td>@GetStudentGroupName(item.StudentId)</td>
                                     <td>@GetSolutionStatus(item.Status)</td>
                                     <td>@item.CreatedAt.ToString("dd.MM.yyyy")</td>
