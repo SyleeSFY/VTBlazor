@@ -29,6 +29,8 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
         private SolutionStudentDTO _taskSolution;
         private StudentSolution _existingSolution;
 
+        private string _errorMessage = string.Empty;
+
         string _solutionText = string.Empty;
 
         public TaskSolutionStudent()
@@ -104,8 +106,14 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
         {
             try
             {
-                if (string.IsNullOrEmpty(_solutionText))
-                    throw new InvalidOperationException("Необходимо заполнить описание");
+                _errorMessage = string.Empty;
+
+                if (string.IsNullOrEmpty(_solutionText)) {
+                    _errorMessage = "Необходимо заполнить описание";
+                    StateHasChanged();
+                    return;
+                }
+
                 var solutionDTO = await FillSolution(_taskSolution);
                 
                 var response = await _apiService.PostSolutionStudent(solutionDTO);
