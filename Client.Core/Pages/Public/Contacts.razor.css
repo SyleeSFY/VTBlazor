@@ -1,20 +1,27 @@
 .Block {
-
     margin-top: 60px;
 }
 
 .BlockContacts {
-    margin-left: 15px;
-    height: 600px;
+    margin-left: auto;
+    margin-right: auto;
     margin-top: 30px;
     background: #008433;
     display: flex;
+    min-height: 600px;
+    width: calc(100% - 15px);
 }
 
 .LeftBlockContacts,
 .RightBlockContacts {
     flex: 1;
     box-sizing: border-box;
+    min-height: 600px; /* Добавлено: минимальная высота */
+}
+
+.RightBlockContacts {
+    position: relative; /* Добавлено: для позиционирования вложенных элементов */
+    overflow: hidden; /* Добавлено: обрезает всё, что выходит за границы */
 }
 
 .LeftBlockContacts {
@@ -79,21 +86,54 @@
     background: #01963a;
 }
 
+/* Стили для карты и фолбэка */
 .map-iframe {
     width: 100%;
     height: 100%;
-}
-.BlockContacts {
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 30px;
-    background: #008433;
-    display: flex;
-    min-height: 600px;
-    width: calc(100% - 15px);
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
+.map-fallback {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
 
+.map-fallback-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Заполняет весь блок, сохраняя пропорции */
+    object-position: center;
+    display: block;
+}
+
+.map-fallback-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.map-fallback-text {
+    font-size: 16px;
+    margin: 0 0 8px 0;
+}
+
+.map-fallback-address {
+    font-size: 14px;
+    margin: 0;
+    opacity: 0.9;
+}
+
+/* Медиа-запросы */
 @media (max-width: 1200px) {
     .BlockContacts {
         height: auto;
@@ -109,29 +149,29 @@
         flex: 1 1 50%;
         min-height: 300px;
     }
-}
 
+    .LeftBlockContacts,
+    .RightBlockContacts {
+        min-height: 600px;
+    }
+}
 
 @media (max-width: 768px) {
     .container {
-        padding-left: 0px;padding-right: 0px;
-    }
-    .BlockContacts {
-        margin-left: 0;
-        width: 100%;
-        flex-direction: column;
+        padding-left: 0px;
+        padding-right: 0px;
     }
 
     .Block {
-
         margin-top: 0px;
     }
 
     .BlockContacts {
         margin-left: 0;
-        height: auto;
+        width: 100%;
         flex-direction: column;
         margin-top: 20px;
+        min-height: auto;
     }
 
     .LeftBlockContacts {
@@ -141,6 +181,7 @@
     .RightBlockContacts {
         order: 1;
         padding: 10px;
+        min-height: 300px; /* Фиксированная высота для мобильных */
     }
 
     .Left, .Right {
@@ -214,5 +255,9 @@
 
     .contact-person-name {
         font-size: 16px !important;
+    }
+
+    .RightBlockContacts {
+        min-height: 250px;
     }
 }

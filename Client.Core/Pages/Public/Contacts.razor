@@ -4,7 +4,6 @@
 
 <div class="container">
     <div class="Block">
-
         <TittleUnderStick Tittle="Контакты для связи!"
                           JustifyContent="JustifyContentEnum.Center"
                           FontSize="48" />
@@ -50,39 +49,14 @@
                 </div>
             </div>
             <div class="RightBlockContacts">
-                @if (isMapLoaded) {
-                    <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A248f63b372de498e9051cbf8be2b3ed6f0e20425851ee1dd481c97e2becd51c9&amp;source=constructor"
-                            title="Карта расположения"
-                            class="map-iframe"
-                            @onload="OnMapLoaded"
-                            @onerror="OnMapError"></iframe>
-                }
-                else {
+
                     <div class="map-fallback">
-                        <img src="/image/ContactsPage/MapFallback.png" alt="Карта недоступна" class="map-fallback-img" />
-                        <p class="map-fallback-text">Карта недоступна в офлайн-режиме</p>
-                        <p class="map-fallback-address">214013, г. Смоленск, Энергетический проезд, д. 1</p>
+                        <img src="/image/ContactsPage/MapFallback.jpg" alt="Карта недоступна" class="map-fallback-img" />
+                        <div class="map-fallback-overlay">
+                            <p class="map-fallback-address">214013, г. Смоленск, Энергетический проезд, д. 1</p>
+                        </div>
                     </div>
-                }
             </div>
         </div>
     </div>
 </div>
-
-@code {
-    private bool isMapLoaded = true; // По умолчанию пытаемся загрузить
-    private bool mapFailed = false;
-
-    private void OnMapLoaded() {
-        if (!mapFailed) {
-            isMapLoaded = true;
-            StateHasChanged();
-        }
-    }
-
-    private void OnMapError() {
-        mapFailed = true;
-        isMapLoaded = false;
-        StateHasChanged();
-    }
-}
