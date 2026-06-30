@@ -1,14 +1,39 @@
 @page "/UserTable"
+@using Client.Core.Entities.Enums
 @using Client.Core.Features
 @using Client.Core.Shared
 @inject HttpClient Http
 @layout PrivateOfficeLayout
+@attribute [Authorize(Policy = "Admin")]
 
 <AuthorizeView>
     <Authorized>
         <div class="container">
             <TittleBackground JustifyContent="@JustifyContentEnum.FlexEnd" Color="006928d8" Tittle="Пользователи" />
             <ButtonRedirect Redirect="UserAdd" Text="Добавление пользователя"/>
+            <div class="sort-container" style="margin: 10px 0; align-items: center; display: flex;">
+                <label>Сортировка: </label>
+                <select style="padding: 5px; margin-right: 10px;"
+                        value="@GetSelectedRoleString()"
+                        @onchange="OnRoleChanged">
+                    <option value="">Default</option>
+                    <option value="student">Студенты</option>
+                    <option value="admin">Администраторы</option>
+                    <option value="educator">Преподаватели</option>
+                </select>
+                @if (_selectedRole is Role.student)
+                {
+                    <div>
+                        <label>Группа:</label>
+                        <select style="padding: 5px; margin-right: 10px;" @onchange="OnGroupChanged">
+                            <option value="">Default</option>
+                            @foreach (var group in _groupsStudent) {
+                                <option value="@group.Id">@group.Name</option>
+                            }
+                        </select>
+                    </div>
+                }
+            </div>
             <div class="table-container">
                 <table class="disciplines-table">
                     <thead>
@@ -18,11 +43,11 @@
                         <th rowSpan="2">Роль</th>
                         <th rowSpan="2">Группа</th>
                         <th rowSpan="2" class="profile-header">Статус</th>
-                        <th colSpan="2" class="profile-header">Изменение</th>
+                        <th colSpan="1" class="profile-header">Изменение</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach(var item in _users)
+                    @foreach(var item in _displayedUsers)
                     {
                         <tr> 
                             <td>@item.Id</td>
@@ -35,8 +60,8 @@
                                     <p class="nav_item Cursor">Редакт.</p>
                                 </NavLink>
                             </td>
-                            <td><button class="btn__delete" @onclick="() => BtnDelete(item.Id)">Удалить</button></td>
-                        </tr>
+@*                             <td><button class="btn__delete" @onclick="() => BtnDelete(item.Id)">Удалить</button></td>
+ *@                        </tr>
                                                 
                     }
                     </tbody>

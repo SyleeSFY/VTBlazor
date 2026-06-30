@@ -64,62 +64,46 @@ table, th, td {
     table-layout: fixed;
 }
 
-    /* Ширины для колонок бакалавриата */
     .disciplines-table th:nth-child(1),
     .disciplines-table td:nth-child(1) {
-        width: 5%; /* № п.п. */
+        width: 5%; /* № п/п */
     }
 
     .disciplines-table th:nth-child(2),
     .disciplines-table td:nth-child(2) {
-        width: 60%;
+        width: 45%; /* Наименование дисциплины - уменьшено с 50% */
         padding-left: 15px;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: relative;
+        transition: all 0.2s ease;
     }
 
     .disciplines-table th:nth-child(3),
     .disciplines-table td:nth-child(3) {
         width: 10%; /* Курс */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: relative;
+        transition: all 0.2s ease;
     }
-
 
     .disciplines-table th:nth-child(4),
     .disciplines-table td:nth-child(4) {
-        width: 20%; /* АС */
+        width: 13.33%; /* АС - увеличено */
     }
 
     .disciplines-table th:nth-child(5),
     .disciplines-table td:nth-child(5) {
-        width: 20%; /* ВМ */
+        width: 13.33%; /* ВМ - увеличено */
     }
 
     .disciplines-table th:nth-child(6),
     .disciplines-table td:nth-child(6) {
-        width: 20%; /* ПО */
-    }
-
-    /* Ширины для колонок магистратуры */
-    .disciplines-table th:nth-child(1):only-child,
-    .disciplines-table td:nth-child(1):only-child {
-        width: 10%; /* № п/п */
-    }
-
-    .disciplines-table th:nth-child(2):only-child,
-    .disciplines-table td:nth-child(2):only-child {
-        width: 70%; /* Наименование дисциплины */
-        text-align: left;
-        padding-left: 15px;
-    }
-
-    .disciplines-table th:nth-child(3):only-child,
-    .disciplines-table td:nth-child(3):only-child {
-        width: 20%; /* Курс */
-    }
-
-    .disciplines-table td:nth-child(4),
-    .disciplines-table td:nth-child(5),
-    .disciplines-table td:nth-child(6) {
-        text-align: center !important;
-        vertical-align: middle !important;
+        width: 13.33%; /* ПО - увеличено */
     }
 
     .disciplines-table th {
@@ -135,13 +119,42 @@ table, th, td {
         background-color: #f5f5f5 !important;
     }
 
+    .disciplines-table td:nth-child(2):hover {
+        overflow: visible;
+        white-space: normal;
+        word-break: break-word;
+        border-radius: 4px;
+        position: relative;
+        z-index: 100;
+        max-width: 500px;
+        padding: 10px 15px;
+    }
+
+    .disciplines-table td:nth-child(3):hover {
+        overflow: visible;
+        white-space: normal;
+        word-break: break-word;
+        border-radius: 4px;
+        position: relative;
+        z-index: 100;
+        max-width: 300px;
+        padding: 10px 15px;
+        text-align: center;
+    }
+
+    .disciplines-table td:nth-child(2)[data-long-text="true"]:hover,
+    .disciplines-table td:nth-child(3)[data-long-text="true"]:hover {
+        max-width: 600px;
+        font-size: 16px;
+        line-height: 1.4;
+    }
+
 @media (max-width: 370px) {
     .button_with_under_stick {
         font-size: 16px !important;
     }
 }
 
-/* Для мобильных устройств */
 @media (max-width: 768px) {
     .disciplines-table {
         font-size: 12px;
@@ -156,10 +169,53 @@ table, th, td {
     .button_with_under_stick {
         font-size: 24px;
     }
+
+    .disciplines-table td:nth-child(2),
+    .disciplines-table td:nth-child(3) {
+        white-space: nowrap;
+        word-break: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+        .disciplines-table td:nth-child(2):hover {
+            white-space: normal;
+            word-break: break-word;
+            overflow: visible;
+            max-width: 300px;
+            font-size: 14px;
+            padding: 8px 12px;
+        }
+
+        .disciplines-table td:nth-child(3):hover {
+            white-space: normal;
+            word-break: break-word;
+            overflow: visible;
+            max-width: 200px;
+            font-size: 14px;
+            padding: 8px 12px;
+        }
 }
 
 @media (max-width: 260px) {
     .button_with_under_stick {
         font-size: 14px !important;
     }
+
+    .disciplines-table td:nth-child(2):hover {
+        max-width: 200px;
+        font-size: 12px;
+    }
+
+    .disciplines-table td:nth-child(3):hover {
+        max-width: 150px;
+        font-size: 12px;
+    }
+}
+
+.profile-header {
+    color: white;
+    font-family: Rubik;
+    font-weight: lighter;
+    font-size: 20px;
 }

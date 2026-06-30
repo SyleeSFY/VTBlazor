@@ -9,7 +9,7 @@ public class Educator
     public int UserId { get; set; }
     public string Profession { get; set; }
     public string? FullName {  get; set; } = null;
-    public string AcademicDegree { get; set; }
+    public string? AcademicDegree { get; set; } = string.Empty;
   
     public EducatorAdditionalInfo EducatorAdditionalInfo { get; set; }
     [JsonIgnore]

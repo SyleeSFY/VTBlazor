@@ -38,6 +38,8 @@ public class EducatorRepository : IEducatorRepository
             return await _context.StudentSolutions
                 .Include(x => x.SolutionFiles)
                 .Include(x => x.SolutionChat)
+                    .ThenInclude(x => x.Participants)
+                .Include(x => x.SolutionChat)
                     .ThenInclude(x => x.Messages)
                         .ThenInclude(x => x.Files)
                 .FirstOrDefaultAsync(x => x.Id == id);
@@ -56,6 +58,8 @@ public class EducatorRepository : IEducatorRepository
             return await _context.StudentSolutions
                         .Include(x => x.SolutionFiles)
                         .Include(x => x.SolutionChat)
+                            .ThenInclude(x => x.Participants)
+                        .Include(x => x.SolutionChat)
                             .ThenInclude(x => x.Messages)
                                 .ThenInclude(x => x.Files)
                         .FirstOrDefaultAsync(x => x.TaskId == taskId && x.StudentId == studentId);
@@ -63,6 +67,26 @@ public class EducatorRepository : IEducatorRepository
         catch (Exception)
         {
             return new StudentSolution();
+            throw;
+        }
+    }
+    public async Task<List<StudentSolution>> GetSolutionsStudentIdAsync(int studentId)
+    {
+        try
+        {
+            return await _context.StudentSolutions
+                        .Include(x => x.SolutionFiles)
+                        .Include(x => x.SolutionChat)
+                            .ThenInclude(x => x.Participants)
+                        .Include(x => x.SolutionChat)
+                            .ThenInclude(x => x.Messages)
+                                .ThenInclude(x => x.Files)
+                        .Where(x=> x.StudentId == studentId)
+                        .ToListAsync();
+        }
+        catch (Exception)
+        {
+            return new List<StudentSolution>();
             throw;
         }
     }

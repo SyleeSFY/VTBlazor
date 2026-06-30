@@ -29,7 +29,12 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
         private SolutionStudentDTO _taskSolution;
         private StudentSolution _existingSolution;
 
+        private string _errorMessage = string.Empty;
+
         string _solutionText = string.Empty;
+
+        private readonly string[] _allowedFileTypes = { ".pdf", ".docx", ".doc", ".xlsx", ".xls", ".pptx", ".ppt", ".txt", ".jpg", ".jpeg", ".png" };
+        private const long MaxFileSize = 10 * 1024 * 1024; // 10 МБ
 
         public TaskSolutionStudent()
         {
@@ -47,6 +52,7 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
             _task = await _apiService.GetTaskEducationById(Id);
             _task.Dicipline = await _apiService.GetDisciplineById(_task.DiciplineId);
             _existingSolution = await _apiService.GetSolutionByTaskIdAndStudentId(Id, _student.Id);
+            await DeleteParticipant();
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -77,9 +83,27 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
             await _module.InvokeVoidAsync("downloadFile", base64, fileName);
         }
 
-        private async Task OnFileUpload(InputFileChangeEventArgs e)
-        {
+        private async Task OnFileUpload(InputFileChangeEventArgs e) {
             var files = e.GetMultipleFiles();
+
+            _errorMessage = string.Empty;
+
+            foreach (var file in files) {
+                if (file.Size > MaxFileSize) {
+                    _errorMessage = $"Файл превышает максимальный размер {MaxFileSize / 1024 / 1024} МБ";
+                    StateHasChanged();
+                    return;
+                }
+
+                var fileExtension = Path.GetExtension(file.Name).ToLower();
+                if (!_allowedFileTypes.Contains(fileExtension)) {
+                    var allowedTypes = string.Join(", ", _allowedFileTypes);
+                    _errorMessage = $"Файл имеет неподдерживаемый тип. Разрешены: {allowedTypes}";
+                    StateHasChanged();
+                    return;
+                }
+            }
+
             _uploadedFiles.Clear();
             _uploadedFiles.AddRange(files);
         }
@@ -103,8 +127,14 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
         {
             try
             {
-                if (string.IsNullOrEmpty(_solutionText))
-                    throw new InvalidOperationException("Необходимо заполнить описание");
+                _errorMessage = string.Empty;
+
+                if (string.IsNullOrEmpty(_solutionText)) {
+                    _errorMessage = "Необходимо заполнить описание";
+                    StateHasChanged();
+                    return;
+                }
+
                 var solutionDTO = await FillSolution(_taskSolution);
                 
                 var response = await _apiService.PostSolutionStudent(solutionDTO);
@@ -132,21 +162,18 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
             return taskSolution;
         }
 
-        private async Task<List<SolutionFileDTO>> AddFiles(List<IBrowserFile> uploadedFiles)
-        {
+        private async Task<List<SolutionFileDTO>> AddFiles(List<IBrowserFile> uploadedFiles) {
             var files = new List<SolutionFileDTO>();
 
-            foreach (var file in uploadedFiles)
-            {
-                using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+            foreach (var file in uploadedFiles) {
+                using var stream = file.OpenReadStream(maxAllowedSize: MaxFileSize);
                 using var memoryStream = new MemoryStream();
                 await stream.CopyToAsync(memoryStream);
 
                 var bytes = memoryStream.ToArray();
                 var base64 = Convert.ToBase64String(bytes);
 
-                var taskFileDTO = new SolutionFileDTO
-                {
+                var taskFileDTO = new SolutionFileDTO {
                     FileName = file.Name,
                     OriginalFileName = file.Name,
                     FileSize = file.Size,
@@ -159,6 +186,12 @@ namespace Client.Core.Pages.PrivateOffice.StudentOffice
             }
 
             return files;
+        }
+
+        private async Task DeleteParticipant() {
+            var participant = _existingSolution.SolutionChat?.Participants?.FirstOrDefault(p => p.SenderId != _user.Id);
+            if (participant is not null)
+                await _apiService.DeleteParticipant(participant.Id);
         }
     }
 }

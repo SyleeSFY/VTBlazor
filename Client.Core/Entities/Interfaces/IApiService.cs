@@ -45,5 +45,8 @@ namespace Client.Core.Entities.Interfaces
         Task<User> GetUserByAuth(AuthenticationState authState);
         Task<byte[]> GetMessageFileByte(int fileId);
         Task<SolutionChat> GetChatById(int chatId);
+        Task<int> GetId(AuthenticationState authState);
+        Task DeleteParticipant(int participantId);
+        Task<List<StudentSolution>> GetSolutionsByStudentId(int studentId);
     }
 }

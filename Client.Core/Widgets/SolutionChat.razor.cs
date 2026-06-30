@@ -1,4 +1,5 @@
-﻿using Client.Core.Entities.Interfaces;
+﻿using Client.Core.Entities.Enums;
+using Client.Core.Entities.Interfaces;
 using Client.Core.Entities.Models.DTO;
 using Client.Core.Entities.Models.Education;
 using Client.Core.Entities.Models.User;
@@ -6,108 +7,174 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 
-namespace Client.Core.Widgets
+namespace Client.Core.Widgets 
 {
-    public partial class SolutionChat : ComponentBase, IDisposable
-    {
+    public partial class SolutionChat : ComponentBase, IDisposable {
         [Inject] private IApiService _apiService { get; set; }
+        [Inject] private IJSRuntime _jsRuntime { get; set; }
 
         [Parameter] public List<MessageInChat> Messages { get; set; }
         [Parameter] public User User { get; set; }
         [Parameter] public StudentSolution Solution { get; set; }
 
+        private readonly string[] _allowedFileTypes = { ".pdf", ".docx", ".doc", ".xlsx", ".xls", ".pptx", ".ppt", ".txt", ".jpg", ".jpeg", ".png" };
+        private const long MaxFileSize = 10 * 1024 * 1024; // 10 МБ
+
         private string _newMessage = "";
-        private ElementReference _fileInput;
+        private ElementReference _messagesContainer;
         private IJSObjectReference? _module;
         private List<IBrowserFile> _uploadedFiles;
         private System.Timers.Timer _timer;
         private bool _isLoading = false;
         private bool _isDisposed = false;
+        private bool _shouldScrollToBottom = false;
 
-        public SolutionChat()
+        private string _errorMessage = string.Empty;
+
+        public SolutionChat() 
         {
             _uploadedFiles = new List<IBrowserFile>();
         }
 
-        protected override async Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync() 
         {
             await LoadMessages();
 
-            _timer = new System.Timers.Timer(30000); // 30 секунд
+            _timer = new System.Timers.Timer(10000);
             _timer.Elapsed += OnTimerElapsed;
             _timer.AutoReset = true;
             _timer.Start();
         }
 
-        private async void OnTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private async void OnTimerElapsed(object sender, System.Timers.ElapsedEventArgs e) 
         {
             if (_isLoading || _isDisposed) return;
 
             _isLoading = true;
-            try
-            {
-                await InvokeAsync(async () =>
-                {
+            try {
+                await InvokeAsync(async () => {
+                    var oldCount = Messages?.Count ?? 0;
                     await LoadMessages();
-                    StateHasChanged();
+
+                    if (Messages != null && Messages.Count > oldCount) {
+                        _shouldScrollToBottom = true; //прокрутка
+                        StateHasChanged();
+                    }
                 });
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
+                Console.WriteLine($"Ошибка при обновлении сообщений: {ex.Message}");
             }
-            finally
-            {
+            finally {
                 _isLoading = false;
             }
         }
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender) 
         {
-            if (firstRender)
-            {
-                _module = await JS.InvokeAsync<IJSObjectReference>("import", "./Widgets/SolutionChat.razor.js");
+            if (firstRender) {
+                _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./Widgets/SolutionChat.razor.js");
+                await Task.Delay(300);
+                await ScrollToBottom();
+            }
+
+            if (_shouldScrollToBottom) {
+                await ScrollToBottom();
+                _shouldScrollToBottom = false;
             }
         }
 
-        private async Task GetFile(FileInChat fileId)
+        private async Task ScrollToBottom() 
         {
-            var file = await _apiService.GetMessageFileByte(fileId.Id);
-            await DownloadFile(file, fileId.FileName);
+            try {
+                if (_module != null) {
+                    await _module.InvokeVoidAsync("scrollToBottom", _messagesContainer);
+                }
+            }
+            catch (Exception ex) 
+            {
+            }
         }
 
-        private async Task DownloadFile(byte[] fileBytes, string fileName)
+        private string GetSenderName(MessageInChat message) 
+        {
+            if (message.SenderId == User.Id)
+                return "Вы";
+
+            return message.SenderRole switch {
+                Role.educator => "Преподаватель",
+                Role.admin => "Администратор",
+                Role.student => "Студент",
+                _ => "Пользователь"
+            };
+        }
+
+        private async Task GetFile(FileInChat fileId) 
+        {
+            try {
+                var file = await _apiService.GetMessageFileByte(fileId.Id);
+                await DownloadFile(file, fileId.FileName);
+            }
+            catch (Exception ex) 
+            {
+            }
+        }
+
+        private async Task DownloadFile(byte[] fileBytes, string fileName) 
         {
             var base64 = Convert.ToBase64String(fileBytes);
-            await _module.InvokeVoidAsync("downloadFile", base64, fileName);
+            if (_module != null) {
+                await _module.InvokeVoidAsync("downloadFile", base64, fileName);
+            }
         }
 
-        private async Task LoadMessages()
+        private async Task LoadMessages() 
         {
-            try
-            {
-                if (Solution?.SolutionChat?.Id != null)
-                {
+            try {
+                if (Solution?.SolutionChat?.Id != null) {
                     var chat = await _apiService.GetChatById(Solution.SolutionChat.Id);
-                    if (chat?.Messages != null && chat.Messages.Count != Messages?.Count)
-                    {
+                    if (chat?.Messages != null) {
+                        var oldCount = Messages?.Count ?? 0;
+                        var oldLastMessageId = Messages?.LastOrDefault()?.Id;
+
                         Messages = chat.Messages;
+
+                        var newMessages = Messages?.Count > oldCount;
+                        var lastMessageChanged = Messages?.LastOrDefault()?.Id != oldLastMessageId;
+
+                        if (newMessages && lastMessageChanged && Messages?.Any() == true) {
+                            var lastMessage = Messages.Last();
+
+                            if (lastMessage.SenderId != User.Id) {
+                                var participant = chat.Participants?
+                                    .FirstOrDefault(p => p.SenderId != User.Id);
+
+                                if (participant != null) {
+                                    await _apiService.DeleteParticipant(participant.Id);
+                                }
+                            }
+
+                            //_shouldScrollToBottom = true;
+                        }
+
+                        if (oldCount == 0) {
+                            _shouldScrollToBottom = true;
+                        }
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
             }
         }
 
-        private async Task SendMessage()
+        private async Task SendMessage() 
         {
             if (string.IsNullOrWhiteSpace(_newMessage) && !_uploadedFiles.Any())
                 return;
 
-            try
-            {
-                var messageDto = new MessageInChatDTO
-                {
+            try {
+                var messageDto = new MessageInChatDTO {
                     ChatId = Solution.SolutionChat.Id,
                     SenderId = User.Id,
                     SenderRole = User.Role,
@@ -117,36 +184,34 @@ namespace Client.Core.Widgets
                 if (_uploadedFiles.Any())
                     messageDto.Files = await AddFiles(_uploadedFiles);
 
-                var newMessage = await _apiService.PostMessage(messageDto);
+                await _apiService.PostMessage(messageDto);
 
-                var newChat = await _apiService.GetChatById(Solution.SolutionChat.Id);
-                Messages = newChat.Messages;
                 _newMessage = "";
                 _uploadedFiles.Clear();
 
+                await LoadMessages();
+                _shouldScrollToBottom = true;
+
                 StateHasChanged();
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
+                Console.WriteLine($"Ошибка отправки сообщения: {ex.Message}");
             }
         }
 
         #region FileWork
-        private async Task<List<FileInChatDTO>> AddFiles(List<IBrowserFile> uploadedFiles)
-        {
+        private async Task<List<FileInChatDTO>> AddFiles(List<IBrowserFile> uploadedFiles) {
             var files = new List<FileInChatDTO>();
 
-            foreach (var file in uploadedFiles)
-            {
-                using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+            foreach (var file in uploadedFiles) {
+                using var stream = file.OpenReadStream(maxAllowedSize: MaxFileSize);
                 using var memoryStream = new MemoryStream();
                 await stream.CopyToAsync(memoryStream);
 
                 var bytes = memoryStream.ToArray();
                 var base64 = Convert.ToBase64String(bytes);
 
-                var fileDTO = new FileInChatDTO
-                {
+                var fileDTO = new FileInChatDTO {
                     FileName = file.Name,
                     FileSize = file.Size,
                     ContentBase64 = base64,
@@ -159,38 +224,48 @@ namespace Client.Core.Widgets
             return files;
         }
 
-        private async Task OnFileUpload(InputFileChangeEventArgs e)
-        {
+        private async Task OnFileUpload(InputFileChangeEventArgs e) {
             var files = e.GetMultipleFiles();
+
+            _errorMessage = string.Empty;
             _uploadedFiles.Clear();
+
+            foreach (var file in files) {
+                if (file.Size > MaxFileSize) {
+                    _errorMessage = $"Файл превышает максимальный размер {MaxFileSize / 1024 / 1024} МБ";
+                    StateHasChanged();
+                    return;
+                }
+
+                var fileExtension = Path.GetExtension(file.Name).ToLower();
+                if (!_allowedFileTypes.Contains(fileExtension)) {
+                    var allowedTypes = string.Join(", ", _allowedFileTypes);
+                    _errorMessage = $"Файл имеет неподдерживаемый тип. Разрешены: {allowedTypes}";
+                    StateHasChanged();
+                    return;
+                }
+            }
+
             _uploadedFiles.AddRange(files);
         }
 
-        private string FormatFileSize(long bytes)
+        private string FormatFileSize(long bytes) 
         {
-            if (bytes < 1024)
-                return $"{bytes} B";
-            if (bytes < 1024 * 1024)
-                return $"{bytes / 1024} KB";
+            if (bytes < 1024) return $"{bytes} B";
+            if (bytes < 1024 * 1024) return $"{bytes / 1024} KB";
             return $"{bytes / (1024 * 1024):F1} MB";
         }
 
-        private void ClearFiles()
-            => _uploadedFiles.Clear();
-
-        private void RemoveFile(IBrowserFile fileToRemove)
-            => _uploadedFiles.Remove(fileToRemove);
+        private void ClearFiles() => _uploadedFiles.Clear();
+        private void RemoveFile(IBrowserFile fileToRemove) => _uploadedFiles.Remove(fileToRemove);
         #endregion
 
-        // Реализация IDisposable для очистки таймера
-        public void Dispose()
+        public void Dispose() 
         {
-            if (!_isDisposed)
-            {
+            if (!_isDisposed) {
                 _isDisposed = true;
                 _timer?.Stop();
                 _timer?.Dispose();
-                Console.WriteLine("Таймер остановлен и очищен");
             }
         }
     }

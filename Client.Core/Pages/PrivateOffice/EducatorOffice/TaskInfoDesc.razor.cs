@@ -37,6 +37,8 @@ public partial class TaskInfoDesc : ComponentBase
         _solution = await _apiService.GetSolutionById(Id);
         _student = await _apiService.GetStudentByStudentId(_solution.StudentId);
         _userStudent = await _apiService.GetUserByUserId(_student.UserId);
+
+        await DeleteParticipant();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -84,10 +86,22 @@ public partial class TaskInfoDesc : ComponentBase
 
         var success = await _apiService.UpdateSolutionStatus(_solution.Id,taskSolution);
 
-        if (success)
-        {
-            _solution.Status = taskSolution.Status;
+        if (success) {
+            _solution.Status = status;
             _solution.UpdatedAt = DateTime.Now;
+
+            var updatedSolution = await _apiService.GetSolutionById(_solution.Id);
+            if (updatedSolution != null) {
+                _solution = updatedSolution;
+            }
+
+            StateHasChanged();
         }
     }
-}
+    
+    private async Task DeleteParticipant() {
+        var participant = _solution.SolutionChat?.Participants?.FirstOrDefault(p => p.SenderId != _user.Id);
+        if (participant is not null)
+            await _apiService.DeleteParticipant(participant.Id);
+    }
+} 

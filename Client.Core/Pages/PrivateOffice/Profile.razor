@@ -68,6 +68,10 @@
                                     <span class="info-label">Ученое звание / Степень:</span>
                                     <span class="info-value">
                                         @_user?.Educator?.AcademicDegree
+                                        @if (!string.IsNullOrWhiteSpace(_user?.Educator?.AcademicDegree) && !string.IsNullOrWhiteSpace(_user?.Educator?.EducatorAdditionalInfo?.AcademicTitle))
+                                        {
+                                            <text> / </text>
+                                        }
                                         @_user?.Educator?.EducatorAdditionalInfo?.AcademicTitle
                                     </span>
                                 </div>

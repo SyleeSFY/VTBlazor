@@ -33,6 +33,7 @@ public class UniversityDbContext : DbContext
     public DbSet<SolutionChat> SolutionChats { get; set; }
     public DbSet<MessageInChat> MessagesInChat { get; set; }
     public DbSet<FileInChat> FilesInChat { get; set; }
+    public DbSet<ChatParticipant> ChatParticipant { get; set; }
 
     /// <summary>
     /// Связи БД через EF
@@ -40,13 +41,24 @@ public class UniversityDbContext : DbContext
     /// <param name="modelBuilder"></param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Educator - EducatorAdditionalInfo
         modelBuilder.Entity<Educator>(entity =>
         {
             entity.HasKey(e => e.Id);
+
+            // Связь с EducatorAdditionalInfo
             entity.HasOne(e => e.EducatorAdditionalInfo)
                 .WithOne()
                 .HasForeignKey<EducatorAdditionalInfo>(eai => eai.EducatorId);
+
+            // Связь с User
+            entity.HasOne(e => e.User)
+                .WithOne(u => u.Educator)
+                .HasForeignKey<Educator>(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Настройки свойств
+            entity.Property(e => e.Profession).IsRequired();
+            entity.Property(e => e.AcademicDegree).IsRequired(false);
         });
 
         // EducatorAdditionalInfo - EducatorDiscipline
@@ -172,16 +184,7 @@ public class UniversityDbContext : DbContext
             entity.Property(e => e.Position).HasMaxLength(100);
         });
 
-        modelBuilder.Entity<Educator>(entity =>
-        {
-            entity.HasOne(e => e.User)
-                .WithOne(u => u.Educator)
-                .HasForeignKey<Educator>(e => e.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
 
-            entity.Property(e => e.Profession).IsRequired();
-            entity.Property(e => e.AcademicDegree).IsRequired();
-        });
 
         // Solution
         modelBuilder.Entity<StudentSolution>(entity =>
@@ -264,6 +267,22 @@ public class UniversityDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasIndex(e => e.MessageId);
+        });
+
+        modelBuilder.Entity<ChatParticipant>(entity =>
+        {
+            entity.ToTable("ChatParticipants");
+            entity.HasKey(e => e.Id);
+
+            entity.HasOne(e => e.SolutionChat)
+                .WithMany(c => c.Participants)
+                .HasForeignKey(e => e.SolutionChatId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => e.SolutionChatId);
+            entity.HasIndex(e => e.SenderId);
+
+            entity.HasIndex(e => new { e.SolutionChatId, e.SenderId }).IsUnique();
         });
 
     }    

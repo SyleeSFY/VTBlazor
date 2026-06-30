@@ -6,6 +6,7 @@
 @inject NavigationManager Navigation
 @inject HttpClient Http
 @layout PrivateOfficeLayout
+@attribute [Authorize(Policy = "Admin")]
 
 <AuthorizeView>
     <Authorized>
@@ -138,33 +139,17 @@
                                             </div>
 
                                             <div class="form-group mb-3">
-                                                <label for="academicDegree" class="form-label">Ученая степень *</label>
-                                                <select class="form-control @(_errors.ContainsKey("AcademicDegree") ? "is-invalid" : "")" id="academicDegree" @bind="_academicDegree">
-                                                    <option value="" disabled selected>Выберите ученую степень</option>
-                                                    <option value="Кандидат наук">Кандидат наук</option>
-                                                    <option value="Доктор наук">Доктор наук</option>
-                                                    <option value="Доцент">Доцент</option>
-                                                    <option value="Профессор">Профессор</option>
-                                                    <option value="Без степени">Без степени</option>
-                                                </select>
-                                                @if (_errors.ContainsKey("AcademicDegree"))
-                                                {
-                                                    <div class="invalid-feedback d-block">@_errors["AcademicDegree"]</div>
-                                                }
+                                                <label for="academicDegree" class="form-label">Ученая степень</label>
+                                                <input type="text" class="form-control" id="academicDegree"
+                                                       placeholder="Введите ученую степень" @bind="_academicDegree">
                                             </div>
 
                                             <h5 class="mt-4 mb-3">Дополнительная информация</h5>
 
                                             <div class="form-group mb-3">
                                                 <label for="educationLevel" class="form-label">Уровень образования *</label>
-                                                <select class="form-control @(_errors.ContainsKey("EducationLevel") ? "is-invalid" : "")" id="educationLevel" @bind="_educationLevel">
-                                                    <option value="" disabled selected>Выберите уровень образования</option>
-                                                    <option value="Высшее образование - бакалавриат">Высшее образование - бакалавриат</option>
-                                                    <option value="Высшее образование - магистратура">Высшее образование - магистратура</option>
-                                                    <option value="Высшее образование - специалитет">Высшее образование - специалитет</option>
-                                                    <option value="Высшее образование - подготовка кадров высшей квалификации">Высшее образование - подготовка кадров высшей квалификации</option>
-                                                    <option value="Среднее профессиональное образование">Среднее профессиональное образование</option>
-                                                </select>
+                                                 <input type="text" class="form-control @(_errors.ContainsKey("EducationLevel") ? "is-invalid" : "")" id="educationLevel"
+                                                       placeholder="Введите уровень образования" @bind="_educationLevel">
                                                 @if (_errors.ContainsKey("EducationLevel"))
                                                 {
                                                     <div class="invalid-feedback d-block">@_errors["EducationLevel"]</div>

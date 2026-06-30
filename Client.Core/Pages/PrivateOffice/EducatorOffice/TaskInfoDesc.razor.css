@@ -1,6 +1,5 @@
 .EducatorCardIMG {
     margin: auto;
-    /*    margin-top: 90px;*/
     height: 400px;
     width: 275px;
     border-radius: 8px;
@@ -12,38 +11,56 @@
 
 .EducatorCardInfo {
     font-family: "Roboto", sans-serif;
-    /*    margin-top: 50px;*/
     font-size: 20px;
     line-height: 1.5;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
-.EducatorCardInfo p {
-margin-top: 10px;
-margin-bottom: 10px;
-white-space: pre-line;
-}
+    .EducatorCardInfo p {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        white-space: pre-line;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        max-width: 100%;
+    }
 
-.EducatorCardInfo br {
-display: block;
-margin-bottom: 1em;
-content: "";
-}
+    .EducatorCardInfo br {
+        display: block;
+        margin-bottom: 1em;
+        content: "";
+    }
 
-.EducatorCardInfo p:first-child {
-margin-top: -8px;
-}
+    .EducatorCardInfo p:first-child {
+        margin-top: -8px;
+    }
 
 .disciplines_list {
-margin: 0.5rem 0;
-padding-left: 1.5rem;
-list-style-type: disc;
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+    list-style-type: disc;
+    max-width: 100%;
+    overflow-wrap: break-word;
 }
 
-.disciplines_list li {
-margin-left: 50px;
-margin-bottom: 0.25rem;
-line-height: 1.4;
-}
+    .disciplines_list li {
+        margin-left: 50px;
+        margin-bottom: 0.25rem;
+        line-height: 1.4;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        max-width: calc(100% - 50px);
+    }
+
+        /* Стили для длинных имен файлов */
+        .disciplines_list li button {
+            word-break: break-all;
+            overflow-wrap: break-word;
+            max-width: 100%;
+            text-align: left;
+        }
 
 .Nav__btn {
     background: #287200;
@@ -96,6 +113,74 @@ line-height: 1.4;
 .nav_item:hover {
     background-color: #00c11c;
 }
+
 .nav__second__item:hover {
     background-color: #d00000;
+}
+
+/* Дополнительные стили для предотвращения переполнения */
+.TittleUnderStick {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+}
+
+/* Стили для текста решения */
+.solution-text {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    white-space: pre-wrap;
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .EducatorCardInfo {
+        font-size: 18px;
+    }
+
+    div[style*="margin-left: 40px"] {
+        margin-left: 20px !important;
+        max-width: calc(100% - 20px) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .EducatorCardInfo {
+        font-size: 16px;
+    }
+
+    div[style*="margin-left: 40px"] {
+        margin-left: 10px !important;
+        max-width: calc(100% - 10px) !important;
+    }
+
+    .disciplines_list li {
+        margin-left: 20px;
+        max-width: calc(100% - 20px);
+    }
+
+    .TittleUnderStick {
+        font-size: 22px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .EducatorCardInfo {
+        font-size: 14px;
+    }
+
+    .container {
+        padding: 5px;
+    }
+
+    div[style*="margin-left: 40px"] {
+        margin-left: 5px !important;
+        max-width: calc(100% - 5px) !important;
+    }
+
+    .nav_item, .nav__second__item {
+        font-size: 14px;
+        padding: 0 10px;
+    }
 }

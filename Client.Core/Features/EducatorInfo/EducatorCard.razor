@@ -1,10 +1,12 @@
+@using Client.Core.App.Services
 @inject NavigationManager Navigation
+@inject EducatorStateService EducatorStateService
 @inject IJSRuntime JSRuntime
 
 <div class="Card Cursor" style="transition-delay: 0.08s" @onclick="@GoToEducatorCard">
     <img src="@GetIMG()" alt="Фото Преподавателя" class="EducatorPhoto"/>
     <div class="EducatorOverlay">
         <p class="fio">@EducatorEntitie?.FullName</p>
-        <p class="academic-title">@EducatorEntitie?.AcademicDegree</p>
+        <p class="academic-title">@EducatorEntitie?.EducatorAdditionalInfo.AcademicTitle</p>
     </div>
 </div>

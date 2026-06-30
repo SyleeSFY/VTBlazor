@@ -15,10 +15,6 @@ public class UserRepository : IUserRepository
     public UserRepository(UniversityDbContext context)
         => _context = context;
     
-    /// <summary>
-    /// Получение всего списка user's
-    /// </summary>
-    /// <returns></returns>
     public async Task<List<User>> GetUsersAsync()
         => await _context.Users
             .Include(x => x.Educator)
@@ -31,12 +27,13 @@ public class UserRepository : IUserRepository
         => await _context.Users
             .Include(x => x.Student)
                 .ThenInclude(x => x.Group).Where(x => x.Student.GroupId == groupId)
-       
             .ToListAsync();
 
     public async Task<List<StudentSolution>> GetSolutionStudentByTaskIdSimpleAsync(int taskId)
         => await _context.StudentSolutions
             .Where(x => x.TaskId == taskId)
+            .Include(x => x.SolutionChat)
+                .ThenInclude(x => x.Participants)
             .ToListAsync();
 
     public async Task<StudentSolution> GetSolutionByIdAsync(int solutionId)
@@ -115,6 +112,9 @@ public class UserRepository : IUserRepository
     {
         try
         {
+            var isUserAvaible = _context.Users.FirstOrDefault(x => x.Email == user.Email);
+            if (isUserAvaible is not null)
+                return false;
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return true;
@@ -154,7 +154,7 @@ public class UserRepository : IUserRepository
         => await _context.Users.Include(x => x.Administrator).FirstOrDefaultAsync(x => x.Id == id);
 
     public async Task<SolutionChat?> GetSolutionChatById(int id)
-        => await _context.SolutionChats.Include(x => x.Messages).ThenInclude(x => x.Files).FirstOrDefaultAsync(x => x.Id == id);
+        => await _context.SolutionChats.Include(x => x.Participants).Include(x => x.Messages).ThenInclude(x => x.Files).FirstOrDefaultAsync(x => x.Id == id);
 
     #region Message
 
@@ -169,6 +169,26 @@ public class UserRepository : IUserRepository
         catch (Exception ex)
         {
             return null;
+        }
+    }
+    public async Task<bool?> AddParticipantAsync(ChatParticipant participant) 
+    {
+        var participantDB = _context.ChatParticipant.FirstOrDefault(x => x.SenderId == participant.SenderId && x.SolutionChatId == participant.SolutionChatId);
+        if (participantDB is null) {
+            await _context.ChatParticipant.AddAsync(participant);
+            await _context.SaveChangesAsync();
+        }
+        return true;
+    }
+
+    public async Task DeleteParticipantAsync(int id) 
+    {
+        var participantDB = await _context.ChatParticipant
+               .FirstOrDefaultAsync(x => x.Id == id);
+
+        if (participantDB != null) {
+            _context.ChatParticipant.Remove(participantDB);
+            await _context.SaveChangesAsync();
         }
     }
 

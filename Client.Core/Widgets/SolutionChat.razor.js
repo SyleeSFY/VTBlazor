@@ -6,3 +6,8 @@ export function downloadFile(base64Data, fileName) {
     link.click();
     document.body.removeChild(link);
 }
+export function scrollToBottom(element) {
+    if (element) {
+        element.scrollTop = element.scrollHeight;
+    }
+}

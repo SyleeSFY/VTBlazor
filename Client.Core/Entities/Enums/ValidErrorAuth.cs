@@ -8,6 +8,7 @@
         RequiredField,
         PasswordTooLong,
         EmailRequired,
-        PasswordRequired
+        PasswordRequired,
+        InvalidCharacters
     }
 }

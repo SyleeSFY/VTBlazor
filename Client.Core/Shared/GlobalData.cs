@@ -26,7 +26,8 @@ namespace Client.Core.Shared
             { ValidErrorAuth.RequiredField, "Ошибка: Заполните все обязательные поля!" },
             { ValidErrorAuth.PasswordTooLong, "Ошибка: Пароль не может быть больше 50 символов!" },
             { ValidErrorAuth.PasswordRequired, "Ошибка: Введите пароль!" },
-            { ValidErrorAuth.EmailRequired, "Ошибка: Введите email!" }
+            { ValidErrorAuth.EmailRequired, "Ошибка: Введите email!" },
+            { ValidErrorAuth.InvalidCharacters, "Ошибка: Обнаружены недопустимые символы!" }
         };
     }
 }

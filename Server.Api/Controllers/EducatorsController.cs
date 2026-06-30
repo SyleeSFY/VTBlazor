@@ -70,6 +70,12 @@ public class EducatorsController : ControllerBase
         return new StudentSolution();
     }
 
+    [HttpGet("GetSolutions/{studentId}")]
+    public async Task<List<StudentSolution>> GetSolutionsByTaskIdAndStudentId(int studentId)
+    {
+        return await _educatorService.GetSolutionsByStudentId(studentId);
+    }
+
     [HttpPost("educators")]
     public async Task AddEducator(Educator id)
     {

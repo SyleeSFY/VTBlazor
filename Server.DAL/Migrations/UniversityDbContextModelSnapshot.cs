@@ -37,6 +37,35 @@ namespace Server.DAL.Migrations
                     b.ToTable("TaskGroups", (string)null);
                 });
 
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.ChatParticipant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("HasUnreadMessages")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SolutionChatId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("SolutionChatId");
+
+                    b.HasIndex("SolutionChatId", "SenderId")
+                        .IsUnique();
+
+                    b.ToTable("ChatParticipants", (string)null);
+                });
+
             modelBuilder.Entity("Server.DAL.Models.Entities.Education.FileInChat", b =>
                 {
                     b.Property<int>("Id")
@@ -233,7 +262,6 @@ namespace Server.DAL.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AcademicDegree")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("FullName")
@@ -552,6 +580,17 @@ namespace Server.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Server.DAL.Models.Entities.Education.ChatParticipant", b =>
+                {
+                    b.HasOne("Server.DAL.Models.Entities.Education.SolutionChat", "SolutionChat")
+                        .WithMany("Participants")
+                        .HasForeignKey("SolutionChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SolutionChat");
+                });
+
             modelBuilder.Entity("Server.DAL.Models.Entities.Education.FileInChat", b =>
                 {
                     b.HasOne("Server.DAL.Models.Entities.Education.MessageInChat", "Message")
@@ -730,6 +769,8 @@ namespace Server.DAL.Migrations
             modelBuilder.Entity("Server.DAL.Models.Entities.Education.SolutionChat", b =>
                 {
                     b.Navigation("Messages");
+
+                    b.Navigation("Participants");
                 });
 
             modelBuilder.Entity("Server.DAL.Models.Entities.Education.StudentSolution", b =>

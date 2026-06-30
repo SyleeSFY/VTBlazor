@@ -8,6 +8,7 @@ namespace Server.DAL.Models.Entities.Education
         public int SolutionId { get; set; }
         public DateTime CreatedAt { get; set; }
         public List<MessageInChat> Messages { get; set; } = new List<MessageInChat>();
+        public List<ChatParticipant> Participants { get; set; } = new List<ChatParticipant>();
 
         [JsonIgnore]
         public StudentSolution Solution { get; set; }
